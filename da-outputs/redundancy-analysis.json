@@ -1,0 +1,188 @@
+{
+  "extraction_date": "2026-07-06",
+  "canonical_shadow_checks": [
+    {
+      "concept": "User / Customer Identity",
+      "representations": [
+        {
+          "name": "AspNetUsers",
+          "location": "IdentityDB (AppIdentityDbContext)",
+          "type": "database_table",
+          "role": "CANONICAL",
+          "rationale": "Source of truth for all authentication. Stores password hash, roles, lockout state. Managed by UserManager<ApplicationUser>.",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "Baskets.BuyerId",
+          "location": "CatalogDB — Baskets table",
+          "type": "denormalized_string_field",
+          "role": "SHADOW_REFERENCE",
+          "rationale": "Stores AspNetUsers.UserName (email) as a plain string. No FK to IdentityDB. Also stores anonymous GUID values for guest users.",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "Orders.BuyerId",
+          "location": "CatalogDB — Orders table",
+          "type": "denormalized_string_field",
+          "role": "SHADOW_REFERENCE",
+          "rationale": "Stores email at time of order. Historical record — intentionally not FK-linked to IdentityDB.",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "Buyer (BuyerAggregate)",
+          "location": "src/ApplicationCore/Entities/BuyerAggregate/Buyer.cs",
+          "type": "domain_entity_class",
+          "role": "SHADOW_UNUSED",
+          "rationale": "Defines IdentityGuid + PaymentMethods. NOT in CatalogContext DbSets. NOT in any migration. Never constructed or queried anywhere in codebase or test files.",
+          "constructed_and_queried": false,
+          "finding": "DEAD CODE — entity exists in domain layer but has zero persistence and zero active use."
+        }
+      ],
+      "canonical_representation": "AspNetUsers (IdentityDB)",
+      "redundancy_risk": "MEDIUM — BuyerId duplicated as string across Baskets and Orders with no FK. Right-to-erasure requires cleanup in 3+ places across 2 databases.",
+      "confidence": 0.9
+    },
+    {
+      "concept": "Product / Catalog Item",
+      "representations": [
+        {
+          "name": "CatalogItem (entity) → Catalog (table)",
+          "location": "CatalogDB — src/ApplicationCore/Entities/CatalogItem.cs",
+          "type": "database_table",
+          "role": "CANONICAL",
+          "rationale": "Master record. Updated by admin. Queried by storefront. Source of truth for current product details.",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "CatalogItemOrdered (value object) → OrderItems.ItemOrdered_* columns",
+          "location": "CatalogDB — OrderItems table",
+          "type": "denormalized_snapshot",
+          "role": "INTENTIONAL_COPY",
+          "rationale": "Snapshot at purchase time. Explicitly documented in XML doc: 'If catalog item details change, details of the item that was part of a completed order should not change.'",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "BlazorShared.Models.CatalogItem",
+          "location": "src/BlazorShared/Models/CatalogItem.cs",
+          "type": "dto_class",
+          "role": "VIEW_MODEL",
+          "rationale": "DTO for Blazor/API communication. Adds UI concerns (PictureBase64, PictureName) absent from the domain entity.",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "CatalogItemDto",
+          "location": "src/PublicApi/CatalogItemEndpoints/CatalogItemDto.cs",
+          "type": "dto_class",
+          "role": "VIEW_MODEL",
+          "rationale": "AutoMapper-mapped DTO for PublicApi responses.",
+          "constructed_and_queried": true
+        }
+      ],
+      "canonical_representation": "CatalogItem entity → Catalog table",
+      "redundancy_risk": "LOW — DTOs are legitimate view models; snapshot is intentional by design.",
+      "confidence": 0.9
+    },
+    {
+      "concept": "Product Category (Type)",
+      "representations": [
+        {
+          "name": "CatalogType (entity) → CatalogTypes (table)",
+          "location": "CatalogDB",
+          "type": "database_table",
+          "role": "CANONICAL",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "BlazorShared.Models.CatalogType",
+          "location": "src/BlazorShared/Models/CatalogType.cs",
+          "type": "dto_class",
+          "role": "VIEW_MODEL",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "CatalogTypeDto",
+          "location": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeDto.cs",
+          "type": "dto_class",
+          "role": "VIEW_MODEL",
+          "notes": "AutoMapper field rename: CatalogType.Type → CatalogTypeDto.Name",
+          "constructed_and_queried": true
+        }
+      ],
+      "canonical_representation": "CatalogType entity → CatalogTypes table",
+      "redundancy_risk": "LOW",
+      "confidence": 0.9
+    },
+    {
+      "concept": "Product Brand",
+      "representations": [
+        {
+          "name": "CatalogBrand (entity) → CatalogBrands (table)",
+          "location": "CatalogDB",
+          "type": "database_table",
+          "role": "CANONICAL",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "BlazorShared.Models.CatalogBrand",
+          "location": "src/BlazorShared/Models/CatalogBrand.cs",
+          "type": "dto_class",
+          "role": "VIEW_MODEL",
+          "constructed_and_queried": true
+        },
+        {
+          "name": "CatalogBrandDto",
+          "location": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandDto.cs",
+          "type": "dto_class",
+          "role": "VIEW_MODEL",
+          "notes": "AutoMapper field rename: CatalogBrand.Brand → CatalogBrandDto.Name",
+          "constructed_and_queried": true
+        }
+      ],
+      "canonical_representation": "CatalogBrand entity → CatalogBrands table",
+      "redundancy_risk": "LOW",
+      "confidence": 0.9
+    },
+    {
+      "concept": "Payment Method",
+      "representations": [
+        {
+          "name": "PaymentMethod (BuyerAggregate)",
+          "location": "src/ApplicationCore/Entities/BuyerAggregate/PaymentMethod.cs",
+          "type": "domain_entity_class",
+          "role": "SHADOW_UNUSED",
+          "rationale": "Defines CardId, Last4, Alias. NOT mapped to any EF context. NOT in any migration. Never instantiated in any service, repository, handler, or test file. Comment: 'actual card data must be stored in a PCI compliant system, like Stripe'.",
+          "constructed_and_queried": false,
+          "finding": "DEAD CODE — placeholder entity, not persisted, not used."
+        }
+      ],
+      "canonical_representation": "NONE — no canonical persistence exists for payment methods in this codebase",
+      "redundancy_risk": "N/A — placeholder only",
+      "confidence": 0.85
+    }
+  ],
+  "agent2_review_changes": [
+    {
+      "change_id": "RC-10",
+      "type": "ENRICHED",
+      "finding_id": "redundancy-analysis.json — Buyer/PaymentMethod SHADOW_UNUSED",
+      "what": "Dead code status confirmed by test evidence. No test file in any of the four test suites (UnitTests, IntegrationTests, FunctionalTests, PublicApiIntegrationTests) references Buyer or PaymentMethod entities. 49 test files scanned — zero hits.",
+      "evidence_source": "Phase 1 test review",
+      "evidence_detail": "Glob of all 49 test .cs files shows no import of BuyerAggregate namespace. No builder/factory for Buyer or PaymentMethod in tests/UnitTests/Builders/.",
+      "confidence_before": 0.9,
+      "confidence_after": 0.98,
+      "phase_found": "Phase 1 test review"
+    }
+  ],
+  "summary": {
+    "dead_code_entities": ["Buyer (BuyerAggregate)", "PaymentMethod (BuyerAggregate)"],
+    "intentional_duplicates": ["CatalogItemOrdered — order snapshot of CatalogItem, correct by design and explicitly documented"],
+    "denormalized_references": [
+      "Baskets.BuyerId — email stored as string, no FK to IdentityDB",
+      "Orders.BuyerId — email stored as string, no FK to IdentityDB"
+    ],
+    "field_renames_in_automapper": [
+      "CatalogType.Type → CatalogTypeDto.Name",
+      "CatalogBrand.Brand → CatalogBrandDto.Name"
+    ]
+  }
+}

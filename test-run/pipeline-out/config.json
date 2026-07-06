@@ -1,0 +1,2455 @@
+{
+  "all_params": [
+    {
+      "key": "name",
+      "value": "eShopOnWeb",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\azure.yaml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.web.project",
+      "value": "./src/Web",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\azure.yaml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.web.language",
+      "value": "csharp",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\azure.yaml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.web.host",
+      "value": "appservice",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\azure.yaml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "version",
+      "value": "3.4",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.override.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "version",
+      "value": "3.4",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.eshopwebmvc.image",
+      "value": "${DOCKER_REGISTRY-}eshopwebmvc",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.eshopwebmvc.build.context",
+      "value": ".",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.eshopwebmvc.build.dockerfile",
+      "value": "src/Web/Dockerfile",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.eshoppublicapi.image",
+      "value": "${DOCKER_REGISTRY-}eshoppublicapi",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.eshoppublicapi.build.context",
+      "value": ".",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.eshoppublicapi.build.dockerfile",
+      "value": "src/PublicApi/Dockerfile",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "services.sqlserver.image",
+      "value": "mcr.microsoft.com/azure-sql-edge",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\docker-compose.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sdk.version",
+      "value": "8.0.x",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\global.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sdk.rollForward",
+      "value": "latestFeature",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\global.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "version",
+      "value": "2",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\dependabot.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "updates[0].package-ecosystem",
+      "value": "nuget",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\dependabot.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "updates[0].directory",
+      "value": "/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\dependabot.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "updates[0].schedule.interval",
+      "value": "daily",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\dependabot.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "name",
+      "value": "eShopOnWeb Build and Test",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.runs-on",
+      "value": "ubuntu-latest",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[0].uses",
+      "value": "actions/checkout@v2",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[1].name",
+      "value": "Setup .NET",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[1].uses",
+      "value": "actions/setup-dotnet@v1",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[1].with.dotnet-version",
+      "value": "8.0.x",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[1].with.include-prerelease",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[2].name",
+      "value": "Build with dotnet",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[2].run",
+      "value": "dotnet build ./eShopOnWeb.sln --configuration Release",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[3].name",
+      "value": "Test with dotnet",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "jobs.build.steps[3].run",
+      "value": "dotnet test ./eShopOnWeb.sln --configuration Release",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\.github\\workflows\\dotnetcore.yml",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "analysisServicesServers",
+      "value": "as",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "apiManagementService",
+      "value": "apim-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "appConfigurationConfigurationStores",
+      "value": "appcs-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "appManagedEnvironments",
+      "value": "cae-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "appContainerApps",
+      "value": "ca-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "authorizationPolicyDefinitions",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "automationAutomationAccounts",
+      "value": "aa-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "blueprintBlueprints",
+      "value": "bp-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "blueprintBlueprintsArtifacts",
+      "value": "bpa-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cacheRedis",
+      "value": "redis-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cdnProfiles",
+      "value": "cdnp-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cdnProfilesEndpoints",
+      "value": "cdne-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cognitiveServicesAccounts",
+      "value": "cog-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cognitiveServicesFormRecognizer",
+      "value": "cog-fr-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cognitiveServicesTextAnalytics",
+      "value": "cog-ta-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeAvailabilitySets",
+      "value": "avail-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeCloudServices",
+      "value": "cld-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeDiskEncryptionSets",
+      "value": "des",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeDisks",
+      "value": "disk",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeDisksOs",
+      "value": "osdisk",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeGalleries",
+      "value": "gal",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeSnapshots",
+      "value": "snap-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeVirtualMachines",
+      "value": "vm",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "computeVirtualMachineScaleSets",
+      "value": "vmss-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "containerInstanceContainerGroups",
+      "value": "ci",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "containerRegistryRegistries",
+      "value": "cr",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "containerServiceManagedClusters",
+      "value": "aks-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "databricksWorkspaces",
+      "value": "dbw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dataFactoryFactories",
+      "value": "adf-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dataLakeAnalyticsAccounts",
+      "value": "dla",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dataLakeStoreAccounts",
+      "value": "dls",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dataMigrationServices",
+      "value": "dms-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dBforMySQLServers",
+      "value": "mysql-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dBforPostgreSQLServers",
+      "value": "psql-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "devicesIotHubs",
+      "value": "iot-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "devicesProvisioningServices",
+      "value": "provs-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "devicesProvisioningServicesCertificates",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "documentDBDatabaseAccounts",
+      "value": "cosmos-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "eventGridDomains",
+      "value": "evgd-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "eventGridDomainsTopics",
+      "value": "evgt-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "eventGridEventSubscriptions",
+      "value": "evgs-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "eventHubNamespaces",
+      "value": "evhns-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "eventHubNamespacesEventHubs",
+      "value": "evh-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hdInsightClustersHadoop",
+      "value": "hadoop-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hdInsightClustersHbase",
+      "value": "hbase-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hdInsightClustersKafka",
+      "value": "kafka-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hdInsightClustersMl",
+      "value": "mls-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hdInsightClustersSpark",
+      "value": "spark-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hdInsightClustersStorm",
+      "value": "storm-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "hybridComputeMachines",
+      "value": "arcs-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "insightsActionGroups",
+      "value": "ag-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "insightsComponents",
+      "value": "appi-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "keyVaultVaults",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "kubernetesConnectedClusters",
+      "value": "arck",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "kustoClusters",
+      "value": "dec",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "kustoClustersDatabases",
+      "value": "dedb",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "logicIntegrationAccounts",
+      "value": "ia-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "logicWorkflows",
+      "value": "logic-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "machineLearningServicesWorkspaces",
+      "value": "mlw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "managedIdentityUserAssignedIdentities",
+      "value": "id-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "managementManagementGroups",
+      "value": "mg-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "migrateAssessmentProjects",
+      "value": "migr-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkApplicationGateways",
+      "value": "agw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkApplicationSecurityGroups",
+      "value": "asg-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkAzureFirewalls",
+      "value": "afw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkBastionHosts",
+      "value": "bas-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkConnections",
+      "value": "con-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkDnsZones",
+      "value": "dnsz-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkExpressRouteCircuits",
+      "value": "erc-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkFirewallPolicies",
+      "value": "afwp-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkFirewallPoliciesWebApplication",
+      "value": "waf",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkFirewallPoliciesRuleGroups",
+      "value": "wafrg",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkFrontDoors",
+      "value": "fd-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkFrontdoorWebApplicationFirewallPolicies",
+      "value": "fdfp-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLoadBalancersExternal",
+      "value": "lbe-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLoadBalancersInternal",
+      "value": "lbi-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLoadBalancersInboundNatRules",
+      "value": "rule-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLocalNetworkGateways",
+      "value": "lgw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkNatGateways",
+      "value": "ng-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkNetworkInterfaces",
+      "value": "nic-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkNetworkSecurityGroups",
+      "value": "nsg-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkNetworkSecurityGroupsSecurityRules",
+      "value": "nsgsr-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkNetworkWatchers",
+      "value": "nw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkPrivateDnsZones",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkPrivateLinkServices",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkPublicIPAddresses",
+      "value": "pip-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkPublicIPPrefixes",
+      "value": "ippre-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkRouteFilters",
+      "value": "rf-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkRouteTables",
+      "value": "rt-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkRouteTablesRoutes",
+      "value": "udr-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkTrafficManagerProfiles",
+      "value": "traf-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVirtualNetworkGateways",
+      "value": "vgw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVirtualNetworks",
+      "value": "vnet-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVirtualNetworksSubnets",
+      "value": "snet-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVirtualNetworksVirtualNetworkPeerings",
+      "value": "peer-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVirtualWans",
+      "value": "vwan-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVpnGateways",
+      "value": "vpng-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVpnGatewaysVpnConnections",
+      "value": "vcn-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkVpnGatewaysVpnSites",
+      "value": "vst-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "notificationHubsNamespaces",
+      "value": "ntfns-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "notificationHubsNamespacesNotificationHubs",
+      "value": "ntf-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "operationalInsightsWorkspaces",
+      "value": "log-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "portalDashboards",
+      "value": "dash-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "powerBIDedicatedCapacities",
+      "value": "pbi-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "purviewAccounts",
+      "value": "pview-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "recoveryServicesVaults",
+      "value": "rsv-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "resourcesResourceGroups",
+      "value": "rg-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "searchSearchServices",
+      "value": "srch-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "serviceBusNamespaces",
+      "value": "sb-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "serviceBusNamespacesQueues",
+      "value": "sbq-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "serviceBusNamespacesTopics",
+      "value": "sbt-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "serviceEndPointPolicies",
+      "value": "se-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "serviceFabricClusters",
+      "value": "sf-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "signalRServiceSignalR",
+      "value": "sigr",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sqlManagedInstances",
+      "value": "sqlmi-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sqlServers",
+      "value": "sql-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sqlServersDataWarehouse",
+      "value": "sqldw-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sqlServersDatabases",
+      "value": "sqldb-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "sqlServersDatabasesStretch",
+      "value": "sqlstrdb-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "storageStorageAccounts",
+      "value": "st",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "storageStorageAccountsVm",
+      "value": "stvm",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "storSimpleManagers",
+      "value": "ssimp",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "streamAnalyticsCluster",
+      "value": "asa-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "synapseWorkspaces",
+      "value": "syn",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "synapseWorkspacesAnalyticsWorkspaces",
+      "value": "synw",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "synapseWorkspacesSqlPoolsDedicated",
+      "value": "syndp",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "synapseWorkspacesSqlPoolsSpark",
+      "value": "synsp",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "timeSeriesInsightsEnvironments",
+      "value": "tsi-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "webServerFarms",
+      "value": "plan-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "webSitesAppService",
+      "value": "app-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "webSitesAppServiceEnvironment",
+      "value": "ase-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "webSitesFunctions",
+      "value": "func-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "webStaticSites",
+      "value": "stapp-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "$schema",
+      "value": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "contentVersion",
+      "value": "1.0.0.0",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "parameters.environmentName.value",
+      "value": "${AZURE_ENV_NAME}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "parameters.location.value",
+      "value": "${AZURE_LOCATION}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "parameters.principalId.value",
+      "value": "${AZURE_PRINCIPAL_ID}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "parameters.sqlAdminPassword.value",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "parameters.appUserPassword.value",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.windowsAuthentication",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.anonymousAuthentication",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.iisExpress.applicationUrl",
+      "value": "http://localhost:58126",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.iisExpress.sslPort",
+      "value": "44315",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.commandName",
+      "value": "IISExpress",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.inspectUri",
+      "value": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.applicationUrl",
+      "value": "https://localhost:5001;http://localhost:5000",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.commandName",
+      "value": "Project",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.inspectUri",
+      "value": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.applicationUrl",
+      "value": "https://localhost:5001;http://localhost:5000",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "https://localhost:5099/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "https://localhost:44315/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.IncludeScopes",
+      "value": "False",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "http://localhost:5200/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "http://host.docker.internal:5106/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "https://localhost:5099/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "https://localhost:44315/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.IncludeScopes",
+      "value": "False",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "https://localhost:5099/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "https://localhost:5001/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft.Hosting.Lifetime",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.CatalogConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.IdentityConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "http://localhost:5200/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "http://host.docker.internal:5106/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft.Hosting.Lifetime",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "https://localhost:5099/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "https://localhost:5001/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.CatalogConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.IdentityConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "CatalogBaseUrl",
+      "value": "",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.IncludeScopes",
+      "value": "False",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.AllowedHosts",
+      "value": "*",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.commandName",
+      "value": "IISExpress",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.launchUrl",
+      "value": "swagger",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.PublicApi.commandName",
+      "value": "Project",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.PublicApi.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.PublicApi.launchUrl",
+      "value": "swagger",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.PublicApi.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.PublicApi.applicationUrl",
+      "value": "https://localhost:5099;http://localhost:5098",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.WSL.commandName",
+      "value": "WSL2",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.WSL.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.WSL.launchUrl",
+      "value": "https://localhost:5099/swagger",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.WSL.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.WSL.environmentVariables.ASPNETCORE_URLS",
+      "value": "https://localhost:5099;http://localhost:5098",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.WSL.distributionName",
+      "value": "",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Docker.commandName",
+      "value": "Docker",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Docker.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Docker.launchUrl",
+      "value": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Docker.publishAllPorts",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Docker.useSSL",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "$schema",
+      "value": "http://json.schemastore.org/launchsettings.json",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.windowsAuthentication",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.anonymousAuthentication",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.iisExpress.applicationUrl",
+      "value": "http://localhost:52023",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.iisExpress.sslPort",
+      "value": "44339",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "https://localhost:5099/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "https://localhost:44315/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Debug",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.CatalogConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.IdentityConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.apiBase",
+      "value": "http://localhost:5200/api/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "baseUrls.webBase",
+      "value": "http://host.docker.internal:5106/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Debug",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[0].outputFileName",
+      "value": "wwwroot/css/site.min.css",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[1].outputFileName",
+      "value": "wwwroot/js/site.min.js",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[1].minify.enabled",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[1].minify.renameLocals",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[1].sourceMap",
+      "value": "False",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "version",
+      "value": "1.0",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "defaultProvider",
+      "value": "cdnjs",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[0].library",
+      "value": "jquery@3.6.3",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[0].destination",
+      "value": "wwwroot/lib/jquery/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[1].library",
+      "value": "twitter-bootstrap@3.4.1",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[1].destination",
+      "value": "wwwroot/lib/bootstrap/dist/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[2].library",
+      "value": "jquery-validation-unobtrusive@4.0.0",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[2].destination",
+      "value": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[3].library",
+      "value": "jquery-validate@1.19.5",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[3].destination",
+      "value": "wwwroot/lib/jquery-validate/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[4].library",
+      "value": "toastr.js@2.1.4",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[4].destination",
+      "value": "wwwroot/lib/toastr/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[5].library",
+      "value": "aspnet-signalr@1.0.27",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "libraries[5].destination",
+      "value": "wwwroot/lib/@aspnet/signalr/dist/browser/",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\libman.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "version",
+      "value": "1",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\.config\\dotnet-tools.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "isRoot",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\.config\\dotnet-tools.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "tools.dotnet-ef.version",
+      "value": "8.0.0",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\.config\\dotnet-tools.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.windowsAuthentication",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.anonymousAuthentication",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.iisExpress.applicationUrl",
+      "value": "http://localhost:17469",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "iisSettings.iisExpress.sslPort",
+      "value": "44315",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.commandName",
+      "value": "IISExpress",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.inspectUri",
+      "value": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.IIS Express.applicationUrl",
+      "value": "https://localhost:5001;http://localhost:5000",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web.commandName",
+      "value": "Project",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web.inspectUri",
+      "value": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web.applicationUrl",
+      "value": "https://localhost:5001;http://localhost:5000",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web - PROD.commandName",
+      "value": "Project",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web - PROD.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web - PROD.inspectUri",
+      "value": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web - PROD.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Production",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.Web - PROD.applicationUrl",
+      "value": "https://localhost:5001;http://localhost:5000",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    }
+  ],
+  "business_params": [
+    {
+      "key": "automationAutomationAccounts",
+      "value": "aa-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "cognitiveServicesAccounts",
+      "value": "cog-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dataLakeAnalyticsAccounts",
+      "value": "dla",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "dataLakeStoreAccounts",
+      "value": "dls",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "documentDBDatabaseAccounts",
+      "value": "cosmos-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "logicIntegrationAccounts",
+      "value": "ia-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "migrateAssessmentProjects",
+      "value": "migr-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLoadBalancersExternal",
+      "value": "lbe-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLoadBalancersInternal",
+      "value": "lbi-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "networkLoadBalancersInboundNatRules",
+      "value": "rule-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "purviewAccounts",
+      "value": "pview-",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "storageStorageAccounts",
+      "value": "st",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "storageStorageAccountsVm",
+      "value": "stvm",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "parameters.sqlAdminPassword.value",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\main.parameters.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.commandName",
+      "value": "Project",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.launchBrowser",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.inspectUri",
+      "value": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.applicationUrl",
+      "value": "https://localhost:5001;http://localhost:5000",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "profiles.BlazorAdmin.environmentVariables.ASPNETCORE_ENVIRONMENT",
+      "value": "Development",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\Properties\\launchSettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\BlazorAdmin\\wwwroot\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft.Hosting.Lifetime",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft.Hosting.Lifetime",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Warning",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.AllowedHosts",
+      "value": "*",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Debug",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Development.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Default",
+      "value": "Debug",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.System",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "Logging.LogLevel.Microsoft",
+      "value": "Information",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[1].minify.enabled",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "[1].minify.renameLocals",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    }
+  ],
+  "connection_strings": [
+    {
+      "key": "ConnectionStrings.CatalogConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.IdentityConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.CatalogConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.IdentityConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\PublicApi\\appsettings.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.CatalogConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    },
+    {
+      "key": "ConnectionStrings.IdentityConnection",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\appsettings.Docker.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    }
+  ],
+  "feature_flags": [
+    {
+      "key": "[1].minify.enabled",
+      "value": "True",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\src\\Web\\bundleconfig.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    }
+  ],
+  "role_definitions": [
+    {
+      "key": "authorizationPolicyDefinitions",
+      "value": "***REDACTED***",
+      "source_file": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\source\\eShopOnWeb\\infra\\abbreviations.json",
+      "source_type": "json",
+      "extraction_timestamp": "2026-07-06T04:26:30.736355+00:00"
+    }
+  ]
+}

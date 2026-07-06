@@ -1,0 +1,720 @@
+{
+  "generated_at": "2026-06-15T07:27:16+00:00",
+  "source_final_artifacts": [
+    "architecture-output/final/business-capability-map.json",
+    "architecture-output/final/module-boundary-map.json"
+  ],
+  "summary": {
+    "consolidated_module_candidate_count": 13,
+    "consolidate_count": 5,
+    "review_count": 8,
+    "keep_submodule_count": 0
+  },
+  "consolidated_modules": [
+    {
+      "consolidated_module_id": "CMOD-001",
+      "name": "Catalog",
+      "capability_id": "CAP-001",
+      "classification": "DataInfrastructure",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-004",
+          "name": "Catalog",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 7,
+          "efferent_coupling": 6,
+          "confidence": 0.879
+        }
+      ],
+      "source_module_names": [
+        "Catalog"
+      ],
+      "component_count": 25,
+      "interface_count": 9,
+      "data_access_component_count": 7,
+      "risk_count": 3,
+      "afferent_coupling": 7,
+      "efferent_coupling": 6,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/ApplicationCore/CatalogSettings.cs",
+        "src/ApplicationCore/Entities/CatalogBrand.cs",
+        "src/ApplicationCore/Entities/CatalogItem.cs",
+        "src/ApplicationCore/Entities/CatalogType.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+        "src/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs",
+        "src/ApplicationCore/Specifications/CatalogFilterSpecification.cs",
+        "src/ApplicationCore/Specifications/CatalogItemNameSpecification.cs",
+        "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+        "src/BlazorAdmin/Pages/CatalogItemPage/Create.razor",
+        "src/BlazorAdmin/Pages/CatalogItemPage/Delete.razor",
+        "src/BlazorAdmin/Pages/CatalogItemPage/Details.razor",
+        "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs",
+        "src/BlazorAdmin/Services/CachedCatalogLookupDataServiceDecorator .cs",
+        "src/Web/Services/CachedCatalogViewModelService.cs",
+        "src/BlazorShared/Models/CatalogBrand.cs",
+        "src/Infrastructure/Data/Config/CatalogBrandConfiguration.cs",
+        "src/PublicApi/CatalogBrandEndpoints/CatalogBrandDto.cs",
+        "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+        "src/BlazorShared/Models/CatalogBrandResponse.cs"
+      ],
+      "confidence": 0.874,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-002",
+      "name": "Identity",
+      "capability_id": "CAP-002",
+      "classification": "DataInfrastructure",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-007",
+          "name": "Identity",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 2,
+          "efferent_coupling": 6,
+          "confidence": 0.878
+        }
+      ],
+      "source_module_names": [
+        "Identity"
+      ],
+      "component_count": 25,
+      "interface_count": 29,
+      "data_access_component_count": 3,
+      "risk_count": 1,
+      "afferent_coupling": 2,
+      "efferent_coupling": 6,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+        "src/ApplicationCore/Interfaces/ITokenClaimsService.cs",
+        "src/BlazorAdmin/CustomAuthStateProvider.cs",
+        "src/BlazorAdmin/Pages/Logout.razor",
+        "src/BlazorAdmin/Shared/RedirectToLogin.razor",
+        "src/BlazorShared/Authorization/ClaimValue.cs",
+        "src/BlazorShared/Authorization/Constants.cs",
+        "src/BlazorShared/Authorization/UserInfo.cs",
+        "src/Infrastructure/Identity/AppIdentityDbContext.cs",
+        "src/Infrastructure/Identity/AppIdentityDbContextSeed.cs",
+        "src/Infrastructure/Identity/ApplicationUser.cs",
+        "src/Infrastructure/Identity/IdentityTokenClaimService.cs",
+        "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+        "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.AuthenticateRequest.cs",
+        "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.AuthenticateResponse.cs",
+        "src/Web/Views/Manage/ChangePassword.cshtml",
+        "src/Web/ViewModels/Manage/ChangePasswordViewModel.cs",
+        "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.ClaimValue.cs",
+        "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml",
+        "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml.cs"
+      ],
+      "confidence": 0.873,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-003",
+      "name": "Verification",
+      "capability_id": "CAP-003",
+      "classification": "TestVerification",
+      "consolidation_action": "consolidate_as_candidate_module",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-012",
+          "name": "Verification",
+          "boundary_quality": "Medium",
+          "migration_readiness": "Needs Refactoring",
+          "afferent_coupling": 0,
+          "efferent_coupling": 0,
+          "confidence": 0.9
+        }
+      ],
+      "source_module_names": [
+        "Verification"
+      ],
+      "component_count": 25,
+      "interface_count": 0,
+      "data_access_component_count": 0,
+      "risk_count": 0,
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "boundary_quality_distribution": {
+        "Medium": 1
+      },
+      "migration_readiness_distribution": {
+        "Needs Refactoring": 1
+      },
+      "evidence_files": [
+        "tests/FunctionalTests/PublicApi/ApiTestFixture.cs",
+        "tests/FunctionalTests/PublicApi/ApiTokenHelper.cs",
+        "tests/FunctionalTests/Web/Controllers/AccountControllerSignIn.cs",
+        "tests/FunctionalTests/Web/Controllers/CatalogControllerIndex.cs",
+        "tests/FunctionalTests/Web/Controllers/OrderControllerIndex.cs",
+        "tests/FunctionalTests/Web/Pages/Basket/BasketPageCheckout.cs",
+        "tests/FunctionalTests/Web/Pages/Basket/CheckoutTest.cs",
+        "tests/FunctionalTests/Web/Pages/Basket/IndexTest.cs",
+        "tests/FunctionalTests/Web/Pages/HomePageOnGet.cs",
+        "tests/FunctionalTests/Web/WebPageHelpers.cs",
+        "tests/FunctionalTests/Web/WebTestFixture.cs",
+        "tests/IntegrationTests/Repositories/BasketRepositoryTests/SetQuantities.cs",
+        "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/AddItemToBasket.cs",
+        "tests/UnitTests/Builders/AddressBuilder.cs",
+        "tests/PublicApiIntegrationTests/ApiTokenHelper.cs",
+        "tests/PublicApiIntegrationTests/AuthEndpoints/AuthenticateEndpointTest.cs",
+        "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketAddItem.cs",
+        "tests/UnitTests/Builders/BasketBuilder.cs",
+        "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketRemoveEmptyItems.cs",
+        "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketTotalItems.cs"
+      ],
+      "confidence": 0.9,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-004",
+      "name": "Admin",
+      "capability_id": "CAP-004",
+      "classification": "InterfaceCapabilityCandidate",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-001",
+          "name": "Admin",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 2,
+          "efferent_coupling": 1,
+          "confidence": 0.868
+        }
+      ],
+      "source_module_names": [
+        "Admin"
+      ],
+      "component_count": 23,
+      "interface_count": 2,
+      "data_access_component_count": 0,
+      "risk_count": 1,
+      "afferent_coupling": 2,
+      "efferent_coupling": 1,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/BlazorAdmin/App.razor",
+        "src/BlazorAdmin/Helpers/BlazorComponent.cs",
+        "src/BlazorAdmin/Helpers/BlazorLayoutComponent.cs",
+        "src/BlazorAdmin/Helpers/RefreshBroadcast.cs",
+        "src/BlazorAdmin/Helpers/ToastComponent.cs",
+        "src/BlazorAdmin/JavaScript/Cookies.cs",
+        "src/BlazorAdmin/JavaScript/Css.cs",
+        "src/BlazorAdmin/JavaScript/JSInteropConstants.cs",
+        "src/BlazorAdmin/JavaScript/Route.cs",
+        "src/BlazorAdmin/Program.cs",
+        "src/BlazorAdmin/Services/CacheEntry.cs",
+        "src/BlazorAdmin/Services/HttpService.cs",
+        "src/BlazorAdmin/Shared/CustomInputSelect.cs",
+        "src/Web/Pages/Admin/Index.cshtml",
+        "src/Web/Pages/Admin/Index.cshtml.cs",
+        "src/BlazorAdmin/Shared/MainLayout.razor",
+        "src/BlazorAdmin/Shared/NavMenu.razor",
+        "src/BlazorAdmin/ServicesConfiguration.cs",
+        "src/BlazorAdmin/Shared/Spinner.razor",
+        "src/BlazorAdmin/Shared/Toast.razor"
+      ],
+      "confidence": 0.776,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-005",
+      "name": "Basket",
+      "capability_id": "CAP-005",
+      "classification": "DataInfrastructure",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-003",
+          "name": "Basket",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 2,
+          "efferent_coupling": 7,
+          "confidence": 0.866
+        }
+      ],
+      "source_module_names": [
+        "Basket"
+      ],
+      "component_count": 23,
+      "interface_count": 3,
+      "data_access_component_count": 3,
+      "risk_count": 1,
+      "afferent_coupling": 2,
+      "efferent_coupling": 7,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+        "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+        "src/ApplicationCore/Exceptions/BasketNotFoundException.cs",
+        "src/ApplicationCore/Exceptions/EmptyBasketOnCheckoutException.cs",
+        "src/ApplicationCore/Extensions/GuardExtensions.cs",
+        "src/ApplicationCore/Services/BasketService.cs",
+        "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+        "src/Infrastructure/Data/Config/BasketConfiguration.cs",
+        "src/Infrastructure/Data/Config/BasketItemConfiguration.cs",
+        "src/Infrastructure/Data/Queries/BasketQueryService.cs",
+        "src/Web/Pages/Basket/BasketItemViewModel.cs",
+        "src/Web/Pages/Basket/BasketViewModel.cs",
+        "src/Web/Pages/Shared/Components/BasketComponent/Basket.cs",
+        "src/Web/ViewModels/BasketComponentViewModel.cs",
+        "src/Web/Services/BasketViewModelService.cs",
+        "src/Web/Pages/Basket/Checkout.cshtml",
+        "src/Web/Pages/Basket/Checkout.cshtml.cs",
+        "src/Web/Pages/Shared/Components/BasketComponent/Default.cshtml",
+        "src/Web/Views/Shared/Components/Basket/Default.cshtml",
+        "src/Web/Pages/Basket/Index.cshtml"
+      ],
+      "confidence": 0.786,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-006",
+      "name": "Controllers",
+      "capability_id": "CAP-006",
+      "classification": "InterfaceCapabilityCandidate",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-013",
+          "name": "Web",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 3,
+          "efferent_coupling": 4,
+          "confidence": 0.685
+        }
+      ],
+      "source_module_names": [
+        "Web"
+      ],
+      "component_count": 21,
+      "interface_count": 3,
+      "data_access_component_count": 0,
+      "risk_count": 1,
+      "afferent_coupling": 3,
+      "efferent_coupling": 4,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/Web/Controllers/Api/BaseApiController.cs",
+        "src/Web/Extensions/CacheHelpers.cs",
+        "src/Web/Extensions/EmailSenderExtensions.cs",
+        "src/Web/Extensions/UrlHelperExtensions.cs",
+        "src/Web/HealthChecks/ApiHealthCheck.cs",
+        "src/Web/HealthChecks/HomePageHealthCheck.cs",
+        "src/Web/Interfaces/IBasketViewModelService.cs",
+        "src/Web/Interfaces/ICatalogItemViewModelService.cs",
+        "src/Web/Interfaces/ICatalogViewModelService.cs",
+        "src/Web/Pages/Error.cshtml",
+        "src/Web/Pages/Error.cshtml.cs",
+        "src/Web/Pages/Index.cshtml",
+        "src/Web/ViewModels/File/FileViewModel.cs",
+        "src/Web/Pages/Index.cshtml.cs",
+        "src/Web/ViewModels/PaginationInfoViewModel.cs",
+        "src/Web/Pages/Privacy.cshtml",
+        "src/Web/Pages/Privacy.cshtml.cs",
+        "src/Web/Pages/_ViewImports.cshtml",
+        "src/Web/Views/_ViewImports.cshtml",
+        "src/Web/Pages/_ViewStart.cshtml"
+      ],
+      "confidence": 0.711,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-007",
+      "name": "Order",
+      "capability_id": "CAP-007",
+      "classification": "DataInfrastructure",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-009",
+          "name": "Order",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 1,
+          "efferent_coupling": 3,
+          "confidence": 0.882
+        }
+      ],
+      "source_module_names": [
+        "Order"
+      ],
+      "component_count": 21,
+      "interface_count": 2,
+      "data_access_component_count": 5,
+      "risk_count": 1,
+      "afferent_coupling": 1,
+      "efferent_coupling": 3,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/ApplicationCore/Entities/BuyerAggregate/Buyer.cs",
+        "src/ApplicationCore/Entities/BuyerAggregate/PaymentMethod.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/Address.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/OrderItem.cs",
+        "src/ApplicationCore/Services/OrderService.cs",
+        "src/ApplicationCore/Specifications/CustomerOrdersSpecification.cs",
+        "src/ApplicationCore/Specifications/CustomerOrdersWithItemsSpecification.cs",
+        "src/ApplicationCore/Specifications/OrderWithItemsByIdSpec.cs",
+        "src/Infrastructure/Data/Config/OrderConfiguration.cs",
+        "src/Infrastructure/Data/Config/OrderItemConfiguration.cs",
+        "src/Web/Controllers/OrderController.cs",
+        "src/Web/Views/Order/Detail.cshtml",
+        "src/Web/Features/MyOrders/GetMyOrders.cs",
+        "src/Web/Features/MyOrders/GetMyOrdersHandler.cs",
+        "src/Web/Features/OrderDetails/GetOrderDetails.cs",
+        "src/Web/Features/OrderDetails/GetOrderDetailsHandler.cs",
+        "src/Web/Views/Order/MyOrders.cshtml",
+        "src/Web/ViewModels/OrderDetailViewModel.cs",
+        "src/Web/ViewModels/OrderItemViewModel.cs"
+      ],
+      "confidence": 0.894,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-008",
+      "name": "Application",
+      "capability_id": "CAP-008",
+      "classification": "TechnicalSupport",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-002",
+          "name": "ApplicationCore",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 5,
+          "efferent_coupling": 1,
+          "confidence": 0.68
+        }
+      ],
+      "source_module_names": [
+        "ApplicationCore"
+      ],
+      "component_count": 13,
+      "interface_count": 0,
+      "data_access_component_count": 2,
+      "risk_count": 1,
+      "afferent_coupling": 5,
+      "efferent_coupling": 1,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/ApplicationCore/Entities/BaseEntity.cs",
+        "src/ApplicationCore/Exceptions/DuplicateException.cs",
+        "src/ApplicationCore/Extensions/JsonExtensions.cs",
+        "src/ApplicationCore/Interfaces/IAggregateRoot.cs",
+        "src/ApplicationCore/Interfaces/IAppLogger.cs",
+        "src/ApplicationCore/Interfaces/IBasketQueryService.cs",
+        "src/ApplicationCore/Interfaces/IBasketService.cs",
+        "src/ApplicationCore/Interfaces/IEmailSender.cs",
+        "src/ApplicationCore/Interfaces/IOrderService.cs",
+        "src/ApplicationCore/Interfaces/IReadRepository.cs",
+        "src/ApplicationCore/Interfaces/IRepository.cs",
+        "src/ApplicationCore/Interfaces/IUriComposer.cs",
+        "src/ApplicationCore/Services/UriComposer.cs"
+      ],
+      "confidence": 0.68,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-009",
+      "name": "Contracts",
+      "capability_id": "CAP-009",
+      "classification": "UICapabilityCandidate",
+      "consolidation_action": "consolidate_as_candidate_module",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-011",
+          "name": "SharedContracts",
+          "boundary_quality": "Medium",
+          "migration_readiness": "Needs Refactoring",
+          "afferent_coupling": 1,
+          "efferent_coupling": 0,
+          "confidence": 0.88
+        }
+      ],
+      "source_module_names": [
+        "SharedContracts"
+      ],
+      "component_count": 12,
+      "interface_count": 0,
+      "data_access_component_count": 0,
+      "risk_count": 0,
+      "afferent_coupling": 1,
+      "efferent_coupling": 0,
+      "boundary_quality_distribution": {
+        "Medium": 1
+      },
+      "migration_readiness_distribution": {
+        "Needs Refactoring": 1
+      },
+      "evidence_files": [
+        "src/BlazorShared/Attributes/EndpointAttribute.cs",
+        "src/BlazorShared/BaseUrlConfiguration.cs",
+        "src/BlazorShared/Interfaces/ICatalogItemService.cs",
+        "src/BlazorShared/Interfaces/ICatalogLookupDataService.cs",
+        "src/BlazorShared/Interfaces/ILookupDataResponse.cs",
+        "src/BlazorShared/Models/ErrorDetails.cs",
+        "src/BlazorShared/Models/LookupData.cs",
+        "src/Web/Pages/Shared/_pagination.cshtml",
+        "src/Web/Views/Shared/Error.cshtml",
+        "src/Web/Views/Shared/_CookieConsentPartial.cshtml",
+        "src/Web/Views/Shared/_Layout.cshtml",
+        "src/Web/Views/Shared/_ValidationScriptsPartial.cshtml"
+      ],
+      "confidence": 0.88,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-010",
+      "name": "Cross",
+      "capability_id": "CAP-010",
+      "classification": "InterfaceCapabilityCandidate",
+      "consolidation_action": "consolidate_as_candidate_module",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-005",
+          "name": "CrossCutting",
+          "boundary_quality": "Medium",
+          "migration_readiness": "Needs Refactoring",
+          "afferent_coupling": 0,
+          "efferent_coupling": 4,
+          "confidence": 0.722
+        }
+      ],
+      "source_module_names": [
+        "CrossCutting"
+      ],
+      "component_count": 10,
+      "interface_count": 7,
+      "data_access_component_count": 0,
+      "risk_count": 0,
+      "afferent_coupling": 0,
+      "efferent_coupling": 4,
+      "boundary_quality_distribution": {
+        "Medium": 1
+      },
+      "migration_readiness_distribution": {
+        "Needs Refactoring": 1
+      },
+      "evidence_files": [
+        "src/PublicApi/CustomSchemaFilters.cs",
+        "src/PublicApi/Middleware/ExceptionMiddleware.cs",
+        "src/PublicApi/Program.cs",
+        "src/Web/Configuration/ConfigureCookieSettings.cs",
+        "src/Web/Configuration/ConfigureCoreServices.cs",
+        "src/Web/Configuration/ConfigureWebServices.cs",
+        "src/Web/Configuration/RevokeAuthenticationEvents.cs",
+        "src/Web/Constants.cs",
+        "src/Web/Program.cs",
+        "src/Web/SlugifyParameterTransformer.cs"
+      ],
+      "confidence": 0.725,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-011",
+      "name": "Message",
+      "capability_id": "CAP-011",
+      "classification": "ApplicationCapabilityCandidate",
+      "consolidation_action": "consolidate_as_candidate_module",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-010",
+          "name": "PublicApi",
+          "boundary_quality": "Medium",
+          "migration_readiness": "Needs Refactoring",
+          "afferent_coupling": 2,
+          "efferent_coupling": 0,
+          "confidence": 0.68
+        }
+      ],
+      "source_module_names": [
+        "PublicApi"
+      ],
+      "component_count": 5,
+      "interface_count": 0,
+      "data_access_component_count": 0,
+      "risk_count": 0,
+      "afferent_coupling": 2,
+      "efferent_coupling": 0,
+      "boundary_quality_distribution": {
+        "Medium": 1
+      },
+      "migration_readiness_distribution": {
+        "Needs Refactoring": 1
+      },
+      "evidence_files": [
+        "src/PublicApi/BaseMessage.cs",
+        "src/PublicApi/BaseRequest.cs",
+        "src/PublicApi/BaseResponse.cs",
+        "src/PublicApi/ImageValidators.cs",
+        "src/PublicApi/MappingProfile.cs"
+      ],
+      "confidence": 0.68,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-012",
+      "name": "Infrastructure",
+      "capability_id": "CAP-012",
+      "classification": "ApplicationCapabilityCandidate",
+      "consolidation_action": "consolidate_as_candidate_module",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-008",
+          "name": "Infrastructure",
+          "boundary_quality": "Medium",
+          "migration_readiness": "Needs Refactoring",
+          "afferent_coupling": 4,
+          "efferent_coupling": 0,
+          "confidence": 0.78
+        }
+      ],
+      "source_module_names": [
+        "Infrastructure"
+      ],
+      "component_count": 3,
+      "interface_count": 0,
+      "data_access_component_count": 0,
+      "risk_count": 0,
+      "afferent_coupling": 4,
+      "efferent_coupling": 0,
+      "boundary_quality_distribution": {
+        "Medium": 1
+      },
+      "migration_readiness_distribution": {
+        "Needs Refactoring": 1
+      },
+      "evidence_files": [
+        "src/Infrastructure/Dependencies.cs",
+        "src/Infrastructure/Logging/LoggerAdapter.cs",
+        "src/Infrastructure/Services/EmailSender.cs"
+      ],
+      "confidence": 0.78,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    },
+    {
+      "consolidated_module_id": "CMOD-013",
+      "name": "Data",
+      "capability_id": "CAP-013",
+      "classification": "DataInfrastructure",
+      "consolidation_action": "review_before_consolidating",
+      "source_module_count": 1,
+      "source_modules": [
+        {
+          "module_id": "MOD-006",
+          "name": "DataAccess",
+          "boundary_quality": "Weak",
+          "migration_readiness": "Blocked",
+          "afferent_coupling": 4,
+          "efferent_coupling": 1,
+          "confidence": 0.84
+        }
+      ],
+      "source_module_names": [
+        "DataAccess"
+      ],
+      "component_count": 2,
+      "interface_count": 0,
+      "data_access_component_count": 2,
+      "risk_count": 3,
+      "afferent_coupling": 4,
+      "efferent_coupling": 1,
+      "boundary_quality_distribution": {
+        "Weak": 1
+      },
+      "migration_readiness_distribution": {
+        "Blocked": 1
+      },
+      "evidence_files": [
+        "src/Infrastructure/Data/EfRepository.cs",
+        "src/Infrastructure/Data/FileItem.cs"
+      ],
+      "confidence": 0.84,
+      "open_questions": [
+        "Confirm whether these source module candidates represent one future module/service boundary."
+      ]
+    }
+  ]
+}

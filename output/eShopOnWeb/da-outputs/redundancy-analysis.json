@@ -1,0 +1,64 @@
+{
+  "db_connection": "N/A — derived from Phase 1 code review (entity list + cross-reference of CatalogContext ef_entities vs. full entity source list).",
+  "canonical_shadow_check_performed": true,
+  "findings": [
+    {
+      "concept": "Customer / Buyer",
+      "representations": [
+        {
+          "representation": "AspNetUsers (IdentityDb)",
+          "role": "CANONICAL — source of truth for identity, login, email, roles.",
+          "confidence": 0.8
+        },
+        {
+          "representation": "Buyer (src/ApplicationCore/Entities/BuyerAggregate/Buyer.cs)",
+          "role": "CONFIRMED DEAD/ASPIRATIONAL CODE — not registered as a DbSet on CatalogContext (only 7 DbSets: Baskets, CatalogItems, CatalogBrands, CatalogTypes, Orders, OrderItems, BasketItems), not configured via AppIdentityDbContext.OnModelCreating (which only calls base), and no `IRepository<Buyer>`/`_buyerRepository` usage was found anywhere in src/. Buyer and PaymentMethod are unused classes.",
+          "confidence": 0.9,
+          "action": "No further action needed — confirmed not persisted. If Buyer/PaymentMethod functionality is desired, it requires new EF configuration + repository wiring from scratch, not a fix to existing mappings."
+        },
+        {
+          "representation": "Basket.BuyerId / Order.BuyerId (string)",
+          "role": "SHADOW / loose reference — a string foreign key into AspNetUsers.Id, duplicated across two tables, with no enforced FK. Classic 'loose identifier' pattern called out in the skill's canonical/shadow guidance.",
+          "confidence": 0.8
+        }
+      ],
+      "recommendation": "If Buyer is confirmed unused (dead code), BuyerId string fields are the de-facto canonical link and should be documented as such with an explicit note that referential integrity is app-enforced only. If Buyer IS used, clarify the relationship between Buyer.Id and AspNetUsers.Id / BuyerId strings — there may be three overlapping identifiers for one customer."
+    },
+    {
+      "concept": "Catalog Product",
+      "representations": [
+        {
+          "representation": "CatalogItem (Catalog table)",
+          "role": "CANONICAL — live product data, source of truth for price/stock/description.",
+          "confidence": 0.85
+        },
+        {
+          "representation": "CatalogItemOrdered (owned type, embedded in OrderItems)",
+          "role": "INTENTIONAL DUPLICATE / historical snapshot — not a shadow entity in the negative sense. Captures product name/price/image at time of order for audit/history purposes.",
+          "confidence": 0.85
+        },
+        {
+          "representation": "CatalogItemDetails (struct, src/ApplicationCore/Entities/CatalogItem.cs)",
+          "role": "POSSIBLE SHADOW / DTO — a struct co-located with CatalogItem class. Likely a read-model/value-object for API responses (e.g. combining CatalogItem with brand/type names), not a persisted duplicate.",
+          "confidence": 0.7,
+          "action": "Confirm CatalogItemDetails is used only as a projection/DTO and never independently persisted."
+        }
+      ],
+      "recommendation": "No corrective action needed for CatalogItemOrdered — this is good practice (event-sourcing-lite for orders). CatalogItemDetails should be confirmed as a non-persisted projection."
+    }
+  ],
+  "summary": "One canonical/shadow check completed per concept area (Customer/Buyer and Catalog Product), as required. The Buyer/PaymentMethod entity mapping gap previously flagged as an open item has now been resolved: confirmed dead/aspirational code, not persisted (see RC-002 in schema-catalogue.json).",
+  "change_records": [
+    {
+      "change_id": "RC-002c",
+      "type": "CORRECTED",
+      "finding_id": "redundancy-analysis.json — Customer/Buyer concept, Buyer representation",
+      "what": "Buyer reclassified from 'POSSIBLE SHADOW' (confidence 0.6) to 'CONFIRMED DEAD/ASPIRATIONAL CODE' (confidence 0.9). The de-facto canonical link for customer identity in CatalogDb is Basket.BuyerId / Order.BuyerId (string), unenforced soft references to AspNetUsers.Id.",
+      "evidence_source": "entity/ORM code",
+      "evidence_detail": "src/Infrastructure/Data/CatalogContext.cs (DbSet list); src/Infrastructure/Identity/AppIdentityDbContext.cs (OnModelCreating)",
+      "confidence_before": 0.6,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    }
+  ]
+}

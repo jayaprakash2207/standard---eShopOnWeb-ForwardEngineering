@@ -1,0 +1,47 @@
+---
+title: eShopOnWeb — Container View
+---
+C4Container
+  title eShopOnWeb Container View
+
+  Person(shopper, "Shopper")
+  Person(admin, "Catalog Admin")
+
+  Container_Boundary(app, "Application") {
+
+    Container(web, "Web", "ASP.NET Core 8, MVC + Razor Pages", "Hosts shopper-facing catalog browsing, basket management, checkout, order history. Cookie-based auth (assumed). Hosts or links to BlazorAdmin.")
+    Container(publicapi, "PublicApi", "ASP.NET Core 8, Ardalis.ApiEndpoints", "REST API. Auth endpoint (POST /api/authenticate). Catalog endpoints (GET brands/types/items, admin CRUD).")
+    Container(blazoradmin, "BlazorAdmin", "Blazor WebAssembly (.NET 8)", "SPA. Catalog admin UI. Calls PublicApi. JWT Bearer auth via CustomAuthStateProvider. 1-min LocalStorage cache via decorators.")
+
+    Container_Boundary(core, "ApplicationCore (shared library)") {
+      Component(services, "Application Services", "C# classes", "BasketService, OrderService, UriComposer")
+      Component(entities, "Domain Entities", "C# classes with IAggregateRoot", "Basket, Order, CatalogItem, CatalogBrand, CatalogType, Buyer (unused)")
+      Component(interfaces, "Interfaces", "C# interfaces", "IBasketService, IOrderService, IRepository<T>, ITokenClaimService, ...")
+      Component(specs, "Specifications", "Ardalis.Specification", "BasketWithItemsSpecification, CatalogItemsSpecification, CustomerOrdersSpecification, ...")
+    }
+
+    Container_Boundary(infra, "Infrastructure (shared library)") {
+      Component(catalogctx, "CatalogContext", "EF Core 8 DbContext", "7 DbSets: Basket, BasketItem, CatalogItem, CatalogBrand, CatalogType, Order, OrderItem. Single shared context — migration blocker.")
+      Component(identityctx, "AppIdentityDbContext", "EF Core Identity DbContext", "ASP.NET Identity tables. Separate from CatalogContext.")
+      Component(repo, "EfRepository<T>", "Ardalis.Specification.RepositoryBase<T>", "Generic repository for all aggregate roots.")
+      Component(tokenservice, "IdentityTokenClaimService", "ITokenClaimService", "Generates JWT. HMAC SHA256. Hardcoded secret — CRITICAL.")
+      Component(email, "EmailSender", "IEmailSender", "Stub — returns Task.CompletedTask. TODO: implement.")
+      Component(di, "Dependencies", "IServiceCollection extension", "DI wiring. InMemory/SqlServer toggle via USE_ONLY_IN_MEMORY_DATABASE.")
+    }
+  }
+
+  ContainerDb(catalogdb, "Catalog Database", "SQL Server", "Baskets, Catalog, Orders (all in one — shared context)")
+  ContainerDb(identitydb, "Identity Database", "SQL Server", "ASP.NET Identity tables")
+
+  Rel(shopper, web, "Uses", "HTTPS")
+  Rel(admin, blazoradmin, "Uses", "HTTPS")
+  Rel(blazoradmin, publicapi, "API calls", "HTTPS / JSON / JWT")
+  Rel(web, services, "Calls", "in-process")
+  Rel(publicapi, services, "Calls", "in-process")
+  Rel(publicapi, tokenservice, "Generate JWT", "in-process")
+  Rel(services, specs, "Uses for queries", "in-process")
+  Rel(services, repo, "CRUD via IRepository<T>", "in-process")
+  Rel(repo, catalogctx, "Queries/writes", "EF Core")
+  Rel(tokenservice, identityctx, "Reads users/roles", "EF Core")
+  Rel(catalogctx, catalogdb, "SQL", "TCP")
+  Rel(identityctx, identitydb, "SQL", "TCP")

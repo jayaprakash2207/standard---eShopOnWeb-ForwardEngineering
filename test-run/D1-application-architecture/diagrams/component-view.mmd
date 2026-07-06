@@ -1,0 +1,77 @@
+---
+title: eShopOnWeb — Component View (ApplicationCore + Infrastructure + PublicApi)
+---
+flowchart TB
+  subgraph PublicApi["PublicApi (Minimal API)"]
+    direction TB
+    AuthEndpoint["AuthenticateEndpoint\nPOST /api/authenticate"]
+    CatalogBrandEndpoint["CatalogBrandListEndpoint\nGET /api/catalog-brands"]
+    CatalogItemEndpoints["CatalogItem Endpoints\nGET/POST/PUT/DELETE /api/catalog-items\n[inferred]"]
+    CatalogTypeEndpoints["CatalogTypeList Endpoint\nGET /api/catalog-types\n[inferred]"]
+  end
+
+  subgraph BlazorAdmin["BlazorAdmin (WASM SPA)"]
+    direction TB
+    CustomAuth["CustomAuthStateProvider\nJWT Bearer header mgmt"]
+    HttpSvc["HttpService\nHTTP client wrapper\ninconsistent error handling"]
+    CatalogItemSvcBlazor["CatalogItemService (Blazor)\n3-way parallel GET + client join"]
+    CachedDecorator["CachedCatalogItemServiceDecorator\nDecorator + 1-min LocalStorage"]
+    ListPage["List.razor.cs\nCatalogItemPage/List\nasync void bug"]
+  end
+
+  subgraph AppCore["ApplicationCore (Library)"]
+    direction TB
+    BasketSvc["BasketService\nAddItem, DeleteBasket\nTransferBasket (2-record tx)"]
+    OrderSvc["OrderService\nCreateOrderAsync\ncross-module Basket read"]
+    UriComposer["UriComposer\nPicture URL template"]
+    BasketAgg["Basket\nAddItem, RemoveEmptyItems\nIAggregateRoot"]
+    OrderAgg["Order\nTotal(), private _orderItems\nIAggregateRoot"]
+    CatalogItemEntity["CatalogItem\nUpdateDetails, Guard.Against\nIAggregateRoot"]
+    BuyerAgg["Buyer + PaymentMethod\nIAggregateRoot\nDEAD CODE CANDIDATE"]
+    BasketSpec["BasketWithItemsSpecification"]
+    OrderSpec["CustomerOrdersSpecification"]
+    CatalogSpec["CatalogItemsSpecification"]
+    IBasketSvc["IBasketService"]
+    IOrderSvc["IOrderService"]
+    IRepo["IRepository&lt;T&gt;"]
+    IAggRoot["IAggregateRoot marker"]
+  end
+
+  subgraph Infra["Infrastructure (Library)"]
+    direction TB
+    EfRepo["EfRepository&lt;T&gt;\nArdalis.RepositoryBase\nIRepository&lt;T&gt;"]
+    CatalogCtx["CatalogContext\n7 DbSets — 3 domains\nSHARED CONTEXT (violation)"]
+    IdentityCtx["AppIdentityDbContext\nASP.NET Identity"]
+    TokenSvc["IdentityTokenClaimService\nJWT HMAC SHA256\nHardcoded secret (CRITICAL)"]
+    EmailStub["EmailSender\nTask.CompletedTask stub"]
+    DISetup["Dependencies.cs\nAddInfrastructureServices\nInMemory toggle"]
+  end
+
+  AuthEndpoint -->|"ITokenClaimService"| TokenSvc
+  CatalogBrandEndpoint -->|"IReadRepository&lt;CatalogBrand&gt;"| EfRepo
+  CatalogItemEndpoints -->|"IRepository&lt;CatalogItem&gt;"| EfRepo
+
+  BlazorAdmin -->|"HTTP"| PublicApi
+  CachedDecorator -->|"wraps"| CatalogItemSvcBlazor
+  ListPage -->|"calls"| CachedDecorator
+  HttpSvc -->|"used by"| CatalogItemSvcBlazor
+  CustomAuth -->|"sets Bearer"| HttpSvc
+
+  PublicApi -->|"IBasketService"| BasketSvc
+  PublicApi -->|"IOrderService"| OrderSvc
+
+  BasketSvc -->|"IRepository&lt;Basket&gt;"| IRepo
+  OrderSvc -->|"IRepository&lt;Basket&gt;\nIRepository&lt;CatalogItem&gt;\nIRepository&lt;Order&gt;"| IRepo
+  OrderSvc -->|"uses"| UriComposer
+
+  IRepo -->|"implemented by"| EfRepo
+  EfRepo -->|"uses"| CatalogCtx
+  TokenSvc -->|"uses"| IdentityCtx
+
+  BasketSvc -->|"uses"| BasketSpec
+  OrderSvc -->|"uses"| BasketSpec
+  OrderSvc -->|"uses"| CatalogSpec
+
+  CatalogCtx -->|"stores"| BasketAgg
+  CatalogCtx -->|"stores"| OrderAgg
+  CatalogCtx -->|"stores"| CatalogItemEntity

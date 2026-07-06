@@ -1,0 +1,169 @@
+{
+  "generated_at": "2026-06-15T07:27:16+00:00",
+  "risks": [
+    {
+      "risk_id": "APP-RISK-001",
+      "category": "unclear_boundary",
+      "description": "Module candidate Catalog has weak or uncertain boundary evidence with coupling score 13.",
+      "affected_module": "Catalog",
+      "affected_component": "unknown",
+      "severity": "High",
+      "forward_engineering_impact": "Forward engineering could create artificial service boundaries or duplicate responsibilities if this candidate boundary is accepted without review.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/module-boundary-pack.json",
+          "reason": "weak or high-coupling module candidate"
+        }
+      ],
+      "recommendation": "Confirm module ownership, public interfaces, and dependency direction before using this candidate as a modernization boundary.",
+      "confidence": 0.879
+    },
+    {
+      "risk_id": "APP-RISK-002",
+      "category": "circular_dependency",
+      "description": "Module dependency cycle detected: Admin -> ApplicationCore -> Basket -> Catalog -> DataAccess -> Identity -> Order -> Web",
+      "affected_module": "Admin, ApplicationCore, Basket, Catalog, DataAccess, Identity, Order, Web",
+      "affected_component": "unknown",
+      "severity": "High",
+      "forward_engineering_impact": "Cycle participants are risky extraction candidates until dependency direction and ownership are clarified.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/dependency-pack.json",
+          "reason": "module cycle evidence"
+        }
+      ],
+      "recommendation": "Review cycle edges and break the cycle with clearer contracts or orchestration boundaries.",
+      "confidence": 0.7
+    },
+    {
+      "risk_id": "APP-RISK-003",
+      "category": "high_coupling",
+      "description": "High-coupling module candidates include Catalog, Basket, Identity, Web, ApplicationCore.",
+      "affected_module": "multiple",
+      "affected_component": "unknown",
+      "severity": "High",
+      "forward_engineering_impact": "High-coupling modules are poor first extraction candidates and need dependency review before rewrite.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/dependency-pack.json",
+          "reason": "high coupling module candidates"
+        }
+      ],
+      "recommendation": "Start modernization with lower-coupled modules and treat these as later-stage candidates.",
+      "confidence": 0.72
+    },
+    {
+      "risk_id": "APP-RISK-004",
+      "category": "shared_dependency",
+      "description": "EfRepository is a high-coupling component candidate with total coupling 16.",
+      "affected_module": "unknown",
+      "affected_component": "EfRepository",
+      "severity": "High",
+      "forward_engineering_impact": "Shared high-coupling components can make migration sequencing and replacement risky.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/dependency-pack.json",
+          "reason": "high coupling component candidate"
+        }
+      ],
+      "recommendation": "Map consumers and ownership before extracting modules that depend on this component.",
+      "confidence": 0.72
+    },
+    {
+      "risk_id": "APP-RISK-005",
+      "category": "unknown",
+      "description": "0 call flows are partial because parsed evidence did not fully resolve runtime dispatch and downstream calls.",
+      "affected_module": "multiple",
+      "affected_component": "unknown",
+      "severity": "Medium",
+      "forward_engineering_impact": "Forward engineering may miss behavior unless partial flows are reviewed against source/tests.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/call-flow-pack.json",
+          "reason": "partial flow count"
+        }
+      ],
+      "recommendation": "Prioritize manual flow review for high-value user-facing and externally visible flows before implementation.",
+      "confidence": 0.56
+    },
+    {
+      "risk_id": "APP-RISK-006",
+      "category": "frontend_backend_coupling",
+      "description": "Frontend application evidence contains 11 API call mappings from BlazorAdmin.",
+      "affected_module": "multiple",
+      "affected_component": "unknown",
+      "severity": "Medium",
+      "forward_engineering_impact": "Frontend/backend contract changes may break detected UI workflows.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/frontend-application-pack.json",
+          "reason": "frontend API call mapping"
+        }
+      ],
+      "recommendation": "Preserve or explicitly redesign detected frontend/API contracts during forward engineering.",
+      "confidence": 0.9
+    },
+    {
+      "risk_id": "APP-RISK-007",
+      "category": "unknown",
+      "description": "Controller-like component CatalogBrandListEndpoint depends directly on repository EfRepository.",
+      "affected_module": "DataAccess, Catalog",
+      "affected_component": "CatalogBrandListEndpoint, EfRepository",
+      "severity": "Medium",
+      "forward_engineering_impact": "This dependency should not be copied into the future design without review.",
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 16,
+          "reason": "method_parameter dependency IRepository<CatalogBrand> catalogBrandRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 36,
+          "reason": "CatalogBrandListEndpoint.HandleAsync calls catalogBrandRepository.ListAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 16,
+          "reason": "CatalogBrandListEndpoint dependency IRepository<CatalogBrand> can resolve to registered implementation EfRepository"
+        }
+      ],
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72
+    },
+    {
+      "risk_id": "APP-RISK-008",
+      "category": "unclear_boundary",
+      "description": "0 components have unknown module ownership and 40 components have unknown type classification.",
+      "affected_module": "unknown",
+      "affected_component": "unknown",
+      "severity": "Medium",
+      "forward_engineering_impact": "Unknown ownership can hide shared responsibilities or dead code candidates.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/component-registry-pack.json",
+          "reason": "unknown component/module classification counts"
+        }
+      ],
+      "recommendation": "Review Unknown components before finalizing service/module boundaries.",
+      "confidence": 0.7
+    },
+    {
+      "risk_id": "APP-RISK-009",
+      "category": "integration_scatter",
+      "description": "External dependency candidates include sqlserver, catalog-items, catalog-items/{id}, catalog-items?PageSize=10, {_apiUrl}{uri}; target purposes may require review.",
+      "affected_module": "multiple",
+      "affected_component": "unknown",
+      "severity": "Medium",
+      "forward_engineering_impact": "Unclear integration purpose can block environment setup and contract preservation in forward engineering.",
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/external-boundary-pack.json",
+          "reason": "external dependency open questions"
+        }
+      ],
+      "recommendation": "Confirm each external boundary purpose and runtime ownership before implementation planning.",
+      "confidence": 0.741
+    }
+  ]
+}

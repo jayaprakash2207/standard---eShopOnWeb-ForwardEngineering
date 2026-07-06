@@ -1,0 +1,53 @@
+%%{init: {"theme": "default"}}%%
+graph LR
+    subgraph Projects["Project References"]
+        WEB[Web\nASP.NET Core MVC]
+        PAPI[PublicApi\nASP.NET Core REST]
+        BADM[BlazorAdmin\nBlazor WASM]
+        AC[ApplicationCore\nDomain Library]
+        INF[Infrastructure\nData + Identity]
+        BSH[BlazorShared\nDTO Library]
+    end
+
+    subgraph External["External Packages"]
+        EF[EF Core\nEntityFrameworkCore]
+        ASI[ASP.NET Identity]
+        ARDSPEC[Ardalis.Specification\nEFCore]
+        ARDGUARD[Ardalis.GuardClauses]
+        BLAZLOC[Blazored.LocalStorage]
+        AUTOMAP[AutoMapper]
+        MINAPI[MinimalApi.Endpoint]
+        ARDAPI[Ardalis.ApiEndpoints]
+    end
+
+    subgraph DB["Databases"]
+        SQL[(SQL Server)]
+    end
+
+    WEB -->|references| AC
+    WEB -->|references| INF
+    PAPI -->|references| AC
+    PAPI -->|references| INF
+    PAPI -->|references| BSH
+    BADM -->|references| BSH
+    BADM -->|HTTP calls| PAPI
+    INF -->|implements| AC
+
+    AC -->|uses| ARDGUARD
+    INF -->|uses| EF
+    INF -->|uses| ASI
+    INF -->|uses| ARDSPEC
+    PAPI -->|uses| AUTOMAP
+    PAPI -->|uses| MINAPI
+    PAPI -->|uses| ARDAPI
+    BADM -->|uses| BLAZLOC
+
+    INF -->|writes via EF| SQL
+
+    style WEB fill:#d4e8ff
+    style PAPI fill:#d4e8ff
+    style BADM fill:#d4e8ff
+    style AC fill:#d8f5d8
+    style INF fill:#fff3d4
+    style BSH fill:#f0d4ff
+    style SQL fill:#ffd4d4,stroke:#cc0000

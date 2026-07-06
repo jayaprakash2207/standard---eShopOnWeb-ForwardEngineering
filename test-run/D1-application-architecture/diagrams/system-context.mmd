@@ -1,0 +1,23 @@
+---
+title: eShopOnWeb — System Context View
+---
+C4Context
+  title eShopOnWeb System Context
+
+  Person(shopper, "Shopper", "Browse catalog, add items to basket, place orders via MVC web app")
+  Person(admin, "Catalog Admin", "Manage catalog items, brands, types via BlazorAdmin SPA")
+
+  System_Boundary(eshop, "eShopOnWeb") {
+    System(web, "Web Application", "ASP.NET Core 8 MVC / Razor Pages. Serves shopper UI, basket management, checkout, order history.")
+    System(publicapi, "Public API", "ASP.NET Core 8 Minimal API (Ardalis.ApiEndpoints). Exposes catalog, auth, admin endpoints.")
+    System(blazoradmin, "BlazorAdmin SPA", "Blazor WebAssembly. Admin frontend for catalog item management. Hosted by or alongside Web project.")
+  }
+
+  SystemDb(sqlserver, "SQL Server", "Azure SQL Edge. Two logical databases: CatalogConnection (business data) and IdentityConnection (ASP.NET Identity).")
+
+  Rel(shopper, web, "Browses / shops", "HTTPS")
+  Rel(admin, blazoradmin, "Manages catalog", "HTTPS")
+  Rel(blazoradmin, publicapi, "Admin API calls (catalog CRUD, auth)", "HTTPS / JSON")
+  Rel(web, sqlserver, "Reads/writes catalog, basket, order data", "EF Core / TCP")
+  Rel(publicapi, sqlserver, "Reads/writes catalog, identity data", "EF Core / TCP")
+  Rel(web, publicapi, "Auth calls (unknown — needs verification)", "HTTPS")

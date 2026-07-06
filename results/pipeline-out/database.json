@@ -1,0 +1,52 @@
+{
+  "tables": [],
+  "stored_procedures": [],
+  "triggers": [],
+  "views": [],
+  "relationships": [],
+  "ef_entities": [
+    {
+      "entity_name": "CatalogBrand",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    },
+    {
+      "entity_name": "CatalogType",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    },
+    {
+      "entity_name": "CatalogItem",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    },
+    {
+      "entity_name": "Basket",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    },
+    {
+      "entity_name": "OrderItem",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    },
+    {
+      "entity_name": "BasketItem",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    },
+    {
+      "entity_name": "Order",
+      "source_file": "src/Infrastructure/Data/CatalogContext.cs",
+      "type": "ef_entity",
+      "extraction_timestamp": "2026-07-06T08:52:41.266347+00:00"
+    }
+  ],
+  "db_contexts": []
+}

@@ -1,0 +1,327 @@
+{
+  "extraction_date": "2026-07-06",
+  "db_connection": "CODE-ONLY — sqlcmd not approved for execution. Command attempted: sqlcmd -S localhost,1433 -U SA -P \"***\" -Q \"SELECT name FROM sys.databases\". Docker Compose defines SQL Server at localhost:1433 (mcr.microsoft.com/azure-sql-edge, SA_PASSWORD set). Start with: docker-compose up sqlserver",
+  "source": "C:\\standard v2 pipeline\\standard---eShopOnWeb-ForwardEngineering-main\\standard---eShopOnWeb-ForwardEngineering-main\\source\\eShopOnWeb",
+  "agent2_review_changes": [
+    {
+      "change_id": "RC-08",
+      "type": "CORRECTED",
+      "finding_id": "schema-catalogue.json — OrderItems.ItemOrdered_ProductName",
+      "what": "Added note about ORM/migration nullability conflict: migration=nullable, ORM config=IsRequired(). Actual SQL schema is nullable. Application guards prevent nulls in practice.",
+      "evidence_source": "Phase 4 spot check + Phase 5 cross-file",
+      "evidence_detail": "src/Infrastructure/Data/Config/OrderItemConfiguration.cs:16 (IsRequired) vs Migration 20201202111507_InitialModel.cs:136 (nullable:true)",
+      "confidence_before": 0.9,
+      "confidence_after": 0.95,
+      "phase_found": "Phase 4 spot check"
+    }
+  ],
+  "databases": [
+    {
+      "logical_name": "CatalogDB",
+      "connection_key": "CatalogConnection",
+      "ef_context": "CatalogContext",
+      "engine": "SQL Server (Azure SQL Edge in Docker)",
+      "in_memory_fallback": "UseInMemoryDatabase('Catalog') when UseOnlyInMemoryDatabase=true config flag",
+      "tables": [
+        {
+          "table_name": "Baskets",
+          "schema": "dbo",
+          "domain": "Shopping Cart",
+          "confidence": 0.9,
+          "confidence_source": "migration file 20201202111507_InitialModel + migration 20211026175614_FixBuyerId",
+          "columns": [
+            { "name": "Id",      "type": "int",           "nullable": false, "pk": true,  "identity": "1,1", "notes": "IDENTITY auto-increment" },
+            { "name": "BuyerId", "type": "nvarchar(256)", "nullable": false, "pk": false, "notes": "Username (email) for authenticated users or GUID string for anonymous guests. Originally nvarchar(40) in InitialModel; widened to nvarchar(256) in FixBuyerId migration (2021-10-26) to match ASP.NET Identity UserName max length." }
+          ],
+          "indexes": [
+            { "name": "PK_Baskets", "columns": ["Id"], "unique": true, "type": "primary key" }
+          ],
+          "fk_constraints": [],
+          "sequences": [],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "BasketItems",
+          "schema": "dbo",
+          "domain": "Shopping Cart",
+          "confidence": 0.9,
+          "confidence_source": "migration file 20201202111507_InitialModel + BasketItemConfiguration.cs",
+          "columns": [
+            { "name": "Id",            "type": "int",           "nullable": false, "pk": true,  "identity": "1,1" },
+            { "name": "UnitPrice",     "type": "decimal(18,2)", "nullable": false, "pk": false, "notes": "Price at time item was added to basket. May diverge from current Catalog.Price." },
+            { "name": "Quantity",      "type": "int",           "nullable": false, "pk": false },
+            { "name": "CatalogItemId", "type": "int",           "nullable": false, "pk": false, "notes": "Soft reference to Catalog.Id — NO FK constraint. CatalogItem can be deleted without cascade." },
+            { "name": "BasketId",      "type": "int",           "nullable": false, "pk": false, "fk": "Baskets.Id ON DELETE CASCADE" }
+          ],
+          "indexes": [
+            { "name": "PK_BasketItems",         "columns": ["Id"],       "unique": true,  "type": "primary key" },
+            { "name": "IX_BasketItems_BasketId", "columns": ["BasketId"], "unique": false, "type": "index" }
+          ],
+          "fk_constraints": [
+            { "name": "FK_BasketItems_Baskets_BasketId", "from_col": "BasketId", "to_table": "Baskets", "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "Catalog",
+          "schema": "dbo",
+          "domain": "Product Catalog",
+          "confidence": 0.9,
+          "confidence_source": "migration InitialModel + CatalogItemConfiguration.cs (.ToTable(\"Catalog\"))",
+          "notes": "EF entity is CatalogItem but table name is 'Catalog' via .ToTable(\"Catalog\") in CatalogItemConfiguration. DbSet is named CatalogItems.",
+          "columns": [
+            { "name": "Id",            "type": "int",           "nullable": false, "pk": true,  "notes": "HiLo sequence: catalog_hilo (increment 10)" },
+            { "name": "Name",          "type": "nvarchar(50)",  "nullable": false, "pk": false, "validation": "Range(0.01,1000) on DTO; NegativeOrZero guard in entity" },
+            { "name": "Description",   "type": "nvarchar(max)", "nullable": true,  "pk": false },
+            { "name": "Price",         "type": "decimal(18,2)", "nullable": false, "pk": false, "notes": "Guard.Against.NegativeOrZero in entity UpdateDetails(). DTO enforces Range(0.01, 1000)." },
+            { "name": "PictureUri",    "type": "nvarchar(max)", "nullable": true,  "pk": false, "notes": "Template URL: 'http://catalogbaseurltobereplaced/...'. Resolved at read time by UriComposer using CatalogSettings.CatalogBaseUrl. New items use placeholder eCatalog-item-default.png." },
+            { "name": "CatalogTypeId", "type": "int",           "nullable": false, "pk": false, "fk": "CatalogTypes.Id ON DELETE CASCADE" },
+            { "name": "CatalogBrandId","type": "int",           "nullable": false, "pk": false, "fk": "CatalogBrands.Id ON DELETE CASCADE" }
+          ],
+          "indexes": [
+            { "name": "PK_Catalog",               "columns": ["Id"],             "unique": true,  "type": "primary key" },
+            { "name": "IX_Catalog_CatalogBrandId", "columns": ["CatalogBrandId"], "unique": false, "type": "index" },
+            { "name": "IX_Catalog_CatalogTypeId",  "columns": ["CatalogTypeId"],  "unique": false, "type": "index" }
+          ],
+          "fk_constraints": [
+            { "name": "FK_Catalog_CatalogBrands_CatalogBrandId", "from_col": "CatalogBrandId", "to_table": "CatalogBrands", "to_col": "Id", "on_delete": "CASCADE" },
+            { "name": "FK_Catalog_CatalogTypes_CatalogTypeId",   "from_col": "CatalogTypeId",  "to_table": "CatalogTypes",  "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected. Seed data: 12 items preconfigured."
+        },
+        {
+          "table_name": "CatalogBrands",
+          "schema": "dbo",
+          "domain": "Product Catalog",
+          "confidence": 0.9,
+          "confidence_source": "migration InitialModel + CatalogBrandConfiguration.cs",
+          "columns": [
+            { "name": "Id",    "type": "int",            "nullable": false, "pk": true,  "notes": "HiLo sequence: catalog_brand_hilo (increment 10)" },
+            { "name": "Brand", "type": "nvarchar(100)",  "nullable": false, "pk": false }
+          ],
+          "indexes": [
+            { "name": "PK_CatalogBrands", "columns": ["Id"], "unique": true, "type": "primary key" }
+          ],
+          "fk_constraints": [],
+          "row_count_estimate": "UNKNOWN — DB not connected. Seed data: 5 brands (Azure, .NET, Visual Studio, SQL Server, Other)."
+        },
+        {
+          "table_name": "CatalogTypes",
+          "schema": "dbo",
+          "domain": "Product Catalog",
+          "confidence": 0.9,
+          "confidence_source": "migration InitialModel + CatalogTypeConfiguration.cs",
+          "columns": [
+            { "name": "Id",   "type": "int",           "nullable": false, "pk": true,  "notes": "HiLo sequence: catalog_type_hilo (increment 10)" },
+            { "name": "Type", "type": "nvarchar(100)", "nullable": false, "pk": false, "notes": "Mapped to DTO field 'Name' via AutoMapper (CatalogType.Type → CatalogTypeDto.Name)." }
+          ],
+          "indexes": [
+            { "name": "PK_CatalogTypes", "columns": ["Id"], "unique": true, "type": "primary key" }
+          ],
+          "fk_constraints": [],
+          "row_count_estimate": "UNKNOWN — DB not connected. Seed data: 4 types (Mug, T-Shirt, Sheet, USB Memory Stick)."
+        },
+        {
+          "table_name": "Orders",
+          "schema": "dbo",
+          "domain": "Order Management",
+          "confidence": 0.9,
+          "confidence_source": "migration InitialModel + FixBuyerId + FixShipToAddress + OrderConfiguration.cs",
+          "columns": [
+            { "name": "Id",                    "type": "int",            "nullable": false, "pk": true,  "identity": "1,1" },
+            { "name": "BuyerId",               "type": "nvarchar(256)",  "nullable": false, "pk": false, "notes": "ASP.NET Identity username (email). Initially nvarchar(max) nullable; made nvarchar(256) NOT NULL in FixBuyerId migration (2021-10-26)." },
+            { "name": "OrderDate",             "type": "datetimeoffset", "nullable": false, "pk": false, "notes": "Set to DateTimeOffset.Now in Order constructor — application clock, not DB default." },
+            { "name": "ShipToAddress_Street",  "type": "nvarchar(180)",  "nullable": false, "pk": false, "notes": "Owned value object. Made NOT NULL in FixShipToAddress migration (2021-12-31)." },
+            { "name": "ShipToAddress_City",    "type": "nvarchar(100)",  "nullable": false, "pk": false, "notes": "Owned value object. Made NOT NULL in FixShipToAddress migration." },
+            { "name": "ShipToAddress_State",   "type": "nvarchar(60)",   "nullable": true,  "pk": false, "notes": "Only nullable ShipToAddress column — intentional for international addresses." },
+            { "name": "ShipToAddress_Country", "type": "nvarchar(90)",   "nullable": false, "pk": false, "notes": "Owned value object. Made NOT NULL in FixShipToAddress migration." },
+            { "name": "ShipToAddress_ZipCode", "type": "nvarchar(18)",   "nullable": false, "pk": false, "notes": "Owned value object. Made NOT NULL in FixShipToAddress migration." }
+          ],
+          "indexes": [
+            { "name": "PK_Orders", "columns": ["Id"], "unique": true, "type": "primary key" }
+          ],
+          "fk_constraints": [],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "OrderItems",
+          "schema": "dbo",
+          "domain": "Order Management",
+          "confidence": 0.9,
+          "confidence_source": "migration InitialModel + OrderItemConfiguration.cs",
+          "notes": "ItemOrdered is an owned value object (CatalogItemOrdered) flattened into this table. All ItemOrdered_* columns are a snapshot of product data at purchase time.",
+          "columns": [
+            { "name": "Id",                        "type": "int",           "nullable": false, "pk": true,  "identity": "1,1" },
+            { "name": "OrderId",                   "type": "int",           "nullable": true,  "pk": false, "fk": "Orders.Id ON DELETE RESTRICT", "warning": "Nullable in migration. ON DELETE RESTRICT — deleting an Order with children throws a DB error." },
+            { "name": "ItemOrdered_CatalogItemId", "type": "int",           "nullable": true,  "pk": false, "notes": "Snapshot of Catalog.Id at purchase time. No FK — intentional: catalog item can be deleted without affecting order history." },
+            { "name": "ItemOrdered_ProductName",   "type": "nvarchar(50)",  "nullable": true,  "pk": false, "notes": "Snapshot of product name at purchase time. DISCREPANCY: migration creates as nullable:true but OrderItemConfiguration.IsRequired() asserts non-null at ORM layer. See DQ-13." },
+            { "name": "ItemOrdered_PictureUri",    "type": "nvarchar(max)", "nullable": true,  "pk": false, "notes": "Snapshot of picture URI at purchase time." },
+            { "name": "UnitPrice",                 "type": "decimal(18,2)", "nullable": false, "pk": false, "notes": "Price per unit at time of order — copied from BasketItem.UnitPrice, not current Catalog.Price." },
+            { "name": "Units",                     "type": "int",           "nullable": false, "pk": false }
+          ],
+          "indexes": [
+            { "name": "PK_OrderItems",         "columns": ["Id"],      "unique": true,  "type": "primary key" },
+            { "name": "IX_OrderItems_OrderId", "columns": ["OrderId"], "unique": false, "type": "index" }
+          ],
+          "fk_constraints": [
+            { "name": "FK_OrderItems_Orders_OrderId", "from_col": "OrderId", "to_table": "Orders", "to_col": "Id", "on_delete": "RESTRICT", "warning": "ON DELETE RESTRICT — deleting an Order row that has OrderItems will raise a database error." }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        }
+      ],
+      "sequences": [
+        { "name": "catalog_hilo",       "increment_by": 10, "used_by": "Catalog.Id" },
+        { "name": "catalog_brand_hilo", "increment_by": 10, "used_by": "CatalogBrands.Id" },
+        { "name": "catalog_type_hilo",  "increment_by": 10, "used_by": "CatalogTypes.Id" }
+      ],
+      "stored_procedures": [],
+      "triggers": [],
+      "views": []
+    },
+    {
+      "logical_name": "IdentityDB",
+      "connection_key": "IdentityConnection",
+      "ef_context": "AppIdentityDbContext",
+      "engine": "SQL Server (same Docker instance as CatalogDB)",
+      "in_memory_fallback": "UseInMemoryDatabase('Identity') when UseOnlyInMemoryDatabase=true config flag",
+      "tables": [
+        {
+          "table_name": "AspNetUsers",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "confidence_source": "migration 20201202111612_InitialIdentityModel",
+          "notes": "Standard ASP.NET Identity table. ApplicationUser extends IdentityUser with no additional custom columns.",
+          "columns": [
+            { "name": "Id",                  "type": "nvarchar(450)", "nullable": false, "pk": true, "notes": "ASP.NET Identity GUID string." },
+            { "name": "UserName",            "type": "nvarchar(256)", "nullable": true,  "notes": "Email address used as username. Cross-referenced by Baskets.BuyerId and Orders.BuyerId in CatalogDB." },
+            { "name": "NormalizedUserName",  "type": "nvarchar(256)", "nullable": true },
+            { "name": "Email",               "type": "nvarchar(256)", "nullable": true,  "pii": true },
+            { "name": "NormalizedEmail",     "type": "nvarchar(256)", "nullable": true,  "pii": true },
+            { "name": "EmailConfirmed",      "type": "bit",           "nullable": false },
+            { "name": "PasswordHash",        "type": "nvarchar(max)", "nullable": true,  "pii": true, "sensitive": true, "notes": "PBKDF2 hash via ASP.NET Identity framework." },
+            { "name": "SecurityStamp",       "type": "nvarchar(max)", "nullable": true,  "sensitive": true },
+            { "name": "ConcurrencyStamp",    "type": "nvarchar(max)", "nullable": true },
+            { "name": "PhoneNumber",         "type": "nvarchar(max)", "nullable": true,  "pii": true },
+            { "name": "PhoneNumberConfirmed","type": "bit",           "nullable": false },
+            { "name": "TwoFactorEnabled",    "type": "bit",           "nullable": false },
+            { "name": "LockoutEnd",          "type": "datetimeoffset","nullable": true },
+            { "name": "LockoutEnabled",      "type": "bit",           "nullable": false },
+            { "name": "AccessFailedCount",   "type": "int",           "nullable": false }
+          ],
+          "indexes": [
+            { "name": "UserNameIndex", "columns": ["NormalizedUserName"], "unique": true,  "filter": "[NormalizedUserName] IS NOT NULL" },
+            { "name": "EmailIndex",    "columns": ["NormalizedEmail"],    "unique": false }
+          ],
+          "fk_constraints": [],
+          "seed_data": ["demouser@microsoft.com (no roles)", "admin@microsoft.com (Administrators role)"],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "AspNetRoles",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "columns": [
+            { "name": "Id",              "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "Name",            "type": "nvarchar(256)", "nullable": true },
+            { "name": "NormalizedName",  "type": "nvarchar(256)", "nullable": true },
+            { "name": "ConcurrencyStamp","type": "nvarchar(max)", "nullable": true }
+          ],
+          "indexes": [
+            { "name": "RoleNameIndex", "columns": ["NormalizedName"], "unique": true, "filter": "[NormalizedName] IS NOT NULL" }
+          ],
+          "fk_constraints": [],
+          "seed_data": ["Administrators"],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "AspNetUserRoles",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "columns": [
+            { "name": "UserId", "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "RoleId", "type": "nvarchar(450)", "nullable": false, "pk": true }
+          ],
+          "indexes": [
+            { "name": "IX_AspNetUserRoles_RoleId", "columns": ["RoleId"], "unique": false }
+          ],
+          "fk_constraints": [
+            { "name": "FK_AspNetUserRoles_AspNetRoles_RoleId", "from_col": "RoleId", "to_table": "AspNetRoles", "to_col": "Id", "on_delete": "CASCADE" },
+            { "name": "FK_AspNetUserRoles_AspNetUsers_UserId", "from_col": "UserId", "to_table": "AspNetUsers", "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "AspNetUserClaims",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "columns": [
+            { "name": "Id",         "type": "int",            "nullable": false, "pk": true, "identity": "1,1" },
+            { "name": "UserId",     "type": "nvarchar(450)",  "nullable": false },
+            { "name": "ClaimType",  "type": "nvarchar(max)",  "nullable": true },
+            { "name": "ClaimValue", "type": "nvarchar(max)",  "nullable": true }
+          ],
+          "fk_constraints": [
+            { "name": "FK_AspNetUserClaims_AspNetUsers_UserId", "from_col": "UserId", "to_table": "AspNetUsers", "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "AspNetUserLogins",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "columns": [
+            { "name": "LoginProvider",      "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "ProviderKey",        "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "ProviderDisplayName","type": "nvarchar(max)", "nullable": true },
+            { "name": "UserId",             "type": "nvarchar(450)", "nullable": false }
+          ],
+          "fk_constraints": [
+            { "name": "FK_AspNetUserLogins_AspNetUsers_UserId", "from_col": "UserId", "to_table": "AspNetUsers", "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "AspNetUserTokens",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "columns": [
+            { "name": "UserId",        "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "LoginProvider", "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "Name",          "type": "nvarchar(450)", "nullable": false, "pk": true },
+            { "name": "Value",         "type": "nvarchar(max)", "nullable": true,  "sensitive": true }
+          ],
+          "fk_constraints": [
+            { "name": "FK_AspNetUserTokens_AspNetUsers_UserId", "from_col": "UserId", "to_table": "AspNetUsers", "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        },
+        {
+          "table_name": "AspNetRoleClaims",
+          "schema": "dbo",
+          "domain": "Identity",
+          "confidence": 0.9,
+          "columns": [
+            { "name": "Id",         "type": "int",           "nullable": false, "pk": true, "identity": "1,1" },
+            { "name": "RoleId",     "type": "nvarchar(450)", "nullable": false },
+            { "name": "ClaimType",  "type": "nvarchar(max)", "nullable": true },
+            { "name": "ClaimValue", "type": "nvarchar(max)", "nullable": true }
+          ],
+          "fk_constraints": [
+            { "name": "FK_AspNetRoleClaims_AspNetRoles_RoleId", "from_col": "RoleId", "to_table": "AspNetRoles", "to_col": "Id", "on_delete": "CASCADE" }
+          ],
+          "row_count_estimate": "UNKNOWN — DB not connected"
+        }
+      ],
+      "sequences": [],
+      "stored_procedures": [],
+      "triggers": [],
+      "views": []
+    }
+  ]
+}

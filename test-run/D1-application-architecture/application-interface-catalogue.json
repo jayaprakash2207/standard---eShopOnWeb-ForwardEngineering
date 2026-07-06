@@ -1,0 +1,202 @@
+{
+  "interfaces": [
+    {
+      "interface_id": "INT-001",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/api/authenticate",
+      "owner_module": "Authentication",
+      "entry_component": "AuthenticateEndpoint",
+      "called_service": "IdentityTokenClaimService",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "reason": "[HttpPost('api/authenticate')] with SwaggerOperation annotation"
+        }
+      ],
+      "confidence": 0.99,
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-002",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-brands",
+      "owner_module": "Catalog",
+      "entry_component": "CatalogBrandListEndpoint",
+      "called_service": "IRepository<CatalogBrand>",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "reason": "app.MapGet('api/catalog-brands') in AddRoute"
+        }
+      ],
+      "confidence": 0.99,
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-003",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — catalog item list endpoint not in extraction",
+      "called_service": "IRepository<CatalogItem>",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "_httpService.HttpGet<PagedCatalogItemResponse>('catalog-items') — implies endpoint exists"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Exact endpoint class not captured — needs verification in PublicApi/CatalogItemEndpoints/"]
+    },
+    {
+      "interface_id": "INT-004",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items/{id}",
+      "owner_module": "Catalog",
+      "entry_component": "unknown",
+      "called_service": "IRepository<CatalogItem>",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "_httpService.HttpGet<EditCatalogItemResult>('catalog-items/{id}') call"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Endpoint implementation not in extraction"]
+    },
+    {
+      "interface_id": "INT-005",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "unknown",
+      "called_service": "IRepository<CatalogItem>",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "_httpService.HttpPost<CreateCatalogItemResponse>('catalog-items', catalogItem)"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Endpoint implementation not captured"]
+    },
+    {
+      "interface_id": "INT-006",
+      "type": "HTTP_API",
+      "method": "PUT",
+      "path_or_name": "/api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "unknown",
+      "called_service": "IRepository<CatalogItem>",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "_httpService.HttpPut<EditCatalogItemResult>('catalog-items', catalogItem)"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Endpoint implementation not captured"]
+    },
+    {
+      "interface_id": "INT-007",
+      "type": "HTTP_API",
+      "method": "DELETE",
+      "path_or_name": "/api/catalog-items/{id}",
+      "owner_module": "Catalog",
+      "entry_component": "unknown",
+      "called_service": "IRepository<CatalogItem>",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "_httpService.HttpDelete<DeleteCatalogItemResponse>('catalog-items', catalogItemId)"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Endpoint implementation not captured"]
+    },
+    {
+      "interface_id": "INT-008",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-types",
+      "owner_module": "Catalog",
+      "entry_component": "unknown",
+      "called_service": "IRepository<CatalogType>",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorShared/Models/CatalogType.cs",
+          "reason": "[Endpoint(Name = 'catalog-types')] attribute — used by CatalogLookupDataService reflection"
+        }
+      ],
+      "confidence": 0.88,
+      "open_questions": ["API endpoint class not in extraction"]
+    },
+    {
+      "interface_id": "INT-009",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/User",
+      "owner_module": "Authentication",
+      "entry_component": "unknown — likely in Web project",
+      "called_service": "unknown",
+      "visibility": "internal",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/CustomAuthStateProvider.cs",
+          "reason": "_httpClient.GetFromJsonAsync<UserInfo>('User') — BlazorAdmin fetches current user info"
+        }
+      ],
+      "confidence": 0.80,
+      "open_questions": ["Which project serves the /User endpoint? Likely Web project acting as host for BlazorAdmin. Needs confirmation."]
+    },
+    {
+      "interface_id": "INT-010",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "BlazorAdmin CatalogItemPage/List",
+      "owner_module": "Catalog",
+      "entry_component": "List (BlazorComponent)",
+      "called_service": "ICatalogItemService",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor.cs",
+          "reason": "Partial class for List.razor — admin catalog management page"
+        }
+      ],
+      "confidence": 0.90,
+      "open_questions": ["Full route path (e.g., /catalog) not determinable without List.razor markup file"]
+    },
+    {
+      "interface_id": "INT-011",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items?PageSize=N",
+      "owner_module": "Catalog",
+      "entry_component": "unknown",
+      "called_service": "IRepository<CatalogItem>",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "HttpGet<PagedCatalogItemResponse>('catalog-items?PageSize=10') — paged variant"
+        }
+      ],
+      "confidence": 0.83,
+      "open_questions": ["Pagination parameters and server-side handling not fully visible"]
+    }
+  ]
+}

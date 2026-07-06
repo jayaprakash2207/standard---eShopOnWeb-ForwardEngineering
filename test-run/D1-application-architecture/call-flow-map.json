@@ -1,0 +1,114 @@
+{
+  "flows": [
+    {
+      "flow_id": "FLOW-001",
+      "name": "Admin Authentication (BlazorAdmin Login)",
+      "entry_point": "POST /api/authenticate",
+      "steps": [
+        { "step": 1, "component": "AuthenticateEndpoint.HandleAsync", "layer": "API", "module": "Authentication", "operation": "Receives AuthenticateRequest (username/password)" },
+        { "step": 2, "component": "SignInManager<ApplicationUser>.PasswordSignInAsync", "layer": "Infrastructure", "module": "Authentication", "operation": "Validates credentials against ASP.NET Identity" },
+        { "step": 3, "component": "IdentityTokenClaimService.GetTokenAsync", "layer": "Infrastructure", "module": "Authentication", "operation": "Fetches user + roles, builds JWT claims, signs token with HMAC SHA256" },
+        { "step": 4, "component": "AuthenticateEndpoint", "layer": "API", "module": "Authentication", "operation": "Returns AuthenticateResponse with JWT token" },
+        { "step": 5, "component": "CustomAuthStateProvider.FetchUser", "layer": "Presentation/UI", "module": "Authentication", "operation": "Receives UserInfo; sets HttpClient default Bearer header" },
+        { "step": 6, "component": "CustomAuthStateProvider.GetAuthenticationStateAsync", "layer": "Presentation/UI", "module": "Authentication", "operation": "Returns AuthenticationState to Blazor auth pipeline" }
+      ],
+      "modules_touched": ["Authentication"],
+      "external_systems_touched": ["AppIdentityDbContext → SQL Server (Identity DB)"],
+      "data_access_components": ["AppIdentityDbContext via UserManager"],
+      "risk_flags": [
+        "JWT_SECRET_KEY is hardcoded string in source — security risk",
+        "CustomAuthStateProvider sets Bearer on shared HttpClient DefaultRequestHeaders — not thread-safe across concurrent requests"
+      ],
+      "confidence": 0.92,
+      "open_questions": ["How does Web (MVC) authenticate? Separate cookie-based flow not visible."]
+    },
+    {
+      "flow_id": "FLOW-002",
+      "name": "Add Item to Basket",
+      "entry_point": "Web controller / API call (unknown endpoint — not in extraction)",
+      "steps": [
+        { "step": 1, "component": "Unknown Web Controller / API Endpoint", "layer": "API", "module": "Basket", "operation": "Receives catalogItemId, price, username from HTTP request" },
+        { "step": 2, "component": "BasketService.AddItemToBasket", "layer": "Application Service", "module": "Basket", "operation": "Loads or creates Basket for user via BasketWithItemsSpecification" },
+        { "step": 3, "component": "EfRepository<Basket>.FirstOrDefaultAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Queries CatalogContext.Baskets with Include(Items)" },
+        { "step": 4, "component": "Basket.AddItem", "layer": "Domain", "module": "Basket", "operation": "Adds new BasketItem or increments quantity on existing item" },
+        { "step": 5, "component": "EfRepository<Basket>.UpdateAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Persists updated basket to CatalogContext" }
+      ],
+      "modules_touched": ["Basket", "Infrastructure-Cross-Cutting"],
+      "external_systems_touched": ["CatalogContext → SQL Server"],
+      "data_access_components": ["EfRepository<Basket>", "CatalogContext.Baskets"],
+      "risk_flags": [],
+      "confidence": 0.90,
+      "open_questions": ["Entry point controller/endpoint not in extraction — Web project basket pages/controllers needed"]
+    },
+    {
+      "flow_id": "FLOW-003",
+      "name": "Checkout / Place Order",
+      "entry_point": "Web controller checkout action (unknown — not in extraction)",
+      "steps": [
+        { "step": 1, "component": "Unknown Web Checkout Controller", "layer": "API", "module": "Order", "operation": "Receives basketId + shipping address from user" },
+        { "step": 2, "component": "OrderService.CreateOrderAsync", "layer": "Application Service", "module": "Order", "operation": "Loads basket via BasketWithItemsSpecification; validates non-empty" },
+        { "step": 3, "component": "EfRepository<Basket>.FirstOrDefaultAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Fetches basket with items from CatalogContext" },
+        { "step": 4, "component": "EfRepository<CatalogItem>.ListAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Fetches CatalogItems matching basket item IDs via CatalogItemsSpecification" },
+        { "step": 5, "component": "OrderService (inline)", "layer": "Application Service", "module": "Order", "operation": "Creates CatalogItemOrdered snapshot per item; builds OrderItem list" },
+        { "step": 6, "component": "UriComposer.ComposePicUri", "layer": "Application Service", "module": "Catalog", "operation": "Resolves picture URI template using CatalogSettings.CatalogBaseUrl" },
+        { "step": 7, "component": "Order constructor", "layer": "Domain", "module": "Order", "operation": "Creates Order with buyerId, Address, List<OrderItem>" },
+        { "step": 8, "component": "EfRepository<Order>.AddAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Persists Order to CatalogContext.Orders" }
+      ],
+      "modules_touched": ["Order", "Basket", "Catalog", "Infrastructure-Cross-Cutting"],
+      "external_systems_touched": ["CatalogContext → SQL Server"],
+      "data_access_components": ["EfRepository<Basket>", "EfRepository<CatalogItem>", "EfRepository<Order>", "CatalogContext"],
+      "risk_flags": [
+        "Basket is NOT deleted after order creation — potential orphan basket",
+        "No payment processing in this flow — checkout completes without payment"
+      ],
+      "confidence": 0.88,
+      "open_questions": [
+        "Basket cleanup after order: is DeleteBasketAsync called by checkout controller? Not visible.",
+        "No payment gateway call visible — intentional demo simplification or missing feature?"
+      ]
+    },
+    {
+      "flow_id": "FLOW-004",
+      "name": "Basket Transfer on Login (Anonymous to Authenticated)",
+      "entry_point": "Web login event handler (not in extraction)",
+      "steps": [
+        { "step": 1, "component": "Unknown Web Login Handler / Event", "layer": "API", "module": "Authentication", "operation": "User logs in; anonymous session identified" },
+        { "step": 2, "component": "BasketService.TransferBasketAsync", "layer": "Application Service", "module": "Basket", "operation": "Loads anonymous basket and user basket" },
+        { "step": 3, "component": "EfRepository<Basket>.FirstOrDefaultAsync x2", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Two DB queries — one for anonymous, one for user basket" },
+        { "step": 4, "component": "Basket.AddItem (loop)", "layer": "Domain", "module": "Basket", "operation": "Copies items from anonymous basket to user basket" },
+        { "step": 5, "component": "EfRepository<Basket>.UpdateAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Saves user basket" },
+        { "step": 6, "component": "EfRepository<Basket>.DeleteAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "Deletes anonymous basket" }
+      ],
+      "modules_touched": ["Basket", "Authentication", "Infrastructure-Cross-Cutting"],
+      "external_systems_touched": ["CatalogContext → SQL Server"],
+      "data_access_components": ["EfRepository<Basket>", "CatalogContext.Baskets"],
+      "risk_flags": ["Anonymous basket transfer does not validate quantity limits or merge conflicts"],
+      "confidence": 0.90,
+      "open_questions": ["Where is TransferBasketAsync called? Likely in Web login redirect or cookie event."]
+    },
+    {
+      "flow_id": "FLOW-005",
+      "name": "Admin Catalog Item List (BlazorAdmin)",
+      "entry_point": "BlazorAdmin CatalogItemPage/List OnAfterRenderAsync",
+      "steps": [
+        { "step": 1, "component": "List.OnAfterRenderAsync", "layer": "Presentation/UI", "module": "Catalog", "operation": "First render; triggers parallel service calls" },
+        { "step": 2, "component": "CachedCatalogItemServiceDecorator.List", "layer": "Integration", "module": "Catalog", "operation": "Checks Blazored LocalStorage for cached items (1-min TTL)" },
+        { "step": 3, "component": "CatalogItemService_Blazor.List", "layer": "Integration", "module": "Catalog", "operation": "Parallel: HttpGet catalog-brands + catalog-types + catalog-items from PublicApi" },
+        { "step": 4, "component": "HttpService.HttpGet", "layer": "Integration", "module": "BlazorAdmin-UI", "operation": "HTTP GET to PublicApi /api/catalog-items; /api/catalog-brands; /api/catalog-types" },
+        { "step": 5, "component": "CatalogBrandListEndpoint.HandleAsync", "layer": "API", "module": "Catalog", "operation": "Server: fetches catalog brands from EfRepository; maps to DTO via AutoMapper" },
+        { "step": 6, "component": "EfRepository<CatalogBrand>.ListAsync", "layer": "Data Access", "module": "Infrastructure-Cross-Cutting", "operation": "SELECT * FROM CatalogBrands via EF" },
+        { "step": 7, "component": "CatalogItemService_Blazor (inline join)", "layer": "Integration", "module": "Catalog", "operation": "Client-side join: assigns CatalogBrand/CatalogType names to CatalogItem objects" },
+        { "step": 8, "component": "CachedCatalogItemServiceDecorator", "layer": "Integration", "module": "Catalog", "operation": "Stores result in LocalStorage cache" }
+      ],
+      "modules_touched": ["Catalog", "Infrastructure-Cross-Cutting", "BlazorAdmin-UI"],
+      "external_systems_touched": ["PublicApi HTTP", "BlazoredLocalStorage (browser)", "CatalogContext → SQL Server"],
+      "data_access_components": ["EfRepository<CatalogBrand>", "EfRepository<CatalogItem>", "EfRepository<CatalogType>"],
+      "risk_flags": [
+        "Client-side join of brand/type names — N catalog items require only 2 extra lookups, but this runs on every page load if cache expired",
+        "async void DetailsClick on List page can swallow exceptions silently"
+      ],
+      "confidence": 0.88,
+      "open_questions": ["Are there additional Blazor pages for Create, Edit, Delete? Not in extraction but referenced by List.razor.cs"]
+    }
+  ]
+}

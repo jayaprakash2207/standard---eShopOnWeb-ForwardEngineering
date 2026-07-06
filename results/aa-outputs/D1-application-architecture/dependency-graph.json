@@ -1,0 +1,209 @@
+{
+  "nodes": [
+    { "id": "MOD-Catalog", "type": "module", "module": "Catalog", "layer": "Domain + API" },
+    { "id": "MOD-Basket", "type": "module", "module": "Basket", "layer": "Domain + Application Service" },
+    { "id": "MOD-Order", "type": "module", "module": "Order", "layer": "Domain + Application Service" },
+    { "id": "MOD-Identity", "type": "module", "module": "Identity", "layer": "Infrastructure + API" },
+    { "id": "MOD-Admin", "type": "module", "module": "Admin", "layer": "Presentation/UI" },
+    { "id": "MOD-CrossCutting", "type": "module", "module": "CrossCutting", "layer": "Cross-cutting" },
+    { "id": "PROJ-Web", "type": "project", "module": "Web", "layer": "Presentation/UI" },
+    { "id": "PROJ-PublicApi", "type": "project", "module": "PublicApi", "layer": "API" },
+    { "id": "PROJ-BlazorAdmin", "type": "project", "module": "Admin", "layer": "Presentation/UI" },
+    { "id": "PROJ-Infrastructure", "type": "project", "module": "CrossCutting", "layer": "Infrastructure" },
+    { "id": "PROJ-ApplicationCore", "type": "project", "module": "CrossCutting", "layer": "Domain" },
+    { "id": "PROJ-BlazorShared", "type": "project", "module": "CrossCutting", "layer": "Cross-cutting" },
+    { "id": "EXT-SqlServer", "type": "external", "module": "unknown", "layer": "Data Access" },
+    { "id": "EXT-AspNetIdentity", "type": "external", "module": "Identity", "layer": "Infrastructure" },
+    { "id": "EXT-ArdalisSpecification", "type": "external", "module": "CrossCutting", "layer": "Data Access" },
+    { "id": "EXT-ArdalisGuardClauses", "type": "external", "module": "CrossCutting", "layer": "Domain" },
+    { "id": "EXT-AutoMapper", "type": "external", "module": "Catalog", "layer": "API" },
+    { "id": "EXT-BlazoredLocalStorage", "type": "external", "module": "Admin", "layer": "Presentation/UI" }
+  ],
+  "edges": [
+    {
+      "from": "PROJ-Web",
+      "to": "PROJ-ApplicationCore",
+      "relationship": "references",
+      "evidence": ["src/Infrastructure/Dependencies.cs — ConfigureServices wired into Web startup; BasketService/OrderService used by Web controllers"]
+    },
+    {
+      "from": "PROJ-Web",
+      "to": "PROJ-Infrastructure",
+      "relationship": "references",
+      "evidence": ["src/Infrastructure/Dependencies.cs — Web registers Infrastructure services"]
+    },
+    {
+      "from": "PROJ-PublicApi",
+      "to": "PROJ-ApplicationCore",
+      "relationship": "references",
+      "evidence": ["src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs — uses IRepository<CatalogBrand> from ApplicationCore"]
+    },
+    {
+      "from": "PROJ-PublicApi",
+      "to": "PROJ-Infrastructure",
+      "relationship": "references",
+      "evidence": ["src/PublicApi/appsettings.json CatalogConnection, IdentityConnection — Infrastructure DbContexts registered"]
+    },
+    {
+      "from": "PROJ-PublicApi",
+      "to": "PROJ-BlazorShared",
+      "relationship": "references",
+      "evidence": ["PublicApi responses map to BlazorShared DTOs (CatalogBrandDto, etc.)"]
+    },
+    {
+      "from": "PROJ-BlazorAdmin",
+      "to": "PROJ-BlazorShared",
+      "relationship": "references",
+      "evidence": ["src/BlazorAdmin/Services/CatalogItemService.cs — imports BlazorShared.Interfaces and BlazorShared.Models"]
+    },
+    {
+      "from": "PROJ-BlazorAdmin",
+      "to": "PROJ-PublicApi",
+      "relationship": "calls",
+      "evidence": ["src/BlazorAdmin/wwwroot/appsettings.json baseUrls.apiBase — runtime HTTP calls to PublicApi"]
+    },
+    {
+      "from": "PROJ-Infrastructure",
+      "to": "PROJ-ApplicationCore",
+      "relationship": "references",
+      "evidence": ["src/Infrastructure/Data/EfRepository.cs — implements IRepository<T> from ApplicationCore"]
+    },
+    {
+      "from": "MOD-Order",
+      "to": "MOD-Basket",
+      "relationship": "reads",
+      "evidence": ["src/ApplicationCore/Services/OrderService.cs — _basketRepository.FirstOrDefaultAsync(basketSpec) to read basket for checkout"]
+    },
+    {
+      "from": "MOD-Order",
+      "to": "MOD-Catalog",
+      "relationship": "reads",
+      "evidence": ["src/ApplicationCore/Services/OrderService.cs — _itemRepository.ListAsync(catalogItemsSpecification) to read catalog items for price snapshot"]
+    },
+    {
+      "from": "MOD-Basket",
+      "to": "MOD-Catalog",
+      "relationship": "references",
+      "evidence": ["src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs — CatalogItemId foreign key reference to Catalog domain"]
+    },
+    {
+      "from": "MOD-Admin",
+      "to": "MOD-Catalog",
+      "relationship": "calls",
+      "evidence": ["src/BlazorAdmin/Services/CatalogItemService.cs — all CRUD operations target catalog API endpoints"]
+    },
+    {
+      "from": "MOD-Admin",
+      "to": "MOD-Identity",
+      "relationship": "calls",
+      "evidence": ["src/BlazorAdmin/CustomAuthStateProvider.cs — fetches user info for authentication state"]
+    },
+    {
+      "from": "MOD-Identity",
+      "to": "MOD-CrossCutting",
+      "relationship": "references",
+      "evidence": ["src/Infrastructure/Identity/IdentityTokenClaimService.cs — implements ITokenClaimsService from ApplicationCore.Interfaces"]
+    },
+    {
+      "from": "MOD-Catalog",
+      "to": "MOD-CrossCutting",
+      "relationship": "references",
+      "evidence": ["CatalogBrandListEndpoint uses IRepository<CatalogBrand> and IMapper; CatalogItem uses IAggregateRoot"]
+    },
+    {
+      "from": "MOD-Basket",
+      "to": "MOD-CrossCutting",
+      "relationship": "references",
+      "evidence": ["BasketService uses IRepository<Basket> and IAppLogger; Basket implements IAggregateRoot"]
+    },
+    {
+      "from": "MOD-Order",
+      "to": "MOD-CrossCutting",
+      "relationship": "references",
+      "evidence": ["OrderService uses IRepository<Order>, IRepository<Basket>, IRepository<CatalogItem>, IUriComposer"]
+    },
+    {
+      "from": "MOD-CrossCutting",
+      "to": "EXT-SqlServer",
+      "relationship": "writes",
+      "evidence": ["src/Infrastructure/Data/CatalogContext.cs — EF Core DbContext targeting SQL Server"]
+    },
+    {
+      "from": "MOD-Identity",
+      "to": "EXT-SqlServer",
+      "relationship": "writes",
+      "evidence": ["src/Infrastructure/Identity/AppIdentityDbContext.cs — Identity tables in SQL Server"]
+    },
+    {
+      "from": "MOD-CrossCutting",
+      "to": "EXT-ArdalisSpecification",
+      "relationship": "references",
+      "evidence": ["src/Infrastructure/Data/EfRepository.cs — extends RepositoryBase<T> from Ardalis.Specification.EntityFrameworkCore"]
+    },
+    {
+      "from": "MOD-Catalog",
+      "to": "EXT-ArdalisGuardClauses",
+      "relationship": "references",
+      "evidence": ["src/ApplicationCore/Entities/CatalogItem.cs — Guard.Against.NullOrEmpty, Guard.Against.NegativeOrZero"]
+    },
+    {
+      "from": "MOD-Basket",
+      "to": "EXT-ArdalisGuardClauses",
+      "relationship": "references",
+      "evidence": ["src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs — Guard.Against.OutOfRange"]
+    },
+    {
+      "from": "MOD-Admin",
+      "to": "EXT-BlazoredLocalStorage",
+      "relationship": "references",
+      "evidence": ["src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs — ILocalStorageService"]
+    },
+    {
+      "from": "PROJ-PublicApi",
+      "to": "EXT-AutoMapper",
+      "relationship": "references",
+      "evidence": ["src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs — IMapper _mapper"]
+    }
+  ],
+  "cycles": [
+    {
+      "cycle": ["MOD-Order", "MOD-Basket", "MOD-Catalog"],
+      "severity": "Medium",
+      "impact": "OrderService reads both Basket and CatalogItem repositories in a single CreateOrderAsync call. This is not a circular dependency per se, but it means Order module has high efferent coupling — it cannot be extracted without also bringing Basket and Catalog along. This is a migration complexity risk, not a compile-time cycle."
+    }
+  ],
+  "high_coupling_components": [
+    {
+      "component": "OrderService",
+      "reason": "Injects 4 dependencies: IRepository<Order>, IRepository<Basket>, IRepository<CatalogItem>, IUriComposer. Orchestrates across 3 domain aggregates in a single method.",
+      "efferent_coupling": 4
+    },
+    {
+      "component": "CatalogContext",
+      "reason": "Single EF Core DbContext exposes 7 DbSets covering all domain entities (Basket, BasketItem, CatalogItem, CatalogBrand, CatalogType, Order, OrderItem). High afferent coupling — all data access flows through this context.",
+      "afferent_coupling": 7
+    },
+    {
+      "component": "CatalogItemService (BlazorAdmin)",
+      "reason": "Injects ICatalogLookupDataService<CatalogBrand>, ICatalogLookupDataService<CatalogType>, HttpService — then makes 3 parallel API calls on each List/GetById operation.",
+      "efferent_coupling": 3
+    }
+  ],
+  "high_coupling_modules": [
+    {
+      "module": "CrossCutting",
+      "reason": "Highest afferent coupling (5 modules depend on it). Contains EfRepository, IRepository interfaces, IAppLogger, IEmailSender, IUriComposer, IAggregateRoot.",
+      "afferent_coupling": 5
+    },
+    {
+      "module": "Order",
+      "reason": "Depends on Basket (reads basket for checkout), Catalog (reads catalog items for snapshot), and CrossCutting — highest efferent coupling of domain modules.",
+      "efferent_coupling": 3
+    },
+    {
+      "module": "Catalog",
+      "reason": "Used by Basket (CatalogItemId reference), Order (catalog item snapshot), and Admin (full CRUD). Cannot be extracted without impacting all other business modules.",
+      "afferent_coupling": 3
+    }
+  ]
+}

@@ -1,0 +1,1964 @@
+{
+  "generated_at": "2026-06-15T07:27:16+00:00",
+  "source_evidence_pack": "architecture-output/evidence-packs/entry-point-pack.json",
+  "summary": {
+    "entry_point_count": 55,
+    "entry_points_by_type": {
+      "CLI": 3,
+      "FrontendRoute": 3,
+      "HTTP_API": 49
+    },
+    "graphql_endpoint_count": 0,
+    "soap_endpoint_count": 0,
+    "scheduled_job_count": 0,
+    "message_consumer_count": 0,
+    "batch_job_count": 0
+  },
+  "interfaces": [
+    {
+      "interface_id": "INT-001",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/api/authenticate",
+      "owner_module": "Identity",
+      "entry_component": "AuthenticateEndpoint",
+      "called_service": [
+        "ITokenClaimsService.GetTokenAsync",
+        "SignInManager<ApplicationUser>.PasswordSignInAsync"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+      "line": 36,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000227",
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "start_line": 1,
+          "end_line": 59,
+          "chunk_sha256": "2ae1af5dc8257d055f73705470add93b9cc85ae42292769be6198f46c36d125d"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "line": 36,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-002",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-brands",
+      "owner_module": "Catalog",
+      "entry_component": "CatalogBrandListEndpoint",
+      "called_service": [
+        "IRepository<CatalogBrand>.ListAsync"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+      "line": 27,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000230",
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "start_line": 1,
+          "end_line": 46,
+          "chunk_sha256": "2939f631257459ec8afa6a9aaf1861edae15ce4fbfafc6a5dcc1c21e8155b09d"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 27,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-003",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items/{catalogItemId}",
+      "owner_module": "Catalog",
+      "entry_component": "CatalogItemGetByIdEndpoint",
+      "called_service": [
+        "GetByIdCatalogItemRequest.CorrelationId",
+        "IRepository<CatalogItem>.GetByIdAsync",
+        "IUriComposer.ComposePicUri"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+      "line": 25,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000234",
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+          "start_line": 1,
+          "end_line": 54,
+          "chunk_sha256": "b5af6e20c2c3114569bd3706971a386d7374bdbe8584895f5f2a07c5d7c1a212"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+          "line": 25,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-004",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "CatalogItemListPagedEndpoint",
+      "called_service": [
+        "IRepository<CatalogItem>.CountAsync",
+        "IRepository<CatalogItem>.ListAsync",
+        "IUriComposer.ComposePicUri",
+        "ListPagedCatalogItemRequest.CorrelationId"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+      "line": 31,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000237",
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+          "start_line": 1,
+          "end_line": 73,
+          "chunk_sha256": "5a8e33b1d1382ff40d631bb47dac8de689fd7f1a95b73ff78e8048380243d10e"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+          "line": 31,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-005",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "CreateCatalogItemEndpoint",
+      "called_service": [
+        "CreateCatalogItemRequest.CorrelationId",
+        "IRepository<CatalogItem>.AddAsync",
+        "IRepository<CatalogItem>.CountAsync",
+        "IRepository<CatalogItem>.UpdateAsync",
+        "IUriComposer.ComposePicUri"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+      "line": 29,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000240",
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "start_line": 1,
+          "end_line": 76,
+          "chunk_sha256": "8469b6daaa1b968795d30471ad6190ebcd9501d12dc31089012bd1e65d37c622"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 29,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-006",
+      "type": "HTTP_API",
+      "method": "DELETE",
+      "path_or_name": "/api/catalog-items/{catalogItemId}",
+      "owner_module": "Catalog",
+      "entry_component": "DeleteCatalogItemEndpoint",
+      "called_service": [
+        "DeleteCatalogItemRequest.CorrelationId",
+        "IRepository<CatalogItem>.DeleteAsync",
+        "IRepository<CatalogItem>.GetByIdAsync"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+      "line": 20,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000243",
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "start_line": 1,
+          "end_line": 42,
+          "chunk_sha256": "7397cc6ec0ce81caaeb99f72d2eb2a1e79c7103822bf91ed7b1ec123e1ddc0a8"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "line": 20,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-007",
+      "type": "HTTP_API",
+      "method": "PUT",
+      "path_or_name": "/api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "UpdateCatalogItemEndpoint",
+      "called_service": [
+        "IRepository<CatalogItem>.GetByIdAsync",
+        "IRepository<CatalogItem>.UpdateAsync",
+        "IUriComposer.ComposePicUri",
+        "UpdateCatalogItemRequest.CorrelationId"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+      "line": 27,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000246",
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "start_line": 1,
+          "end_line": 67,
+          "chunk_sha256": "75ea210c970ad14742b3ba90a30ece86c92dda5d9e5440b4ed4bcd59cdcec03e"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "line": 27,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-008",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-types",
+      "owner_module": "Catalog",
+      "entry_component": "CatalogTypeListEndpoint",
+      "called_service": [
+        "IRepository<CatalogType>.ListAsync"
+      ],
+      "visibility": "external_system",
+      "source_file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+      "line": 27,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000249",
+          "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+          "start_line": 1,
+          "end_line": 46,
+          "chunk_sha256": "7fa33e6066000b12598f50b69b93fcce0521380c3cc12e96382a8d219f286501"
+        }
+      ],
+      "parser_strategy": "aspnet_minimal_api_parser",
+      "route_action": "HandleAsync",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+          "line": 27,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-009",
+      "type": "HTTP_API",
+      "method": "unknown",
+      "path_or_name": "/{controller:slugify=Home}/{action:slugify=Index}/{id?}",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Program.cs",
+      "line": 194,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000256",
+          "file": "src/Web/Program.cs",
+          "start_line": 141,
+          "end_line": 202,
+          "chunk_sha256": "8cf438a4c70b89143404d182cba946a4120083a6e5cf2070be03e70e59fff486"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "ASP.NET conventional MVC route",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 194,
+          "reason": "ASP.NET conventional MVC route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "interface_id": "INT-010",
+      "type": "HTTP_API",
+      "method": "unknown",
+      "path_or_name": "ASP.NET Razor Pages route registration",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "unknown",
+      "source_file": "src/Web/Program.cs",
+      "line": 195,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000256",
+          "file": "src/Web/Program.cs",
+          "start_line": 141,
+          "end_line": 202,
+          "chunk_sha256": "8cf438a4c70b89143404d182cba946a4120083a6e5cf2070be03e70e59fff486"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "ASP.NET Razor Pages route registration",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 195,
+          "reason": "ASP.NET Razor Pages route registration"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "interface_id": "INT-011",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/index.html",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Program.cs",
+      "line": 199,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000256",
+          "file": "src/Web/Program.cs",
+          "start_line": 141,
+          "end_line": 202,
+          "chunk_sha256": "8cf438a4c70b89143404d182cba946a4120083a6e5cf2070be03e70e59fff486"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "SPA fallback route",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 199,
+          "reason": "SPA fallback route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "interface_id": "INT-012",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/home_page_health_check",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Program.cs",
+      "line": 196,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000256",
+          "file": "src/Web/Program.cs",
+          "start_line": 141,
+          "end_line": 202,
+          "chunk_sha256": "8cf438a4c70b89143404d182cba946a4120083a6e5cf2070be03e70e59fff486"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "ASP.NET health check route",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 196,
+          "reason": "ASP.NET health check route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "interface_id": "INT-013",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api_health_check",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Program.cs",
+      "line": 197,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000256",
+          "file": "src/Web/Program.cs",
+          "start_line": 141,
+          "end_line": 202,
+          "chunk_sha256": "8cf438a4c70b89143404d182cba946a4120083a6e5cf2070be03e70e59fff486"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "ASP.NET health check route",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 197,
+          "reason": "ASP.NET health check route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "interface_id": "INT-014",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/MyAccount",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 47,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000287",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "d3ac9fc256dce938d065363cdb4192185fa50c363a4e5b3f18058272d9929299"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "MyAccount",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 47,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-015",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/MyAccount",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.SetEmailAsync",
+        "UserManager<ApplicationUser>.SetPhoneNumberAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 69,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000287",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "d3ac9fc256dce938d065363cdb4192185fa50c363a4e5b3f18058272d9929299"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "MyAccount",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 69,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-016",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/SendVerificationEmail",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IEmailSender.SendEmailConfirmationAsync",
+        "UserManager<ApplicationUser>.GenerateEmailConfirmationTokenAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 108,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000288",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 71,
+          "end_line": 150,
+          "chunk_sha256": "39b2f4a4dc2b37905c31a07dc479dc5c6c08114f837dc06d4e18a81068ae2f11"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "SendVerificationEmail",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 108,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-017",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ChangePassword",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.HasPasswordAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 137,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000288",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 71,
+          "end_line": 150,
+          "chunk_sha256": "39b2f4a4dc2b37905c31a07dc479dc5c6c08114f837dc06d4e18a81068ae2f11"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "ChangePassword",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 137,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-018",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/ChangePassword",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "SignInManager<ApplicationUser>.SignInAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 157,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000289",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 141,
+          "end_line": 220,
+          "chunk_sha256": "0aecc620733cf0b4ce4ff6aba881a59061f4136a9b2c4cfb9986b422cd41ec5b"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "ChangePassword",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 157,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-019",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/SetPassword",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.HasPasswordAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 186,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000289",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 141,
+          "end_line": 220,
+          "chunk_sha256": "0aecc620733cf0b4ce4ff6aba881a59061f4136a9b2c4cfb9986b422cd41ec5b"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "SetPassword",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 186,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-020",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/SetPassword",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.SignInAsync",
+        "UserManager<ApplicationUser>.AddPasswordAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 207,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000289",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 141,
+          "end_line": 220,
+          "chunk_sha256": "0aecc620733cf0b4ce4ff6aba881a59061f4136a9b2c4cfb9986b422cd41ec5b"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "SetPassword",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 207,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-021",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ExternalLogins",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.GetExternalAuthenticationSchemesAsync",
+        "UserManager<ApplicationUser>.GetLoginsAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.HasPasswordAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 234,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000290",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 211,
+          "end_line": 290,
+          "chunk_sha256": "8dd02febc95a2ec7e6014f2633ecad4004f0bb2d2af9453e010cc450250f7e51"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "ExternalLogins",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 234,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-022",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/LinkLogin",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.ConfigureExternalAuthenticationProperties",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 254,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000290",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 211,
+          "end_line": 290,
+          "chunk_sha256": "8dd02febc95a2ec7e6014f2633ecad4004f0bb2d2af9453e010cc450250f7e51"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "LinkLogin",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 254,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-023",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/LinkLoginCallback",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.GetExternalLoginInfoAsync",
+        "UserManager<ApplicationUser>.AddLoginAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 266,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000290",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 211,
+          "end_line": 290,
+          "chunk_sha256": "8dd02febc95a2ec7e6014f2633ecad4004f0bb2d2af9453e010cc450250f7e51"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "LinkLoginCallback",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 266,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-024",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/RemoveLogin",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.SignInAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.RemoveLoginAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 295,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000291",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 281,
+          "end_line": 360,
+          "chunk_sha256": "0817d50c273027ceb332dd4c45fadbd101ae631d9f046c8ce929a4affb5c2b3c"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "RemoveLogin",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 295,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-025",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/TwoFactorAuthentication",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.CountRecoveryCodesAsync",
+        "UserManager<ApplicationUser>.GetAuthenticatorKeyAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 319,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000291",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 281,
+          "end_line": 360,
+          "chunk_sha256": "0817d50c273027ceb332dd4c45fadbd101ae631d9f046c8ce929a4affb5c2b3c"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "TwoFactorAuthentication",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 319,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-026",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/Disable2faWarning",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 338,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000291",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 281,
+          "end_line": 360,
+          "chunk_sha256": "0817d50c273027ceb332dd4c45fadbd101ae631d9f046c8ce929a4affb5c2b3c"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "Disable2faWarning",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 338,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-027",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/Disable2fa",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.SetTwoFactorEnabledAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 356,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000291",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 281,
+          "end_line": 360,
+          "chunk_sha256": "0817d50c273027ceb332dd4c45fadbd101ae631d9f046c8ce929a4affb5c2b3c"
+        },
+        {
+          "chunk_id": "CHUNK-000292",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 351,
+          "end_line": 430,
+          "chunk_sha256": "29ff33f6497f27c141817bb552fe0e5bebc8cc9f1a1b3b5286215dbe04b897b8"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "Disable2fa",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 356,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-028",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/EnableAuthenticator",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 375,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000292",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 351,
+          "end_line": 430,
+          "chunk_sha256": "29ff33f6497f27c141817bb552fe0e5bebc8cc9f1a1b3b5286215dbe04b897b8"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "EnableAuthenticator",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 375,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-029",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ShowRecoveryCodes",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 390,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000292",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 351,
+          "end_line": 430,
+          "chunk_sha256": "29ff33f6497f27c141817bb552fe0e5bebc8cc9f1a1b3b5286215dbe04b897b8"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "ShowRecoveryCodes",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 390,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-030",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/EnableAuthenticator",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GenerateNewTwoFactorRecoveryCodesAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.SetTwoFactorEnabledAsync",
+        "UserManager<ApplicationUser>.VerifyTwoFactorTokenAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 405,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000292",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 351,
+          "end_line": 430,
+          "chunk_sha256": "29ff33f6497f27c141817bb552fe0e5bebc8cc9f1a1b3b5286215dbe04b897b8"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "EnableAuthenticator",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 405,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-031",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ResetAuthenticatorWarning",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 441,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000293",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 421,
+          "end_line": 500,
+          "chunk_sha256": "054057cd083a90c6491e17debe9ad7f27626f3859572005173f1e94db2573ac9"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "ResetAuthenticatorWarning",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 441,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-032",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/ResetAuthenticator",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.ResetAuthenticatorKeyAsync",
+        "UserManager<ApplicationUser>.SetTwoFactorEnabledAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 448,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000293",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 421,
+          "end_line": 500,
+          "chunk_sha256": "054057cd083a90c6491e17debe9ad7f27626f3859572005173f1e94db2573ac9"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "ResetAuthenticator",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 448,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-033",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/GenerateRecoveryCodes",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GenerateNewTwoFactorRecoveryCodesAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 465,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000293",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 421,
+          "end_line": 500,
+          "chunk_sha256": "054057cd083a90c6491e17debe9ad7f27626f3859572005173f1e94db2573ac9"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "GenerateRecoveryCodes",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 465,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-034",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/GenerateRecoveryCodesWarning",
+      "owner_module": "Identity",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 487,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000293",
+          "file": "src/Web/Controllers/ManageController.cs",
+          "start_line": 421,
+          "end_line": 500,
+          "chunk_sha256": "054057cd083a90c6491e17debe9ad7f27626f3859572005173f1e94db2573ac9"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "GenerateRecoveryCodesWarning",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 487,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-035",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Order/MyOrders",
+      "owner_module": "Order",
+      "entry_component": "OrderController",
+      "called_service": [
+        "IMediator.Send"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/OrderController.cs",
+      "line": 23,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000295",
+          "file": "src/Web/Controllers/OrderController.cs",
+          "start_line": 1,
+          "end_line": 44,
+          "chunk_sha256": "2aa61ed775bb54993c050ce882c77f584649feead783da49666038fc5da99f82"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "MyOrders",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/OrderController.cs",
+          "line": 23,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-036",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Order/Detail/{orderId}",
+      "owner_module": "Order",
+      "entry_component": "OrderController",
+      "called_service": [
+        "IMediator.Send"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/OrderController.cs",
+      "line": 32,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000295",
+          "file": "src/Web/Controllers/OrderController.cs",
+          "start_line": 1,
+          "end_line": 44,
+          "chunk_sha256": "2aa61ed775bb54993c050ce882c77f584649feead783da49666038fc5da99f82"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "Detail",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/OrderController.cs",
+          "line": 32,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-037",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/User",
+      "owner_module": "Identity",
+      "entry_component": "UserController",
+      "called_service": [
+        "ILogger<UserController>.LogInformation",
+        "IMemoryCache.Set",
+        "SignInManager<ApplicationUser>.SignOutAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/UserController.cs",
+      "line": 38,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000296",
+          "file": "src/Web/Controllers/UserController.cs",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "f0b33b1ff6bc18f6b047717515a3107f1fdc226954cc528e130801ce911048b3"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "GetCurrentUser",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/UserController.cs",
+          "line": 38,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-038",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/User/Logout",
+      "owner_module": "Identity",
+      "entry_component": "UserController",
+      "called_service": [
+        "ILogger<UserController>.LogInformation",
+        "IMemoryCache.Set",
+        "SignInManager<ApplicationUser>.SignOutAsync"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Controllers/UserController.cs",
+      "line": 45,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000296",
+          "file": "src/Web/Controllers/UserController.cs",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "f0b33b1ff6bc18f6b047717515a3107f1fdc226954cc528e130801ce911048b3"
+        }
+      ],
+      "parser_strategy": "aspnet_attribute_route_parser",
+      "route_action": "Logout",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/UserController.cs",
+          "line": 45,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-039",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/logout",
+      "owner_module": "Identity",
+      "entry_component": "Logout",
+      "called_service": [
+        "IJSRuntime",
+        "HttpClient",
+        "BlazorAdmin.Helpers.BlazorComponent"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/BlazorAdmin/Pages/Logout.razor",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000113",
+          "file": "src/BlazorAdmin/Pages/Logout.razor",
+          "start_line": 1,
+          "end_line": 14,
+          "chunk_sha256": "326b07b7e9ace99b69405b3a9e0bbf8df1effc43bf3f9efe3a446bfa1102f6f7"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.84,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/Logout.razor",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-040",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/admin",
+      "owner_module": "Catalog",
+      "entry_component": "List",
+      "called_service": [
+        "BlazorAdmin.Helpers.BlazorComponent"
+      ],
+      "visibility": "user_facing",
+      "source_file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000124",
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor",
+          "start_line": 1,
+          "end_line": 67,
+          "chunk_sha256": "716a2b34286b1a9145cb337eef5528cd3819de6ff35bdeab493ea0eb286f683f"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.84,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-041",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/ConfirmEmail",
+      "owner_module": "Identity",
+      "entry_component": "ConfirmEmail",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000272",
+          "file": "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml",
+          "start_line": 1,
+          "end_line": 12,
+          "chunk_sha256": "51f59b884726f744cd668f0f4fae12d56113b5e45e7fea8378e7c624b4927252"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-042",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/Login",
+      "owner_module": "Identity",
+      "entry_component": "Login",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Areas/Identity/Pages/Account/Login.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000274",
+          "file": "src/Web/Areas/Identity/Pages/Account/Login.cshtml",
+          "start_line": 1,
+          "end_line": 63,
+          "chunk_sha256": "33d556ed02c8dc961eb6e3c5f434ff7ffcfcd9d5e1a8cce694e754ad507a94e5"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/Login.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-043",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/Logout",
+      "owner_module": "Identity",
+      "entry_component": "Logout",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Areas/Identity/Pages/Account/Logout.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000277",
+          "file": "src/Web/Areas/Identity/Pages/Account/Logout.cshtml",
+          "start_line": 1,
+          "end_line": 10,
+          "chunk_sha256": "f8186e14a703e0c6e50ee818389541acda58f180224ce7dd625888604f091213"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/Logout.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-044",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/Register",
+      "owner_module": "Identity",
+      "entry_component": "Register",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Areas/Identity/Pages/Account/Register.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000279",
+          "file": "src/Web/Areas/Identity/Pages/Account/Register.cshtml",
+          "start_line": 1,
+          "end_line": 41,
+          "chunk_sha256": "357491a65aaffd002c9b584cdc2f39dd2f5f8cd92407d231f8c28745bc1435e0"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/Register.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-045",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Error",
+      "owner_module": "Web",
+      "entry_component": "Error",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Error.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000311",
+          "file": "src/Web/Pages/Error.cshtml",
+          "start_line": 1,
+          "end_line": 26,
+          "chunk_sha256": "671559bcfecafe7c629608207568b170e1bcb92166261e4ecfb3a1b4bf6ec67c"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Error.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-046",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/",
+      "owner_module": "Web",
+      "entry_component": "Index",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Index.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000313",
+          "file": "src/Web/Pages/Index.cshtml",
+          "start_line": 1,
+          "end_line": 45,
+          "chunk_sha256": "efa23fa9ad038e80c1383aca0f4a08890631e288414aa24831bef9062feb9cea"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Index.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-047",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Privacy",
+      "owner_module": "Web",
+      "entry_component": "Privacy",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Privacy.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000315",
+          "file": "src/Web/Pages/Privacy.cshtml",
+          "start_line": 1,
+          "end_line": 8,
+          "chunk_sha256": "84dcd4ddc32c527bca59189e814e2dcd15643363f6a45cacd50f166f97eb46a4"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Privacy.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-048",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Admin/EditCatalogItem",
+      "owner_module": "Catalog",
+      "entry_component": "EditCatalogItem",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Admin/EditCatalogItem.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000319",
+          "file": "src/Web/Pages/Admin/EditCatalogItem.cshtml",
+          "start_line": 1,
+          "end_line": 38,
+          "chunk_sha256": "25d8063ee5c34220b30088c16380cfc66043b76d4d1839069c5cc373c72fa519"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Admin/EditCatalogItem.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-049",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Admin",
+      "owner_module": "Admin",
+      "entry_component": "Index",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Admin/Index.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000321",
+          "file": "src/Web/Pages/Admin/Index.cshtml",
+          "start_line": 1,
+          "end_line": 75,
+          "chunk_sha256": "972302e2ad8350b1ecfbad2377bbfba0e94070d58d5d8c53c80bdb243bf07f4a"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Admin/Index.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-050",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Basket/Checkout",
+      "owner_module": "Basket",
+      "entry_component": "Checkout",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Basket/Checkout.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000325",
+          "file": "src/Web/Pages/Basket/Checkout.cshtml",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "c596ada07f78a25e7cc87192d1a3345717458b1a8434b3c7df238651b0090bfb"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Checkout.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-051",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/{handler?}",
+      "owner_module": "Basket",
+      "entry_component": "Index",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Basket/Index.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000329",
+          "file": "src/Web/Pages/Basket/Index.cshtml",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "37a09317f0d86d9ef4083798ecc20c124281694121fb6bb6ef30b61fbf3dfa05"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.84,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Index.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-052",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Basket/Success",
+      "owner_module": "Basket",
+      "entry_component": "Success",
+      "called_service": [],
+      "visibility": "user_facing",
+      "source_file": "src/Web/Pages/Basket/Success.cshtml",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000333",
+          "file": "src/Web/Pages/Basket/Success.cshtml",
+          "start_line": 1,
+          "end_line": 17,
+          "chunk_sha256": "1448315e783b43423b8078f744c3a03ff71d63245efe6685d812eec46ddded7b"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "@page",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Success.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "interface_id": "INT-053",
+      "type": "CLI",
+      "method": "unknown",
+      "path_or_name": ".NET application bootstrap Program.cs",
+      "owner_module": "Admin",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "internal",
+      "source_file": "src/BlazorAdmin/Program.cs",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000101",
+          "file": "src/BlazorAdmin/Program.cs",
+          "start_line": 1,
+          "end_line": 49,
+          "chunk_sha256": "8f862a1b346de253e4e8951b533a4875d808653a1f68aee1baed7f72e5e053d3"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "unknown",
+      "confidence": 0.74,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Program.cs",
+          "line": 1,
+          "reason": "Program.cs top-level/application bootstrap entry point"
+        }
+      ],
+      "open_questions": [
+        "CLI classification here means executable bootstrap, not a user-facing command surface"
+      ]
+    },
+    {
+      "interface_id": "INT-054",
+      "type": "CLI",
+      "method": "unknown",
+      "path_or_name": ".NET application bootstrap Program.cs",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "internal",
+      "source_file": "src/PublicApi/Program.cs",
+      "line": 180,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000217",
+          "file": "src/PublicApi/Program.cs",
+          "start_line": 141,
+          "end_line": 181,
+          "chunk_sha256": "67cffd9f566b1036bc8002ccaf82c180cf032b245fc9968f266f58701d9c85ca"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "unknown",
+      "confidence": 0.74,
+      "evidence": [
+        {
+          "file": "src/PublicApi/Program.cs",
+          "line": 180,
+          "reason": "Program.cs top-level/application bootstrap entry point"
+        }
+      ],
+      "open_questions": [
+        "CLI classification here means executable bootstrap, not a user-facing command surface"
+      ]
+    },
+    {
+      "interface_id": "INT-055",
+      "type": "CLI",
+      "method": "unknown",
+      "path_or_name": ".NET application bootstrap Program.cs",
+      "owner_module": "CrossCutting",
+      "entry_component": "Program",
+      "called_service": [],
+      "visibility": "internal",
+      "source_file": "src/Web/Program.cs",
+      "line": 1,
+      "source_chunks": [
+        {
+          "chunk_id": "CHUNK-000254",
+          "file": "src/Web/Program.cs",
+          "start_line": 1,
+          "end_line": 80,
+          "chunk_sha256": "d8a52107ed346b96f9afcf1bea009472a6651032d7d213230cffef96f3eb24ad"
+        }
+      ],
+      "parser_strategy": "unknown",
+      "route_action": "unknown",
+      "confidence": 0.74,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 1,
+          "reason": "Program.cs top-level/application bootstrap entry point"
+        }
+      ],
+      "open_questions": [
+        "CLI classification here means executable bootstrap, not a user-facing command surface"
+      ]
+    }
+  ],
+  "open_questions": [
+    "Confirm whether CLI Program.cs entries should be treated only as application bootstraps in final architecture.",
+    "Review convention-based ASP.NET route registrations because exact runtime endpoints can depend on framework conventions."
+  ]
+}

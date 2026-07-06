@@ -1,0 +1,115 @@
+{
+  "extraction_date": "2026-07-06",
+  "db_connection": "CODE-ONLY",
+  "overall_complexity": "LOW",
+  "overall_complexity_rationale": "3 migrations for CatalogDB, 1 for IdentityDB. No stored procedures, triggers, or views. All changes are additive (schema creation) or corrective (column type/nullability fixes). No data migration scripts required.",
+  "contexts": [
+    {
+      "context": "CatalogContext",
+      "database": "CatalogDB",
+      "migration_count": 3,
+      "migrations": [
+        {
+          "name": "20201202111507_InitialModel",
+          "date": "2020-12-02",
+          "type": "schema_creation",
+          "complexity": "LOW",
+          "operations": [
+            "CreateSequence: catalog_brand_hilo (increment 10)",
+            "CreateSequence: catalog_hilo (increment 10)",
+            "CreateSequence: catalog_type_hilo (increment 10)",
+            "CreateTable: Baskets (Id IDENTITY, BuyerId nvarchar(40) NOT NULL)",
+            "CreateTable: CatalogBrands (Id HiLo, Brand nvarchar(100) NOT NULL)",
+            "CreateTable: CatalogTypes (Id HiLo, Type nvarchar(100) NOT NULL)",
+            "CreateTable: Orders (Id IDENTITY, BuyerId nvarchar(max) nullable, OrderDate datetimeoffset, ShipToAddress_* nullable)",
+            "CreateTable: BasketItems (Id IDENTITY, FK → Baskets ON DELETE CASCADE)",
+            "CreateTable: Catalog (Id HiLo, FK → CatalogBrands CASCADE, FK → CatalogTypes CASCADE)",
+            "CreateTable: OrderItems (Id IDENTITY, FK → Orders ON DELETE RESTRICT)",
+            "CreateIndex: IX_BasketItems_BasketId",
+            "CreateIndex: IX_Catalog_CatalogBrandId",
+            "CreateIndex: IX_Catalog_CatalogTypeId",
+            "CreateIndex: IX_OrderItems_OrderId"
+          ],
+          "destructive": false,
+          "data_migration": false,
+          "risks": []
+        },
+        {
+          "name": "20211026175614_FixBuyerId",
+          "date": "2021-10-26",
+          "type": "column_alteration",
+          "complexity": "LOW",
+          "operations": [
+            "AlterColumn: Orders.BuyerId nvarchar(max) nullable → nvarchar(256) NOT NULL (defaultValue: '')",
+            "AlterColumn: Baskets.BuyerId nvarchar(40) → nvarchar(256)"
+          ],
+          "reason": "Original nvarchar(40) was too short for ASP.NET Identity email usernames (max 256). Orders.BuyerId was also made NOT NULL.",
+          "destructive": false,
+          "data_migration": false,
+          "risks": [
+            "Orders.BuyerId: If any existing row had a NULL BuyerId before migration, the NOT NULL constraint with defaultValue '' would silently replace the NULL with an empty string — not a hard error, but a data quality risk on existing data.",
+            "Baskets.BuyerId: Widening from nvarchar(40) to nvarchar(256) is safe on all RDBMS."
+          ]
+        },
+        {
+          "name": "20211231093753_FixShipToAddress",
+          "date": "2021-12-31",
+          "type": "column_alteration",
+          "complexity": "LOW",
+          "operations": [
+            "AlterColumn: ShipToAddress_ZipCode nullable → NOT NULL (defaultValue: '')",
+            "AlterColumn: ShipToAddress_Street nullable → NOT NULL (defaultValue: '')",
+            "AlterColumn: ShipToAddress_Country nullable → NOT NULL (defaultValue: '')",
+            "AlterColumn: ShipToAddress_City nullable → NOT NULL (defaultValue: '')"
+          ],
+          "reason": "ShipToAddress value object was initially created with nullable columns. FixShipToAddress enforced NOT NULL on the 4 required fields (State remains nullable — intentional for international addresses).",
+          "destructive": false,
+          "data_migration": false,
+          "risks": [
+            "Any pre-existing Orders with NULL address fields will have those columns replaced with empty string '' after migration. Not a SQL error but any such rows would have semantically empty addresses."
+          ]
+        }
+      ]
+    },
+    {
+      "context": "AppIdentityDbContext",
+      "database": "IdentityDB",
+      "migration_count": 1,
+      "migrations": [
+        {
+          "name": "20201202111612_InitialIdentityModel",
+          "date": "2020-12-02",
+          "type": "schema_creation",
+          "complexity": "LOW",
+          "operations": [
+            "CreateTable: AspNetRoles",
+            "CreateTable: AspNetUsers",
+            "CreateTable: AspNetRoleClaims (FK → AspNetRoles CASCADE)",
+            "CreateTable: AspNetUserClaims (FK → AspNetUsers CASCADE)",
+            "CreateTable: AspNetUserLogins (FK → AspNetUsers CASCADE)",
+            "CreateTable: AspNetUserRoles (FK → AspNetRoles CASCADE + FK → AspNetUsers CASCADE)",
+            "CreateTable: AspNetUserTokens (FK → AspNetUsers CASCADE)",
+            "CreateIndex: RoleNameIndex (unique, filtered: [NormalizedName] IS NOT NULL)",
+            "CreateIndex: EmailIndex (non-unique)",
+            "CreateIndex: UserNameIndex (unique, filtered: [NormalizedUserName] IS NOT NULL)",
+            "CreateIndex: IX_AspNetRoleClaims_RoleId",
+            "CreateIndex: IX_AspNetUserClaims_UserId",
+            "CreateIndex: IX_AspNetUserLogins_UserId",
+            "CreateIndex: IX_AspNetUserRoles_RoleId"
+          ],
+          "destructive": false,
+          "data_migration": false,
+          "risks": []
+        }
+      ]
+    }
+  ],
+  "forward_migration_notes": [
+    "All migrations are additive or corrective — no destructive DROP statements in Up() methods.",
+    "No cross-database migrations or coordinated ordering required between CatalogDB and IdentityDB.",
+    "HiLo sequences (catalog_hilo, catalog_brand_hilo, catalog_type_hilo) must exist before any INSERT into Catalog/CatalogBrands/CatalogTypes — created in InitialModel.",
+    "If migrating to a new DB engine (e.g. PostgreSQL), HiLo sequence strategy must be re-validated — behaviour differs by engine.",
+    "Buyer and PaymentMethod domain entities (BuyerAggregate) exist in code but have NO migrations — they are never persisted. Do not attempt to migrate them without first creating EF entity configurations and a new migration.",
+    "CatalogItem entity maps to table named 'Catalog' (not 'CatalogItems') — any raw SQL must use the correct table name."
+  ]
+}

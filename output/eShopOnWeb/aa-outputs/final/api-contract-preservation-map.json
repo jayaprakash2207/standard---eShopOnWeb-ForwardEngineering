@@ -1,0 +1,1675 @@
+{
+  "generated_at": "2026-06-15T07:27:16+00:00",
+  "source_final_artifacts": [
+    "architecture-output/final/application-interface-catalogue.json",
+    "architecture-output/final/component-registry.json",
+    "architecture-output/final/module-boundary-map.json",
+    "architecture-output/final/business-capability-map.json"
+  ],
+  "summary": {
+    "contract_count": 55,
+    "preserve_count": 46,
+    "review_count": 9
+  },
+  "api_contracts": [
+    {
+      "contract_id": "API-CONTRACT-001",
+      "interface_id": "INT-001",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/api/authenticate",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0221",
+      "entry_component": "AuthenticateEndpoint",
+      "called_service": [
+        "ITokenClaimsService.GetTokenAsync",
+        "SignInManager<ApplicationUser>.PasswordSignInAsync"
+      ],
+      "source_file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+      "line": 36,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "line": 36,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-002",
+      "interface_id": "INT-002",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-brands",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0118",
+      "entry_component": "CatalogBrandListEndpoint",
+      "called_service": [
+        "IRepository<CatalogBrand>.ListAsync"
+      ],
+      "source_file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+      "line": 27,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 27,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-003",
+      "interface_id": "INT-003",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items/{catalogItemId}",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0122",
+      "entry_component": "CatalogItemGetByIdEndpoint",
+      "called_service": [
+        "GetByIdCatalogItemRequest.CorrelationId",
+        "IRepository<CatalogItem>.GetByIdAsync",
+        "IUriComposer.ComposePicUri"
+      ],
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+      "line": 25,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+          "line": 25,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-004",
+      "interface_id": "INT-004",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-items",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0223",
+      "entry_component": "CatalogItemListPagedEndpoint",
+      "called_service": [
+        "IRepository<CatalogItem>.CountAsync",
+        "IRepository<CatalogItem>.ListAsync",
+        "IUriComposer.ComposePicUri",
+        "ListPagedCatalogItemRequest.CorrelationId"
+      ],
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+      "line": 31,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+          "line": 31,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-005",
+      "interface_id": "INT-005",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/api/catalog-items",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0128",
+      "entry_component": "CreateCatalogItemEndpoint",
+      "called_service": [
+        "CreateCatalogItemRequest.CorrelationId",
+        "IRepository<CatalogItem>.AddAsync",
+        "IRepository<CatalogItem>.CountAsync",
+        "IRepository<CatalogItem>.UpdateAsync",
+        "IUriComposer.ComposePicUri"
+      ],
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+      "line": 29,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 29,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-006",
+      "interface_id": "INT-006",
+      "type": "HTTP_API",
+      "method": "DELETE",
+      "path_or_name": "/api/catalog-items/{catalogItemId}",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0131",
+      "entry_component": "DeleteCatalogItemEndpoint",
+      "called_service": [
+        "DeleteCatalogItemRequest.CorrelationId",
+        "IRepository<CatalogItem>.DeleteAsync",
+        "IRepository<CatalogItem>.GetByIdAsync"
+      ],
+      "source_file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+      "line": 20,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "line": 20,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-007",
+      "interface_id": "INT-007",
+      "type": "HTTP_API",
+      "method": "PUT",
+      "path_or_name": "/api/catalog-items",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0134",
+      "entry_component": "UpdateCatalogItemEndpoint",
+      "called_service": [
+        "IRepository<CatalogItem>.GetByIdAsync",
+        "IRepository<CatalogItem>.UpdateAsync",
+        "IUriComposer.ComposePicUri",
+        "UpdateCatalogItemRequest.CorrelationId"
+      ],
+      "source_file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+      "line": 27,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "line": 27,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-008",
+      "interface_id": "INT-008",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api/catalog-types",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0137",
+      "entry_component": "CatalogTypeListEndpoint",
+      "called_service": [
+        "IRepository<CatalogType>.ListAsync"
+      ],
+      "source_file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+      "line": 27,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+          "line": 27,
+          "reason": "ASP.NET Minimal API Map* call"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-009",
+      "interface_id": "INT-009",
+      "type": "HTTP_API",
+      "method": "unknown",
+      "path_or_name": "/{controller:slugify=Home}/{action:slugify=Index}/{id?}",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/Web/Program.cs",
+      "line": 194,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 194,
+          "reason": "ASP.NET conventional MVC route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-010",
+      "interface_id": "INT-010",
+      "type": "HTTP_API",
+      "method": "unknown",
+      "path_or_name": "ASP.NET Razor Pages route registration",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/Web/Program.cs",
+      "line": 195,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 195,
+          "reason": "ASP.NET Razor Pages route registration"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-011",
+      "interface_id": "INT-011",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/index.html",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/Web/Program.cs",
+      "line": 199,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 199,
+          "reason": "SPA fallback route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-012",
+      "interface_id": "INT-012",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/home_page_health_check",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/Web/Program.cs",
+      "line": 196,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 196,
+          "reason": "ASP.NET health check route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-013",
+      "interface_id": "INT-013",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/api_health_check",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/Web/Program.cs",
+      "line": 197,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 197,
+          "reason": "ASP.NET health check route"
+        }
+      ],
+      "open_questions": [
+        "Framework-level route registration; individual endpoints may be in controller/Razor/endpoint files"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-014",
+      "interface_id": "INT-014",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/MyAccount",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 47,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 47,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-015",
+      "interface_id": "INT-015",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/MyAccount",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.SetEmailAsync",
+        "UserManager<ApplicationUser>.SetPhoneNumberAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 69,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 69,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-016",
+      "interface_id": "INT-016",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/SendVerificationEmail",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IEmailSender.SendEmailConfirmationAsync",
+        "UserManager<ApplicationUser>.GenerateEmailConfirmationTokenAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 108,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 108,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-017",
+      "interface_id": "INT-017",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ChangePassword",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.HasPasswordAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 137,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 137,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-018",
+      "interface_id": "INT-018",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/ChangePassword",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "SignInManager<ApplicationUser>.SignInAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 157,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 157,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-019",
+      "interface_id": "INT-019",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/SetPassword",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.HasPasswordAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 186,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 186,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-020",
+      "interface_id": "INT-020",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/SetPassword",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.SignInAsync",
+        "UserManager<ApplicationUser>.AddPasswordAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 207,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 207,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-021",
+      "interface_id": "INT-021",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ExternalLogins",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.GetExternalAuthenticationSchemesAsync",
+        "UserManager<ApplicationUser>.GetLoginsAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.HasPasswordAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 234,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 234,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-022",
+      "interface_id": "INT-022",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/LinkLogin",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.ConfigureExternalAuthenticationProperties",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 254,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 254,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-023",
+      "interface_id": "INT-023",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/LinkLoginCallback",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.GetExternalLoginInfoAsync",
+        "UserManager<ApplicationUser>.AddLoginAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 266,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 266,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-024",
+      "interface_id": "INT-024",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/RemoveLogin",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "SignInManager<ApplicationUser>.SignInAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.RemoveLoginAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 295,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 295,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-025",
+      "interface_id": "INT-025",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/TwoFactorAuthentication",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.CountRecoveryCodesAsync",
+        "UserManager<ApplicationUser>.GetAuthenticatorKeyAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 319,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 319,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-026",
+      "interface_id": "INT-026",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/Disable2faWarning",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 338,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 338,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-027",
+      "interface_id": "INT-027",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/Disable2fa",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.SetTwoFactorEnabledAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 356,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 356,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-028",
+      "interface_id": "INT-028",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/EnableAuthenticator",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 375,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 375,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-029",
+      "interface_id": "INT-029",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ShowRecoveryCodes",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 390,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 390,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-030",
+      "interface_id": "INT-030",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/EnableAuthenticator",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GenerateNewTwoFactorRecoveryCodesAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.SetTwoFactorEnabledAsync",
+        "UserManager<ApplicationUser>.VerifyTwoFactorTokenAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 405,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 405,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-031",
+      "interface_id": "INT-031",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/ResetAuthenticatorWarning",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 441,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 441,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-032",
+      "interface_id": "INT-032",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/ResetAuthenticator",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId",
+        "UserManager<ApplicationUser>.ResetAuthenticatorKeyAsync",
+        "UserManager<ApplicationUser>.SetTwoFactorEnabledAsync"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 448,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 448,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-033",
+      "interface_id": "INT-033",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/Manage/GenerateRecoveryCodes",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "IAppLogger<ManageController>.LogInformation",
+        "UserManager<ApplicationUser>.GenerateNewTwoFactorRecoveryCodesAsync",
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 465,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 465,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-034",
+      "interface_id": "INT-034",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Manage/GenerateRecoveryCodesWarning",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0153",
+      "entry_component": "ManageController",
+      "called_service": [
+        "UserManager<ApplicationUser>.GetUserAsync",
+        "UserManager<ApplicationUser>.GetUserId"
+      ],
+      "source_file": "src/Web/Controllers/ManageController.cs",
+      "line": 487,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/ManageController.cs",
+          "line": 487,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-035",
+      "interface_id": "INT-035",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Order/MyOrders",
+      "owner_module_id": "MOD-009",
+      "owner_module": "Order",
+      "owner_capability_id": "CAP-007",
+      "owner_capability": "Order",
+      "entry_component_id": "COMP-0154",
+      "entry_component": "OrderController",
+      "called_service": [
+        "IMediator.Send"
+      ],
+      "source_file": "src/Web/Controllers/OrderController.cs",
+      "line": 23,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/OrderController.cs",
+          "line": 23,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-036",
+      "interface_id": "INT-036",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Order/Detail/{orderId}",
+      "owner_module_id": "MOD-009",
+      "owner_module": "Order",
+      "owner_capability_id": "CAP-007",
+      "owner_capability": "Order",
+      "entry_component_id": "COMP-0154",
+      "entry_component": "OrderController",
+      "called_service": [
+        "IMediator.Send"
+      ],
+      "source_file": "src/Web/Controllers/OrderController.cs",
+      "line": 32,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/OrderController.cs",
+          "line": 32,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-037",
+      "interface_id": "INT-037",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/User",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0155",
+      "entry_component": "UserController",
+      "called_service": [
+        "ILogger<UserController>.LogInformation",
+        "IMemoryCache.Set",
+        "SignInManager<ApplicationUser>.SignOutAsync"
+      ],
+      "source_file": "src/Web/Controllers/UserController.cs",
+      "line": 38,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/UserController.cs",
+          "line": 38,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-038",
+      "interface_id": "INT-038",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "/User/Logout",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0155",
+      "entry_component": "UserController",
+      "called_service": [
+        "ILogger<UserController>.LogInformation",
+        "IMemoryCache.Set",
+        "SignInManager<ApplicationUser>.SignOutAsync"
+      ],
+      "source_file": "src/Web/Controllers/UserController.cs",
+      "line": 45,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "file": "src/Web/Controllers/UserController.cs",
+          "line": 45,
+          "reason": "ASP.NET HTTP method attribute"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-039",
+      "interface_id": "INT-039",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/logout",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0268",
+      "entry_component": "Logout",
+      "called_service": [
+        "IJSRuntime",
+        "HttpClient",
+        "BlazorAdmin.Helpers.BlazorComponent"
+      ],
+      "source_file": "src/BlazorAdmin/Pages/Logout.razor",
+      "line": 1,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.84,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/Logout.razor",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-040",
+      "interface_id": "INT-040",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/admin",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0257",
+      "entry_component": "List",
+      "called_service": [
+        "BlazorAdmin.Helpers.BlazorComponent"
+      ],
+      "source_file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor",
+      "line": 1,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.84,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-041",
+      "interface_id": "INT-041",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/ConfirmEmail",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0266",
+      "entry_component": "ConfirmEmail",
+      "called_service": [],
+      "source_file": "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-042",
+      "interface_id": "INT-042",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/Login",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0267",
+      "entry_component": "Login",
+      "called_service": [],
+      "source_file": "src/Web/Areas/Identity/Pages/Account/Login.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/Login.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-043",
+      "interface_id": "INT-043",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/Logout",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0268",
+      "entry_component": "Logout",
+      "called_service": [],
+      "source_file": "src/Web/Areas/Identity/Pages/Account/Logout.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/Logout.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-044",
+      "interface_id": "INT-044",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Account/Register",
+      "owner_module_id": "MOD-007",
+      "owner_module": "Identity",
+      "owner_capability_id": "CAP-002",
+      "owner_capability": "Identity",
+      "entry_component_id": "COMP-0269",
+      "entry_component": "Register",
+      "called_service": [],
+      "source_file": "src/Web/Areas/Identity/Pages/Account/Register.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Areas/Identity/Pages/Account/Register.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-045",
+      "interface_id": "INT-045",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Error",
+      "owner_module_id": "MOD-013",
+      "owner_module": "Web",
+      "owner_capability_id": "CAP-006",
+      "owner_capability": "Controllers",
+      "entry_component_id": "COMP-0305",
+      "entry_component": "Error",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Error.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Error.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-046",
+      "interface_id": "INT-046",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/",
+      "owner_module_id": "MOD-013",
+      "owner_module": "Web",
+      "owner_capability_id": "CAP-006",
+      "owner_capability": "Controllers",
+      "entry_component_id": "COMP-0279",
+      "entry_component": "Index",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Index.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Index.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-047",
+      "interface_id": "INT-047",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Privacy",
+      "owner_module_id": "MOD-013",
+      "owner_module": "Web",
+      "owner_capability_id": "CAP-006",
+      "owner_capability": "Controllers",
+      "entry_component_id": "COMP-0273",
+      "entry_component": "Privacy",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Privacy.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Privacy.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-048",
+      "interface_id": "INT-048",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Admin/EditCatalogItem",
+      "owner_module_id": "MOD-004",
+      "owner_module": "Catalog",
+      "owner_capability_id": "CAP-001",
+      "owner_capability": "Catalog",
+      "entry_component_id": "COMP-0276",
+      "entry_component": "EditCatalogItem",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Admin/EditCatalogItem.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Admin/EditCatalogItem.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-049",
+      "interface_id": "INT-049",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Admin",
+      "owner_module_id": "MOD-001",
+      "owner_module": "Admin",
+      "owner_capability_id": "CAP-004",
+      "owner_capability": "Admin",
+      "entry_component_id": "COMP-0279",
+      "entry_component": "Index",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Admin/Index.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Admin/Index.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-050",
+      "interface_id": "INT-050",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Basket/Checkout",
+      "owner_module_id": "MOD-003",
+      "owner_module": "Basket",
+      "owner_capability_id": "CAP-005",
+      "owner_capability": "Basket",
+      "entry_component_id": "COMP-0278",
+      "entry_component": "Checkout",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Basket/Checkout.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Checkout.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-051",
+      "interface_id": "INT-051",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/{handler?}",
+      "owner_module_id": "MOD-003",
+      "owner_module": "Basket",
+      "owner_capability_id": "CAP-005",
+      "owner_capability": "Basket",
+      "entry_component_id": "COMP-0279",
+      "entry_component": "Index",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Basket/Index.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.84,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Index.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": []
+    },
+    {
+      "contract_id": "API-CONTRACT-052",
+      "interface_id": "INT-052",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "/Basket/Success",
+      "owner_module_id": "MOD-003",
+      "owner_module": "Basket",
+      "owner_capability_id": "CAP-005",
+      "owner_capability": "Basket",
+      "entry_component_id": "COMP-0280",
+      "entry_component": "Success",
+      "called_service": [],
+      "source_file": "src/Web/Pages/Basket/Success.cshtml",
+      "line": 1,
+      "preserve_redesign_review": "preserve",
+      "forward_engineering_note": "Preserve behavior contract or provide an explicit compatibility plan.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Success.cshtml",
+          "line": 1,
+          "reason": "Razor @page directive"
+        }
+      ],
+      "open_questions": [
+        "Route path inferred from Razor Pages file location"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-053",
+      "interface_id": "INT-053",
+      "type": "CLI",
+      "method": "unknown",
+      "path_or_name": ".NET application bootstrap Program.cs",
+      "owner_module_id": "MOD-001",
+      "owner_module": "Admin",
+      "owner_capability_id": "CAP-004",
+      "owner_capability": "Admin",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/BlazorAdmin/Program.cs",
+      "line": 1,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.74,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Program.cs",
+          "line": 1,
+          "reason": "Program.cs top-level/application bootstrap entry point"
+        }
+      ],
+      "open_questions": [
+        "CLI classification here means executable bootstrap, not a user-facing command surface"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-054",
+      "interface_id": "INT-054",
+      "type": "CLI",
+      "method": "unknown",
+      "path_or_name": ".NET application bootstrap Program.cs",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/PublicApi/Program.cs",
+      "line": 180,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.74,
+      "evidence": [
+        {
+          "file": "src/PublicApi/Program.cs",
+          "line": 180,
+          "reason": "Program.cs top-level/application bootstrap entry point"
+        }
+      ],
+      "open_questions": [
+        "CLI classification here means executable bootstrap, not a user-facing command surface"
+      ]
+    },
+    {
+      "contract_id": "API-CONTRACT-055",
+      "interface_id": "INT-055",
+      "type": "CLI",
+      "method": "unknown",
+      "path_or_name": ".NET application bootstrap Program.cs",
+      "owner_module_id": "MOD-005",
+      "owner_module": "CrossCutting",
+      "owner_capability_id": "CAP-010",
+      "owner_capability": "Cross",
+      "entry_component_id": "COMP-0140",
+      "entry_component": "Program",
+      "called_service": [],
+      "source_file": "src/Web/Program.cs",
+      "line": 1,
+      "preserve_redesign_review": "review",
+      "forward_engineering_note": "Review before treating as a stable future contract.",
+      "confidence": 0.74,
+      "evidence": [
+        {
+          "file": "src/Web/Program.cs",
+          "line": 1,
+          "reason": "Program.cs top-level/application bootstrap entry point"
+        }
+      ],
+      "open_questions": [
+        "CLI classification here means executable bootstrap, not a user-facing command surface"
+      ]
+    }
+  ]
+}

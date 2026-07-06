@@ -1,0 +1,227 @@
+{
+  "extraction_date": "2026-07-06",
+  "source": "Phase 1 code discovery — entity constructors, guard clauses, service layer, EF config, seed data, XML doc comments",
+  "rules": [
+    {
+      "id": "BR-01",
+      "category": "validation",
+      "entity": "CatalogItem",
+      "rule": "Price must be > 0 (entity level) and ≤ 1000 (DTO/API level)",
+      "source_file": "src/BlazorShared/Models/CatalogItem.cs + CreateCatalogItemRequest.cs + src/ApplicationCore/Entities/CatalogItem.cs",
+      "evidence": "[Range(0.01, 1000)] on DTO; Guard.Against.NegativeOrZero in UpdateDetails()",
+      "confidence": 0.9,
+      "notes": "Upper bound of 1000 enforced only at DTO/UI layer, not in the domain entity."
+    },
+    {
+      "id": "BR-02",
+      "category": "validation",
+      "entity": "CatalogItem",
+      "rule": "Catalog item name must be unique",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+      "evidence": "CatalogItemNameSpecification count check before AddAsync",
+      "confidence": 0.75,
+      "notes": "Enforced in CreateCatalogItemEndpoint only — not in UpdateCatalogItemEndpoint, not in entity, not as DB UNIQUE index. Race condition possible under concurrent writes. See DQ-04."
+    },
+    {
+      "id": "BR-03",
+      "category": "validation",
+      "entity": "BasketItem",
+      "rule": "Basket item quantity must be ≥ 0 and ≤ int.MaxValue",
+      "source_file": "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+      "evidence": "Guard.Against.OutOfRange(quantity, 0, int.MaxValue) in SetQuantity() and AddQuantity()",
+      "confidence": 0.9,
+      "notes": "Zero is a valid value. Basket.RemoveEmptyItems() clears all zero-quantity items. No max quantity per item other than int.MaxValue."
+    },
+    {
+      "id": "BR-04",
+      "category": "process",
+      "entity": "Order",
+      "rule": "Basket must not be empty at checkout",
+      "source_file": "src/ApplicationCore/Extensions/GuardExtensions.cs + src/ApplicationCore/Services/OrderService.cs",
+      "evidence": "Guard.Against.EmptyBasketOnCheckout(basket.Items) — throws EmptyBasketOnCheckoutException if basket.Items has 0 items",
+      "confidence": 0.9,
+      "notes": "Web MVC CheckoutModel.OnPost redirects to /Basket/Index if EmptyBasketOnCheckoutException is caught."
+    },
+    {
+      "id": "BR-05",
+      "category": "pricing",
+      "entity": "Order / BasketItem",
+      "rule": "Order total uses the price locked when the item was added to the basket, not the current catalog price",
+      "source_file": "src/ApplicationCore/Services/OrderService.cs",
+      "evidence": "new OrderItem(itemOrdered, basketItem.UnitPrice, basketItem.Quantity) — uses BasketItem.UnitPrice, NOT current CatalogItem.Price",
+      "confidence": 0.9,
+      "notes": "Price changes to a catalog item after it is added to a basket do not affect the order total. No staleness notification shown to user."
+    },
+    {
+      "id": "BR-06",
+      "category": "data_integrity",
+      "entity": "OrderItem / CatalogItemOrdered",
+      "rule": "Order items store a snapshot of product data at purchase time — catalog changes do not retroactively alter order history",
+      "source_file": "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+      "evidence": "XML doc comment: 'Represents a snapshot of the item that was ordered. If catalog item details change, details of the item that was part of a completed order should not change.'",
+      "confidence": 1.0,
+      "notes": "Explicitly documented design intent in entity XML comment."
+    },
+    {
+      "id": "BR-07",
+      "category": "authentication",
+      "entity": "Basket",
+      "rule": "Anonymous users get a basket identified by a GUID cookie; on login the anonymous basket is merged into the authenticated user basket and the anonymous basket is deleted",
+      "source_file": "src/ApplicationCore/Services/BasketService.cs",
+      "evidence": "TransferBasketAsync: loads anonymous basket by GUID, loads/creates user basket, copies all items, UpdateAsync(userBasket), DeleteAsync(anonymousBasket)",
+      "confidence": 0.9,
+      "notes": "GUID cookie has 10-year TTL. Transfer is non-atomic (2 separate SaveChanges — see DQ-07)."
+    },
+    {
+      "id": "BR-08",
+      "category": "caching",
+      "entity": "CatalogItem / CatalogBrand / CatalogType",
+      "rule": "Web MVC catalog view data is cached with 30-second sliding expiration per server instance",
+      "source_file": "src/Web/Extensions/CacheHelpers.cs + src/Web/Services/CachedCatalogViewModelService.cs",
+      "evidence": "CacheHelpers.DefaultCacheDuration = TimeSpan.FromSeconds(30); entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration",
+      "confidence": 0.9,
+      "notes": "In-process IMemoryCache — not shared across instances. Admin edits via PublicApi/BlazorAdmin will not appear in Web MVC storefront for up to 30 seconds."
+    },
+    {
+      "id": "BR-09",
+      "category": "caching",
+      "entity": "CatalogItem / CatalogBrand / CatalogType",
+      "rule": "BlazorAdmin caches catalog data in browser LocalStorage for 1 minute (absolute TTL)",
+      "source_file": "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs + CachedCatalogLookupDataServiceDecorator.cs",
+      "evidence": "cacheEntry.DateCreated.AddMinutes(1) > DateTime.UtcNow",
+      "confidence": 0.9,
+      "notes": "CatalogItem write operations (Create/Edit/Delete) explicitly clear and refresh the LocalStorage 'items' cache via RefreshLocalStorageList(). Brand and Type lists are NOT refreshed on item write — only 1-min TTL refreshes them. Both caches are cleared on BlazorAdmin startup."
+    },
+    {
+      "id": "BR-10",
+      "category": "authentication",
+      "entity": "CustomAuthStateProvider (BlazorAdmin)",
+      "rule": "BlazorAdmin caches authenticated user state for 60 seconds",
+      "source_file": "src/BlazorAdmin/CustomAuthStateProvider.cs",
+      "evidence": "UserCacheRefreshInterval = TimeSpan.FromSeconds(60); TODO comment: 'Get Default Cache Duration from Config'",
+      "confidence": 0.9,
+      "notes": "Hardcoded. If a user's role is revoked, they will continue to appear authenticated in BlazorAdmin for up to 60 seconds. The TODO indicates this was intended to be configurable."
+    },
+    {
+      "id": "BR-11",
+      "category": "authorization",
+      "entity": "Catalog CRUD (PublicApi)",
+      "rule": "Creating, updating, and deleting catalog items requires the 'Administrators' role with a valid JWT Bearer token",
+      "source_file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs + UpdateCatalogItemEndpoint.cs + DeleteCatalogItemEndpoint.cs",
+      "evidence": "[Authorize(Roles = Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]",
+      "confidence": 0.9
+    },
+    {
+      "id": "BR-12",
+      "category": "authorization",
+      "entity": "Admin pages (Web MVC)",
+      "rule": "Web MVC /Admin pages require the 'Administrators' role (cookie auth)",
+      "source_file": "src/Web/Pages/Admin/Index.cshtml.cs",
+      "evidence": "[Authorize(Roles = BlazorShared.Authorization.Constants.Roles.ADMINISTRATORS)]",
+      "confidence": 0.9
+    },
+    {
+      "id": "BR-13",
+      "category": "validation",
+      "entity": "CatalogItemOrdered",
+      "rule": "CatalogItemId in an order item must be ≥ 1",
+      "source_file": "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+      "evidence": "Guard.Against.OutOfRange(catalogItemId, nameof(catalogItemId), 1, int.MaxValue)",
+      "confidence": 0.9
+    },
+    {
+      "id": "BR-14",
+      "category": "validation",
+      "entity": "CatalogItem image",
+      "rule": "Product image must be JPG/PNG/GIF/JPEG and must not exceed 512 KB",
+      "source_file": "src/BlazorShared/Models/CatalogItem.cs",
+      "evidence": "IsValidImage(): checks base64 decoded length vs ImageMaximumBytes (512000) and extension whitelist",
+      "confidence": 0.9,
+      "notes": "Image upload is currently disabled — this rule applies if re-enabled."
+    },
+    {
+      "id": "BR-15",
+      "category": "process",
+      "entity": "CatalogItem.PictureUri",
+      "rule": "PictureUri stored in DB contains a placeholder host ('http://catalogbaseurltobereplaced') that is substituted at read time with the configured CatalogBaseUrl",
+      "source_file": "src/ApplicationCore/Services/UriComposer.cs",
+      "evidence": "uriTemplate.Replace('http://catalogbaseurltobereplaced', _catalogSettings.CatalogBaseUrl)",
+      "confidence": 0.9,
+      "notes": "Raw DB value is non-functional. If CatalogBaseUrl config is missing, the placeholder URL is returned to clients."
+    },
+    {
+      "id": "BR-16",
+      "category": "data_integrity",
+      "entity": "CatalogItem",
+      "rule": "CatalogBrandId and CatalogTypeId must be non-zero when updating",
+      "source_file": "src/ApplicationCore/Entities/CatalogItem.cs",
+      "evidence": "Guard.Against.Zero(catalogBrandId) in UpdateBrand(); Guard.Against.Zero(catalogTypeId) in UpdateType()",
+      "confidence": 0.9
+    },
+    {
+      "id": "BR-17",
+      "category": "process",
+      "entity": "Database",
+      "rule": "When UseOnlyInMemoryDatabase=true, both databases use in-memory providers and all data is lost on restart",
+      "source_file": "src/Infrastructure/Dependencies.cs",
+      "evidence": "bool.Parse(configuration['UseOnlyInMemoryDatabase']) branch → UseInMemoryDatabase('Catalog') and UseInMemoryDatabase('Identity')",
+      "confidence": 0.9,
+      "notes": "Enables development/testing without a running SQL Server instance."
+    },
+    {
+      "id": "BR-18",
+      "category": "test_behavior",
+      "entity": "All test suites",
+      "rule": "ALL automated tests run exclusively against in-memory databases — never against SQL Server",
+      "source_file": "tests/FunctionalTests/Web/WebTestFixture.cs + tests/FunctionalTests/PublicApi/ApiTestFixture.cs + tests/IntegrationTests/",
+      "evidence": "WebTestFixture: UseInMemoryDatabase('InMemoryDbForTesting') + UseInMemoryDatabase('Identity'). ApiTestFixture: UseInMemoryDatabase('DbForPublicApi') + UseInMemoryDatabase('IdentityDbForPublicApi'). IntegrationTests: UseInMemoryDatabase('TestCatalog').",
+      "confidence": 1.0,
+      "notes": "EF In-Memory provider does NOT enforce FK constraints, UNIQUE constraints, or HiLo sequence behaviour. All DQ issues (DQ-01 RESTRICT, DQ-02 no FK, DQ-04 no UNIQUE index, DQ-06 nullable OrderId) are invisible to the test suite. QUALIFIER (RC-01): PublicApiIntegrationTests (MSTest, tests/PublicApiIntegrationTests/) uses WebApplicationFactory<Program> WITHOUT overriding DbContext. Since no appsettings.Testing.json exists for PublicApi and UseOnlyInMemoryDatabase is not set, this suite may attempt localdb connection. All other three suites (UnitTests/xUnit, IntegrationTests/xUnit, FunctionalTests/xUnit) are confirmed in-memory."
+    },
+    {
+      "id": "BR-19",
+      "category": "pricing",
+      "entity": "BasketItem",
+      "rule": "When an item already in the basket is added again, the UnitPrice is NOT updated — the original add-time price is always preserved",
+      "source_file": "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketAddItem.cs",
+      "evidence": "Test KeepsOriginalUnitPriceIfMoreItemsAdded: basket.AddItem(id, price); basket.AddItem(id, price*2); Assert item.UnitPrice == price (original). Quantity accumulates but price does not update.",
+      "confidence": 1.0,
+      "notes": "Complements BR-05. The price lock applies not just at checkout but at first-add time within the basket session. A shopper who sees a price drop after adding cannot benefit from it unless they remove and re-add the item."
+    }
+  ],
+  "review_changes": [
+    {
+      "change_id": "RC-01",
+      "type": "ENRICHED",
+      "finding_id": "hidden-business-rules.json — BR-18",
+      "what": "Added qualifier: PublicApiIntegrationTests (MSTest) uses WebApplicationFactory<Program> without DB override, unlike the three xUnit suites. May require localdb. The blanket claim 'ALL tests use in-memory' is not strictly accurate for that project.",
+      "evidence_source": "Phase 1 test review",
+      "evidence_detail": "tests/PublicApiIntegrationTests/ProgramTest.cs:10 — new WebApplicationFactory<Program>() with no ConfigureServices override. src/PublicApi/appsettings.json — no UseOnlyInMemoryDatabase key. Contrast with FunctionalTests/ApiTestFixture.cs which explicitly overrides.",
+      "confidence_before": 1.0,
+      "confidence_after": 0.95,
+      "phase_found": "Phase 1 test review"
+    },
+    {
+      "change_id": "RC-02",
+      "type": "ENRICHED",
+      "finding_id": "hidden-business-rules.json — BR-07",
+      "what": "Added confirmed merge behavior: when the same CatalogItemId exists in both anonymous and user baskets during transfer, quantities are accumulated (AddItem calls AddQuantity). Test proves: anon has item 1 qty=1, user has item 1 qty=4; after transfer user has item 1 qty=5.",
+      "evidence_source": "Phase 1 test review",
+      "evidence_detail": "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/TransferBasket.cs:68-71 — Assert item CatalogItemId==1 Quantity==5 (1+4 accumulated).",
+      "confidence_before": 0.9,
+      "confidence_after": 1.0,
+      "phase_found": "Phase 1 test review"
+    },
+    {
+      "change_id": "RC-03",
+      "type": "ADDED",
+      "finding_id": "hidden-business-rules.json — BR-19 (new)",
+      "what": "NEW rule: basket item UnitPrice is locked at first-add time and never updated even if the same item is re-added with a different price.",
+      "evidence_source": "Phase 1 test review",
+      "evidence_detail": "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketAddItem.cs:39-47 — KeepsOriginalUnitPriceIfMoreItemsAdded test.",
+      "confidence_before": 0.0,
+      "confidence_after": 1.0,
+      "phase_found": "Phase 1 test review"
+    }
+  ]
+}

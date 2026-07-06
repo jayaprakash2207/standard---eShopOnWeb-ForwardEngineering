@@ -1,0 +1,161 @@
+{
+  "violations": [
+    {
+      "violation_id": "ARCH-VIOL-001",
+      "type": "Shared Data Model",
+      "description": "CatalogContext is a single EF DbContext that owns entities from three separate business domains: Basket (Basket, BasketItem), Catalog (CatalogItem, CatalogBrand, CatalogType), and Order (Order, OrderItem). There is no bounded context separation at the data layer.",
+      "affected_module": "Infrastructure-Cross-Cutting",
+      "affected_components": ["CatalogContext", "EfRepository<T>"],
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/CatalogContext.cs",
+          "reason": "DbSet<Basket>, DbSet<BasketItem>, DbSet<CatalogItem>, DbSet<CatalogBrand>, DbSet<CatalogType>, DbSet<Order>, DbSet<OrderItem> — 7 entities across 3 domains in one context"
+        }
+      ],
+      "severity": "High",
+      "migration_impact": "Cannot extract Basket, Order, or Catalog to separate services without splitting this context first. High migration blocker.",
+      "recommendation": "Split into CatalogContext (Catalog domain), BasketContext (Basket domain), and OrderContext (Order domain). Migrate to separate connection strings per bounded context.",
+      "confidence": 0.99
+    },
+    {
+      "violation_id": "ARCH-VIOL-002",
+      "type": "Cross-Module Leakage",
+      "description": "OrderService directly injects and reads IRepository<Basket>. The Order module has a direct compile-time and runtime dependency on the Basket aggregate's internal data. This violates the bounded context principle — Order should not read Basket internals directly.",
+      "affected_module": "Order",
+      "affected_components": ["OrderService"],
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Services/OrderService.cs",
+          "reason": "Constructor: IRepository<Basket> basketRepository; CreateOrderAsync reads basket.Items directly"
+        }
+      ],
+      "severity": "Medium",
+      "migration_impact": "If Basket is extracted to a separate service, OrderService.CreateOrderAsync must be redesigned. Currently a direct dependency — would require either a checkout domain event, an anti-corruption layer, or a dedicated checkout aggregate.",
+      "recommendation": "Introduce a CheckoutRequest/CheckoutDTO that OrderService accepts. Basket module should produce a checkout-ready payload; Order should not query Basket directly.",
+      "confidence": 0.95
+    },
+    {
+      "violation_id": "ARCH-VIOL-003",
+      "type": "Hardcoded Security Constant",
+      "description": "JWT signing secret key and default user password are hardcoded in ApplicationCore/Constants/AuthorizationConstants.cs. Source-code-level secret exposure is a security architecture violation.",
+      "affected_module": "Authentication",
+      "affected_components": ["AuthorizationConstants", "IdentityTokenClaimService"],
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+          "reason": "JWT_SECRET_KEY = 'SecretKeyOfDoomThatMustBeAMinimumNumberOfBytes'; DEFAULT_PASSWORD = 'Pass@word1' — both have TODO comments"
+        }
+      ],
+      "severity": "Critical",
+      "migration_impact": "If re-deployed as-is to production, any forward-engineered service using these constants will have a known secret in source code. Must be resolved before any migration.",
+      "recommendation": "Move JWT_SECRET_KEY to environment variable / Azure Key Vault. Remove DEFAULT_PASSWORD from source. Use secret management in CI/CD pipeline.",
+      "confidence": 0.99
+    },
+    {
+      "violation_id": "ARCH-VIOL-004",
+      "type": "Dead Code Candidate",
+      "description": "EmailSender returns Task.CompletedTask. The implementation stub is wired into DI but has no real behavior. Any email-dependent flows (account confirmation, password reset) silently fail.",
+      "affected_module": "Authentication",
+      "affected_components": ["EmailSender"],
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Services/EmailSender.cs",
+          "reason": "TODO comment: 'Wire this up to actual email sending logic via SendGrid, local SMTP, etc.' Body: return Task.CompletedTask"
+        }
+      ],
+      "severity": "Low",
+      "migration_impact": "If forward-engineered services depend on email notifications (order confirmation, user registration), this must be implemented before go-live.",
+      "recommendation": "Implement with SendGrid, SMTP, or event-driven email service before production deployment.",
+      "confidence": 0.98
+    },
+    {
+      "violation_id": "ARCH-VIOL-005",
+      "type": "Dead Code Candidate / Unknown Ownership",
+      "description": "Buyer aggregate (Buyer, PaymentMethod entities) exists in ApplicationCore but has no corresponding service, repository registration, DbSet in CatalogContext, or API endpoint. It appears to be scaffolded but unused.",
+      "affected_module": "Buyer",
+      "affected_components": ["Buyer", "PaymentMethod"],
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/BuyerAggregate/Buyer.cs",
+          "reason": "Buyer and PaymentMethod exist but no service or interface references found in extraction"
+        },
+        {
+          "file": "src/ApplicationCore/Entities/BuyerAggregate/PaymentMethod.cs",
+          "reason": "Comment: 'actual card data must be stored in PCI compliant system like Stripe' — stub only"
+        }
+      ],
+      "severity": "Low",
+      "migration_impact": "If Buyer is not used, it is dead code. If it is used in the Web project (not in extraction), this changes the module boundary map. Requires human review.",
+      "recommendation": "Verify whether Buyer is used in Web project controllers. If not used, remove to reduce confusion. If intended for payment expansion, document as planned.",
+      "confidence": 0.75
+    },
+    {
+      "violation_id": "ARCH-VIOL-006",
+      "type": "Fat Controller / High Orchestration in Service",
+      "description": "OrderService.CreateOrderAsync performs basket loading, catalog item lookup, snapshot creation, order assembly, and order persistence in a single method. It orchestrates across three repositories. While this is tolerable at current scale, it is a candidate for splitting as order complexity grows.",
+      "affected_module": "Order",
+      "affected_components": ["OrderService"],
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Services/OrderService.cs",
+          "reason": "Single CreateOrderAsync method: reads IRepository<Basket>, reads IRepository<CatalogItem>, constructs CatalogItemOrdered snapshots, constructs Order, writes IRepository<Order>"
+        }
+      ],
+      "severity": "Low",
+      "migration_impact": "Acceptable at this scale. Becomes a problem if payment, inventory reservation, fulfillment, or event publishing are added to checkout.",
+      "recommendation": "Monitor complexity. Consider separating into a CheckoutOrchestrator or using a Saga/workflow pattern if checkout gains steps.",
+      "confidence": 0.85
+    },
+    {
+      "violation_id": "ARCH-VIOL-007",
+      "type": "Frontend-Backend Tight Coupling",
+      "description": "BlazorAdmin CatalogItemService performs client-side join of brand/type lookup data with catalog items. Three parallel API calls are made and joined in client code. This couples client list rendering to server pagination shape, and any API contract change in brands/types/items breaks the join logic.",
+      "affected_module": "Catalog",
+      "affected_components": ["CatalogItemService (Blazor)", "HttpService"],
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "Task.WhenAll(brandListTask, typeListTask, itemListTask) then client-side LINQ join"
+        }
+      ],
+      "severity": "Medium",
+      "migration_impact": "If PublicApi catalog-items endpoint is redesigned to include brand/type names in the response (as it should), the client join logic must be removed to avoid double hydration.",
+      "recommendation": "Server should return catalog items with embedded brand/type names. Client should not join. Add a catalog-items response DTO with embedded lookup data.",
+      "confidence": 0.90
+    },
+    {
+      "violation_id": "ARCH-VIOL-008",
+      "type": "Async Void Anti-Pattern",
+      "description": "List.razor.cs DetailsClick method is declared as 'async void' instead of 'async Task'. In Blazor/C#, async void means unhandled exceptions are swallowed and cannot be awaited by callers.",
+      "affected_module": "Catalog",
+      "affected_components": ["List (Blazor Page)"],
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor.cs",
+          "reason": "private async void DetailsClick(int id) — should be async Task"
+        }
+      ],
+      "severity": "Low",
+      "migration_impact": "Bug risk during forward engineering if similar pattern is copied into new services.",
+      "recommendation": "Change to async Task DetailsClick(int id).",
+      "confidence": 0.95
+    },
+    {
+      "violation_id": "ARCH-VIOL-009",
+      "type": "Shared Utility Overuse / Integration Layer Violation",
+      "description": "HttpService is a monolithic HTTP wrapper used by all Blazor frontend service calls. Error handling is inconsistent — HttpGet/HttpDelete silently return null on error; only HttpPost shows toast. This creates silent failure modes for GET and DELETE operations.",
+      "affected_module": "BlazorAdmin-UI",
+      "affected_components": ["HttpService"],
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/HttpService.cs",
+          "reason": "HttpGet<T> and HttpDelete<T>: 'if (!result.IsSuccessStatusCode) { return null; }' — no toast, no log. HttpPost shows toast on error."
+        }
+      ],
+      "severity": "Medium",
+      "migration_impact": "When catalog or auth endpoints are refactored, silent null returns will hide broken contracts in development.",
+      "recommendation": "Standardize error handling across all HTTP verbs. Use a Result<T> pattern or throw typed exceptions.",
+      "confidence": 0.93
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "db_connection": "N/A — this file is derived from Phase 1 code structure, not DB state.",
+  "hidden_business_rules": [
+    {
+      "rule": "A basket cannot be checked out if it has no items.",
+      "evidence": "EmptyBasketOnCheckoutException (src/ApplicationCore/Exceptions/EmptyBasketOnCheckoutException.cs), used presumably by OrderService.cs",
+      "confidence": 0.8,
+      "category": "validation"
+    },
+    {
+      "rule": "Basket lookups by id must succeed or the operation fails fast with a typed exception (not a generic null-ref).",
+      "evidence": "BasketNotFoundException (src/ApplicationCore/Exceptions/BasketNotFoundException.cs)",
+      "confidence": 0.8,
+      "category": "validation"
+    },
+    {
+      "rule": "A CatalogItem's Name must be unique — creating a new catalog item with a name that already exists is explicitly rejected via DuplicateException rather than relying on a DB unique constraint error.",
+      "evidence": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs:47 — `throw new DuplicateException($\"A catalogItem with name {request.Name} already exists\")`; src/ApplicationCore/Exceptions/DuplicateException.cs",
+      "confidence": 0.9,
+      "category": "validation",
+      "notes": "CONFIRMED via spot check — previously UNKNOWN which entity/field this guarded."
+    },
+    {
+      "rule": "Order line items must capture a point-in-time snapshot of product name/price/image rather than a live reference, so historical orders display correctly even if the catalog item is later changed or deleted.",
+      "evidence": "CatalogItemOrdered owned type (src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs) embedded in OrderItem",
+      "confidence": 0.85,
+      "category": "data_integrity / business_rule"
+    },
+    {
+      "rule": "Inventory reordering: items have AvailableStock, RestockThreshold, MaxStockThreshold and an OnReorder flag — implies an automatic/manual reorder workflow triggers when AvailableStock <= RestockThreshold.",
+      "evidence": "CatalogItem entity fields (INFERRED from naming, src/ApplicationCore/Entities/CatalogItem.cs)",
+      "confidence": 0.7,
+      "category": "calculation / process",
+      "notes": "Actual trigger logic (5 calculation-category artifacts reported in extraction summary) not visible in supplied excerpts — Agent 2 should locate the reorder calculation method."
+    },
+    {
+      "rule": "Role-based access control distinguishes at least an 'Administrators' role from regular buyers, gating BlazorAdmin and certain PublicApi/Web endpoints.",
+      "evidence": "CONFIRMED — src/BlazorShared/Authorization/Constants.cs: `public const string ADMINISTRATORS = \"Administrators\";`. AuthorizationConstants (src/ApplicationCore/Constants/AuthorizationConstants.cs) holds unrelated auth secrets, not role names — see RC-006 in pii-inventory.json.",
+      "confidence": 0.95,
+      "category": "authentication / authorization"
+    },
+    {
+      "rule": "Frontend caching layer for catalog lookups (brands/types/items) is implemented via browser localStorage (CacheEntry<T> with a DateCreated timestamp), but the staleness/expiry check itself was not located in this pass.",
+      "evidence": "CacheEntry.cs (Value, DateCreated), CachedCatalogItemServiceDecorator.cs, CachedCatalogLookupDataServiceDecorator.cs (src/BlazorAdmin/Services/)",
+      "confidence": 0.75,
+      "category": "caching / performance",
+      "notes": "Storage mechanism now CONFIRMED (localStorage, not IMemoryCache — see RC-004). Exact TTL/expiry comparison logic still UNKNOWN, confidence < 0.7 for that specific detail."
+    },
+    {
+      "rule": "The BlazorAdmin client-side auth state (CustomAuthStateProvider) refreshes/re-validates the cached user against the server at most once every 60 seconds.",
+      "evidence": "src/BlazorAdmin/CustomAuthStateProvider.cs:16 — `private static readonly TimeSpan UserCacheRefreshInterval = TimeSpan.FromSeconds(60);`",
+      "confidence": 0.9,
+      "category": "caching / performance",
+      "notes": "NEW finding (RC-005) — a concrete, previously-undocumented TTL value."
+    },
+    {
+      "rule": "RefreshBroadcast mechanism implies that after an admin write (e.g. updating a catalog item), connected Blazor components must be notified to refresh/invalidate their cached view.",
+      "evidence": "RefreshBroadcast.cs (src/BlazorAdmin/Helpers/)",
+      "confidence": 0.65,
+      "category": "process",
+      "notes": "Below 0.70 confidence threshold — INFERRED purely from class name, marked UNKNOWN for exact mechanism."
+    },
+    {
+      "rule": "1 feature flag exists in the codebase controlling some behavior toggle.",
+      "evidence": "extraction_summary.total_feature_flags = 1",
+      "confidence": 0.6,
+      "category": "configuration",
+      "notes": "UNKNOWN — a spot-check grep for FeatureManagement/IFeatureManager/FeatureFlag found no matches in src/. Could not be located in this pass; remains an open item for Gate G1 / a deeper grep across config files."
+    }
+  ],
+  "change_records": [
+    {
+      "change_id": "RC-009",
+      "type": "CORRECTED",
+      "finding_id": "hidden-business-rules.json — DuplicateException rule",
+      "what": "Confirmed DuplicateException guards CatalogItem.Name uniqueness on create (PublicApi CreateCatalogItemEndpoint), not Buyer or CatalogBrand/Type as speculated.",
+      "evidence_source": "repository/API code",
+      "evidence_detail": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs:47",
+      "confidence_before": 0.7,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-008",
+      "type": "ENRICHED",
+      "finding_id": "hidden-business-rules.json — Administrators role",
+      "what": "Confirmed literal role name string is exactly 'Administrators' (BlazorShared.Authorization.Constants.Roles.ADMINISTRATORS). Also clarified that AuthorizationConstants.cs (ApplicationCore) does not itself contain role names — it holds AUTH_KEY/JWT_SECRET_KEY/DEFAULT_PASSWORD (see RC-006).",
+      "evidence_source": "entity/ORM code",
+      "evidence_detail": "src/BlazorShared/Authorization/Constants.cs",
+      "confidence_before": 0.75,
+      "confidence_after": 0.95,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-004b",
+      "type": "CORRECTED",
+      "finding_id": "hidden-business-rules.json — frontend caching TTL rule",
+      "what": "Confirmed caching mechanism is browser localStorage via CacheEntry<T> (Value + DateCreated), not IMemoryCache. TTL comparison logic itself still not located.",
+      "evidence_source": "spot check",
+      "evidence_detail": "src/BlazorAdmin/Services/CacheEntry.cs; src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs",
+      "confidence_before": 0.7,
+      "confidence_after": 0.75,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-005",
+      "type": "ADDED",
+      "finding_id": "hidden-business-rules.json — CustomAuthStateProvider refresh interval",
+      "what": "New finding: BlazorAdmin's CustomAuthStateProvider re-validates cached auth state at most every 60 seconds (UserCacheRefreshInterval).",
+      "evidence_source": "spot check",
+      "evidence_detail": "src/BlazorAdmin/CustomAuthStateProvider.cs:16",
+      "confidence_before": 0.0,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    }
+  ]
+}

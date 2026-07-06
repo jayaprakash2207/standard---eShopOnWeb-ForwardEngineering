@@ -1,0 +1,120 @@
+---
+title: eShopOnWeb — Call Flow View (Key Flows)
+---
+sequenceDiagram
+  autonumber
+
+  %% FLOW-001: Admin Authentication
+  box BlazorAdmin
+    participant BA as BlazorAdmin\nCustomAuthStateProvider
+  end
+  box PublicApi
+    participant AE as AuthenticateEndpoint\nPOST /api/authenticate
+  end
+  box Infrastructure
+    participant SM as SignInManager
+    participant TCS as IdentityTokenClaimService\n(HMAC SHA256 — hardcoded key)
+    participant IDB as AppIdentityDbContext\n(Identity DB)
+  end
+
+  Note over BA,IDB: FLOW-001: Admin Authentication
+  BA->>AE: POST /api/authenticate {username, password}
+  AE->>SM: PasswordSignInAsync(username, password)
+  SM->>IDB: SELECT FROM AspNetUsers WHERE...
+  IDB-->>SM: ApplicationUser
+  SM-->>AE: SignInResult.Success
+  AE->>TCS: GetTokenAsync(username)
+  TCS->>IDB: GetUserAsync + GetRolesAsync
+  IDB-->>TCS: user + roles
+  TCS-->>AE: JWT token (HMAC SHA256)
+  AE-->>BA: AuthenticateResponse {token, username}
+  BA->>BA: SetDefaultRequestHeaders(Bearer token)
+
+  %% FLOW-003: Checkout / Place Order
+  box WebApp
+    participant WC as Checkout Controller\n[Web project — NOT extracted]
+  end
+  box ApplicationCore
+    participant OS as OrderService\nCreateOrderAsync
+    participant BS as BasketService
+    participant BD as Basket domain entity
+  end
+  box Infrastructure2["Infrastructure"]
+    participant ER_B as EfRepository&lt;Basket&gt;
+    participant ER_C as EfRepository&lt;CatalogItem&gt;
+    participant ER_O as EfRepository&lt;Order&gt;
+    participant CC as CatalogContext\n(shared — all domains)
+  end
+
+  Note over WC,CC: FLOW-003: Checkout / Place Order
+  WC->>OS: CreateOrderAsync(basketId, address)
+  OS->>ER_B: FirstOrDefaultAsync(BasketWithItemsSpecification)
+  ER_B->>CC: SELECT Baskets + BasketItems WHERE BuyerId=?
+  CC-->>ER_B: Basket with items
+  ER_B-->>OS: Basket
+  OS->>ER_C: ListAsync(CatalogItemsSpecification)
+  ER_C->>CC: SELECT CatalogItems WHERE Id IN (...)
+  CC-->>ER_C: CatalogItem list
+  ER_C-->>OS: CatalogItem[]
+  OS->>OS: Build CatalogItemOrdered snapshots
+  OS->>OS: new Order(buyerId, address, orderItems)
+  OS->>ER_O: AddAsync(order)
+  ER_O->>CC: INSERT Orders + OrderItems
+  CC-->>ER_O: saved
+  ER_O-->>OS: order
+  OS-->>WC: order
+  Note over OS,CC: ⚠ Basket NOT deleted — potential orphan basket\n⚠ No payment processing
+
+  %% FLOW-005: BlazorAdmin Catalog List
+  box BlazorAdmin2["BlazorAdmin"]
+    participant LP as List.razor.cs\nOnAfterRenderAsync
+    participant CD as CachedCatalogItemServiceDecorator\n(1-min LocalStorage TTL)
+    participant CS as CatalogItemService (Blazor)\nparallel HTTP calls
+    participant HS as HttpService
+  end
+  box PublicApi2["PublicApi"]
+    participant BE as CatalogBrandListEndpoint
+    participant TE as CatalogTypeList Endpoint
+    participant IE as CatalogItems Endpoint
+  end
+  box Infrastructure3["Infrastructure"]
+    participant ER2 as EfRepository&lt;CatalogBrand&gt;\nEfRepository&lt;CatalogType&gt;\nEfRepository&lt;CatalogItem&gt;
+    participant CC2 as CatalogContext
+  end
+
+  Note over LP,CC2: FLOW-005: BlazorAdmin Catalog Item List
+  LP->>CD: List(pageIndex)
+  CD->>CD: Check LocalStorage cache
+  alt Cache miss
+    CD->>CS: List(pageIndex)
+    par Parallel HTTP calls
+      CS->>HS: HttpGet /api/catalog-brands
+      HS->>BE: GET /api/catalog-brands
+      BE->>ER2: ListAsync(CatalogBrands)
+      ER2->>CC2: SELECT CatalogBrands
+      CC2-->>ER2: brands
+      ER2-->>BE: brands
+      BE-->>HS: CatalogBrandListResponse
+      HS-->>CS: brands
+    and
+      CS->>HS: HttpGet /api/catalog-types
+      HS->>TE: GET /api/catalog-types
+      TE->>ER2: ListAsync(CatalogTypes)
+      ER2-->>TE: types
+      TE-->>HS: CatalogTypeListResponse
+      HS-->>CS: types
+    and
+      CS->>HS: HttpGet /api/catalog-items?page=N
+      HS->>IE: GET /api/catalog-items
+      IE->>ER2: ListAsync(CatalogItemsSpecification)
+      ER2->>CC2: SELECT CatalogItems + COUNT
+      CC2-->>ER2: items
+      ER2-->>IE: items
+      IE-->>HS: CatalogListResponse
+      HS-->>CS: items
+    end
+    CS->>CS: Client-side join:\nassign brand/type names to items
+    CS-->>CD: enriched catalog items
+    CD->>CD: Store in LocalStorage (1-min TTL)
+  end
+  CD-->>LP: catalog items list

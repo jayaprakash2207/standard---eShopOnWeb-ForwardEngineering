@@ -1,0 +1,156 @@
+{
+  "system_name": "eShopOnWeb",
+  "repo_root": "c:/std - graphify/standard---eShopOnWeb-ForwardEngineering/source/eShopOnWeb",
+  "applications": [
+    {
+      "name": "Web",
+      "type": "web_app",
+      "framework": "ASP.NET Core 8.0 MVC / Razor Pages",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "src/Web/Dockerfile",
+          "reason": "Dockerfile present for containerization; referenced in docker-compose.yml as eshopwebmvc"
+        },
+        {
+          "file": "azure.yaml",
+          "reason": "services.web.project = './src/Web', host = 'appservice' — declared Azure deployable unit"
+        },
+        {
+          "file": "src/Web/Properties/launchSettings.json",
+          "reason": "profiles for Web, Web-PROD, IIS Express all present; applicationUrl https://localhost:5001"
+        }
+      ],
+      "confidence": 0.98
+    },
+    {
+      "name": "PublicApi",
+      "type": "backend_api",
+      "framework": "ASP.NET Core 8.0 Minimal API + Ardalis.ApiEndpoints",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "src/PublicApi/Dockerfile",
+          "reason": "Referenced in docker-compose.yml as eshoppublicapi"
+        },
+        {
+          "file": "src/PublicApi/Properties/launchSettings.json",
+          "reason": "Swagger launch URL configured; applicationUrl https://localhost:5099"
+        },
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "reason": "HttpPost('api/authenticate') — concrete HTTP endpoint class"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "reason": "GET api/catalog-brands minimal API endpoint"
+        }
+      ],
+      "confidence": 0.98
+    },
+    {
+      "name": "BlazorAdmin",
+      "type": "frontend_spa",
+      "framework": "Blazor WebAssembly (.NET 8)",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Program.cs",
+          "reason": "WebAssemblyHostBuilder.CreateDefault(args) — WASM bootstrap"
+        },
+        {
+          "file": "src/BlazorAdmin/Properties/launchSettings.json",
+          "reason": "BlazorAdmin profile with inspectUri for WASM debugging"
+        },
+        {
+          "file": "src/BlazorAdmin/wwwroot/appsettings.json",
+          "reason": "baseUrls.apiBase pointing to PublicApi; standalone frontend config"
+        }
+      ],
+      "confidence": 0.97
+    },
+    {
+      "name": "ApplicationCore",
+      "type": "library",
+      "framework": ".NET 8 class library",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Interfaces/IBasketService.cs",
+          "reason": "Pure interface definitions; no entry point or host"
+        },
+        {
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "reason": "Domain services with no web host dependency"
+        },
+        {
+          "file": "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+          "reason": "Domain entities; IAggregateRoot marker interface used"
+        }
+      ],
+      "confidence": 0.99
+    },
+    {
+      "name": "Infrastructure",
+      "type": "library",
+      "framework": ".NET 8 class library — EF Core + ASP.NET Identity",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/CatalogContext.cs",
+          "reason": "EF DbContext; not deployable alone"
+        },
+        {
+          "file": "src/Infrastructure/Dependencies.cs",
+          "reason": "ConfigureServices static method wiring up EF and Identity — consumed by host projects"
+        },
+        {
+          "file": "src/Infrastructure/Identity/IdentityTokenClaimService.cs",
+          "reason": "JWT generation service; consumed by PublicApi"
+        }
+      ],
+      "confidence": 0.99
+    },
+    {
+      "name": "BlazorShared",
+      "type": "library",
+      "framework": ".NET 8 class library",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": "src/BlazorShared/Models/CatalogItem.cs",
+          "reason": "Shared DTO models used by both BlazorAdmin and PublicApi"
+        },
+        {
+          "file": "src/BlazorShared/Interfaces/ICatalogItemService.cs",
+          "reason": "Service contracts shared across frontend boundary"
+        },
+        {
+          "file": "src/BlazorShared/BaseUrlConfiguration.cs",
+          "reason": "Shared config class used in BlazorAdmin"
+        }
+      ],
+      "confidence": 0.97
+    }
+  ],
+  "supporting_projects": [
+    {
+      "name": "sqlserver (Docker)",
+      "type": "unknown",
+      "framework": "mcr.microsoft.com/azure-sql-edge",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "docker-compose.yml",
+          "reason": "services.sqlserver.image = mcr.microsoft.com/azure-sql-edge"
+        }
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "open_questions": [
+    "Does a separate test project exist? (not visible in Layer 1 extraction artifacts)",
+    "Are there additional Razor component files beyond List.razor.cs captured? Full Blazor page inventory incomplete.",
+    "Is PublicApi deployed independently of Web, or co-hosted in Azure App Service?"
+  ]
+}

@@ -1,0 +1,35 @@
+%%{init: {"theme": "default"}}%%
+C4Container
+    title Container View — eShopOnWeb
+
+    Person(shopper, "Shopper")
+    Person(admin, "Administrator")
+
+    System_Boundary(eshop, "eShopOnWeb") {
+
+        Container(web, "Web Storefront", "ASP.NET Core MVC / .NET 8", "Razor Pages and/or MVC controllers for catalog browse, basket, checkout, order history. Hosts BlazorAdmin WASM files (inferred).")
+        Container(api, "Public API", "ASP.NET Core REST / .NET 8", "REST API: POST api/authenticate, GET api/catalog-brands, GET/POST/PUT/DELETE api/catalog-items, GET api/catalog-types")
+        Container(blazor, "BlazorAdmin", "Blazor WebAssembly / .NET 8", "SPA running in browser. Admin catalog CRUD via PublicApi. Browser localStorage caching.")
+
+        Container(appcore, "ApplicationCore", ".NET Class Library", "Domain entities (Basket, Order, CatalogItem, etc.), Interfaces, Specifications, Application Services (BasketService, OrderService)")
+        Container(infra, "Infrastructure", ".NET Class Library", "EfRepository<T>, CatalogContext, AppIdentityDbContext, IdentityTokenClaimService, EmailSender (stub), LoggerAdapter")
+        Container(shared, "BlazorShared", ".NET Class Library", "Shared DTOs: CatalogItemDto, CatalogBrandDto, CatalogTypeDto, CreateCatalogItemRequest, etc.")
+
+        ContainerDb(catalogdb, "Catalog Database", "SQL Server", "Tables: Catalog, CatalogBrands, CatalogTypes, Baskets, BasketItems, Orders, OrderItems, Buyers, PaymentMethods")
+        ContainerDb(identitydb, "Identity Database", "SQL Server", "Tables: AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserClaims")
+    }
+
+    Rel(shopper, web, "HTTPS")
+    Rel(admin, blazor, "HTTPS — served from Web host")
+    Rel(blazor, api, "HTTPS/REST — Bearer JWT")
+
+    Rel(web, appcore, "Direct .NET reference")
+    Rel(web, infra, "Direct .NET reference (DI wiring)")
+    Rel(api, appcore, "Direct .NET reference")
+    Rel(api, infra, "Direct .NET reference (DI wiring)")
+    Rel(api, shared, "Direct .NET reference (response DTOs)")
+    Rel(blazor, shared, "Direct .NET reference (request/response models)")
+    Rel(infra, appcore, "Implements interfaces")
+
+    Rel(infra, catalogdb, "EF Core / SQL — CatalogConnection")
+    Rel(infra, identitydb, "EF Core / SQL — IdentityConnection")

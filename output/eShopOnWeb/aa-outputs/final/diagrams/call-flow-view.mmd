@@ -1,0 +1,25 @@
+%% Generated from source evidence. Unknown items are marked as unknown.
+flowchart TB
+  FLOW_0001_1["1. AuthenticateEndpoint\nAPI / Identity"]
+  FLOW_0001_2["2. BaseMessage\nApplication / PublicApi"]
+  FLOW_0001_1 --> FLOW_0001_2
+  FLOW_0001_3["3. IdentityTokenClaimService\nApplication / Identity"]
+  FLOW_0001_2 --> FLOW_0001_3
+  FLOW_0002_1["1. CatalogBrandListEndpoint\nAPI / Catalog"]
+  FLOW_0002_2["2. EfRepository\nDataAccess / DataAccess"]
+  FLOW_0002_1 --> FLOW_0002_2
+  FLOW_0002_3["3. CatalogContext\nDataAccess / Catalog"]
+  FLOW_0002_2 --> FLOW_0002_3
+  FLOW_0003_1["1. CatalogItemGetByIdEndpoint\nAPI / Catalog"]
+  FLOW_0003_2["2. BaseMessage\nApplication / PublicApi"]
+  FLOW_0003_1 --> FLOW_0003_2
+  FLOW_0003_3["3. UriComposer\nApplication / ApplicationCore"]
+  FLOW_0003_2 --> FLOW_0003_3
+  FLOW_0003_4["4. EfRepository\nDataAccess / DataAccess"]
+  FLOW_0003_3 --> FLOW_0003_4
+  FLOW_0003_5["5. CatalogSettings\nCrossCutting / Catalog"]
+  FLOW_0003_4 --> FLOW_0003_5
+  FLOW_0003_6["6. CatalogContext\nDataAccess / Catalog"]
+  FLOW_0003_5 --> FLOW_0003_6
+  FLOW_0003_7["7. GetByIdCatalogItemRequest\nApplication / Catalog"]
+  FLOW_0003_6 --> FLOW_0003_7

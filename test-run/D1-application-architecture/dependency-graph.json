@@ -1,0 +1,101 @@
+{
+  "nodes": [
+    { "id": "ApplicationCore", "type": "project", "module": "cross-cutting", "layer": "Domain + Application Service" },
+    { "id": "Infrastructure", "type": "project", "module": "Infrastructure-Cross-Cutting", "layer": "Infrastructure" },
+    { "id": "Web", "type": "project", "module": "Web-UI", "layer": "Presentation/UI + API" },
+    { "id": "PublicApi", "type": "project", "module": "API", "layer": "API" },
+    { "id": "BlazorAdmin", "type": "project", "module": "BlazorAdmin-UI", "layer": "Presentation/UI" },
+    { "id": "BlazorShared", "type": "project", "module": "shared-library", "layer": "Cross-cutting" },
+    { "id": "BasketService", "type": "component", "module": "Basket", "layer": "Application Service" },
+    { "id": "OrderService", "type": "component", "module": "Order", "layer": "Application Service" },
+    { "id": "UriComposer", "type": "component", "module": "Catalog", "layer": "Application Service" },
+    { "id": "EfRepository", "type": "component", "module": "Infrastructure-Cross-Cutting", "layer": "Data Access" },
+    { "id": "CatalogContext", "type": "component", "module": "Infrastructure-Cross-Cutting", "layer": "Data Access" },
+    { "id": "AppIdentityDbContext", "type": "component", "module": "Authentication", "layer": "Data Access" },
+    { "id": "AuthenticateEndpoint", "type": "component", "module": "Authentication", "layer": "API" },
+    { "id": "CatalogBrandListEndpoint", "type": "component", "module": "Catalog", "layer": "API" },
+    { "id": "IdentityTokenClaimService", "type": "component", "module": "Authentication", "layer": "Infrastructure" },
+    { "id": "CustomAuthStateProvider", "type": "component", "module": "Authentication", "layer": "Presentation/UI" },
+    { "id": "CatalogItemService_Blazor", "type": "component", "module": "Catalog", "layer": "Integration" },
+    { "id": "CachedCatalogItemServiceDecorator", "type": "component", "module": "Catalog", "layer": "Integration" },
+    { "id": "HttpService", "type": "component", "module": "BlazorAdmin-UI", "layer": "Integration" },
+    { "id": "LoggerAdapter", "type": "component", "module": "Infrastructure-Cross-Cutting", "layer": "Cross-cutting" },
+    { "id": "EmailSender", "type": "component", "module": "Authentication", "layer": "Infrastructure" },
+    { "id": "BasketQueryService", "type": "component", "module": "Basket", "layer": "Data Access" },
+    { "id": "SqlServer", "type": "external", "module": "external", "layer": "Data Access" },
+    { "id": "BlazoredLocalStorage", "type": "external", "module": "external", "layer": "Cross-cutting" },
+    { "id": "Ardalis.Specification", "type": "external", "module": "external", "layer": "Data Access" },
+    { "id": "Ardalis.ApiEndpoints", "type": "external", "module": "external", "layer": "API" },
+    { "id": "AutoMapper", "type": "external", "module": "external", "layer": "Application Service" }
+  ],
+  "edges": [
+    { "from": "Web", "to": "ApplicationCore", "relationship": "references", "evidence": ["azure.yaml, docker-compose.yml — Web project consumes ApplicationCore"] },
+    { "from": "Web", "to": "Infrastructure", "relationship": "references", "evidence": ["Dependencies.cs consumed by host projects"] },
+    { "from": "PublicApi", "to": "ApplicationCore", "relationship": "references", "evidence": ["AuthenticateEndpoint, CatalogBrandListEndpoint use ApplicationCore interfaces"] },
+    { "from": "PublicApi", "to": "Infrastructure", "relationship": "references", "evidence": ["IdentityTokenClaimService, EfRepository injected into PublicApi"] },
+    { "from": "BlazorAdmin", "to": "BlazorShared", "relationship": "references", "evidence": ["src/BlazorAdmin/Services/CatalogItemService.cs imports BlazorShared.Models"] },
+    { "from": "BlazorAdmin", "to": "PublicApi", "relationship": "calls", "evidence": ["HttpService calls api/catalog-items, api/authenticate etc on PublicApi"] },
+    { "from": "OrderService", "to": "BasketService", "relationship": "references", "evidence": ["OrderService.CreateOrderAsync reads IRepository<Basket> — shares Basket data"] },
+    { "from": "OrderService", "to": "EfRepository", "relationship": "injects", "evidence": ["src/ApplicationCore/Services/OrderService.cs — IRepository<Order>, IRepository<Basket>, IRepository<CatalogItem>"] },
+    { "from": "BasketService", "to": "EfRepository", "relationship": "injects", "evidence": ["src/ApplicationCore/Services/BasketService.cs — IRepository<Basket>"] },
+    { "from": "CatalogBrandListEndpoint", "to": "EfRepository", "relationship": "injects", "evidence": ["src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs — IRepository<CatalogBrand>"] },
+    { "from": "EfRepository", "to": "CatalogContext", "relationship": "references", "evidence": ["src/Infrastructure/Data/EfRepository.cs — EfRepository(CatalogContext dbContext)"] },
+    { "from": "CatalogContext", "to": "SqlServer", "relationship": "references", "evidence": ["src/Infrastructure/Dependencies.cs — c.UseSqlServer(configuration.GetConnectionString('CatalogConnection'))"] },
+    { "from": "AppIdentityDbContext", "to": "SqlServer", "relationship": "references", "evidence": ["src/Infrastructure/Dependencies.cs — options.UseSqlServer(configuration.GetConnectionString('IdentityConnection'))"] },
+    { "from": "AuthenticateEndpoint", "to": "IdentityTokenClaimService", "relationship": "injects", "evidence": ["src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs — constructor injection"] },
+    { "from": "IdentityTokenClaimService", "to": "AppIdentityDbContext", "relationship": "injects", "evidence": ["UserManager<ApplicationUser> backed by AppIdentityDbContext"] },
+    { "from": "CachedCatalogItemServiceDecorator", "to": "CatalogItemService_Blazor", "relationship": "injects", "evidence": ["src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs — constructor injects CatalogItemService"] },
+    { "from": "CachedCatalogItemServiceDecorator", "to": "BlazoredLocalStorage", "relationship": "injects", "evidence": ["ILocalStorageService injected"] },
+    { "from": "CatalogItemService_Blazor", "to": "HttpService", "relationship": "injects", "evidence": ["src/BlazorAdmin/Services/CatalogItemService.cs — HttpService injected"] },
+    { "from": "HttpService", "to": "PublicApi", "relationship": "calls", "evidence": ["_apiUrl from BaseUrlConfiguration pointing to PublicApi base"] },
+    { "from": "UriComposer", "to": "CatalogContext", "relationship": "references", "evidence": ["UriComposer uses CatalogSettings.CatalogBaseUrl — config, not direct DB"] },
+    { "from": "BasketQueryService", "to": "CatalogContext", "relationship": "injects", "evidence": ["src/Infrastructure/Data/Queries/BasketQueryService.cs — CatalogContext injected directly"] },
+    { "from": "LoggerAdapter", "to": "BasketService", "relationship": "injects", "evidence": ["IAppLogger<T> injected into BasketService"] },
+    { "from": "CustomAuthStateProvider", "to": "PublicApi", "relationship": "calls", "evidence": ["FetchUser() calls HttpClient.GetFromJsonAsync<UserInfo>('User')"] }
+  ],
+  "cycles": [
+    {
+      "cycle": ["OrderService", "BasketService (data)", "CatalogContext"],
+      "severity": "Medium",
+      "impact": "OrderService reads from Basket and Catalog repositories simultaneously. If Basket or Catalog are extracted to separate services, this flow must be redesigned. Not a code-level circular import but a runtime data coupling cycle through shared CatalogContext."
+    }
+  ],
+  "high_coupling_components": [
+    {
+      "component": "CatalogContext",
+      "reason": "Single EF DbContext owns 7 entities across Basket, Catalog, and Order domains. All repositories depend on it. Changing schema for one domain risks all others.",
+      "efferent_coupling": 0,
+      "afferent_coupling": 6
+    },
+    {
+      "component": "EfRepository<T>",
+      "reason": "Generic repository used by all application services. No domain isolation — same class used for Basket, Order, and Catalog.",
+      "efferent_coupling": 1,
+      "afferent_coupling": 5
+    },
+    {
+      "component": "OrderService",
+      "reason": "Depends on 4 injected dependencies: IRepository<Basket>, IRepository<CatalogItem>, IRepository<Order>, IUriComposer. Crosses Basket, Catalog, and Order module boundaries.",
+      "efferent_coupling": 4,
+      "afferent_coupling": 1
+    },
+    {
+      "component": "HttpService (Blazor)",
+      "reason": "Central HTTP gateway for all Blazor admin API calls. All Blazor services route through it. High afferent coupling in frontend layer.",
+      "efferent_coupling": 1,
+      "afferent_coupling": 3
+    }
+  ],
+  "high_coupling_modules": [
+    {
+      "module": "Infrastructure-Cross-Cutting",
+      "reason": "All modules depend on EfRepository and CatalogContext. Single DbContext across domain boundaries is the primary coupling source.",
+      "afferent_coupling": 4
+    },
+    {
+      "module": "Catalog",
+      "reason": "Referenced by Order (snapshot), Basket (CatalogItemId FK), and BlazorAdmin UI. Core domain anchor.",
+      "afferent_coupling": 3
+    }
+  ]
+}

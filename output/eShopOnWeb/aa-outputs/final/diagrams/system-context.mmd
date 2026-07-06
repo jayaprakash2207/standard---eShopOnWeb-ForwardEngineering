@@ -1,0 +1,17 @@
+%% Generated from source evidence. Unknown items are marked as unknown.
+flowchart LR
+  User[Users]
+  System[Legacy System: unknown]
+  User --> System
+  External1["sqlserver"]
+  System --> External1
+  External2["catalog-items"]
+  System --> External2
+  External3["catalog-items/{id}"]
+  System --> External3
+  External4["catalog-items?PageSize=10"]
+  System --> External4
+  External5["{_apiUrl}{uri}"]
+  System --> External5
+  External6["{_apiUrl}{uri}/{id}"]
+  System --> External6

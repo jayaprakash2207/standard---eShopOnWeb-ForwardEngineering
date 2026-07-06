@@ -1,0 +1,40 @@
+{
+  "extraction_date": "2026-07-06T04:26:30.815783+00:00",
+  "source": "c:/std - graphify/standard---eShopOnWeb-ForwardEngineering/source/eShopOnWeb",
+  "source_type": "local",
+  "language": "dotnet",
+  "total_methods": 203,
+  "total_classes": 164,
+  "total_interfaces": 16,
+  "total_enums": 1,
+  "total_business_artifacts": 165,
+  "total_db_objects": 7,
+  "total_config_params": 298,
+  "total_business_params": 43,
+  "total_feature_flags": 1,
+  "log_events_found": 0,
+  "process_sequences": 0,
+  "business_categories": {
+    "data_operation": 24,
+    "business_attribute": 25,
+    "process": 36,
+    "validation": 7,
+    "calculation": 5,
+    "contract_definition": 16,
+    "class_definition": 19,
+    "general": 7,
+    "integration": 7,
+    "business_state": 1,
+    "authentication": 6,
+    "notification": 2,
+    "restriction": 9,
+    "transformation": 1
+  },
+  "output_files": {
+    "source_code": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\test-run\\pipeline-out\\source_code.json",
+    "database": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\test-run\\pipeline-out\\database.json",
+    "config": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\test-run\\pipeline-out\\config.json",
+    "logs": "C:\\std - graphify\\standard---eShopOnWeb-ForwardEngineering\\test-run\\pipeline-out\\logs.json"
+  },
+  "ready_for_layer2": true
+}

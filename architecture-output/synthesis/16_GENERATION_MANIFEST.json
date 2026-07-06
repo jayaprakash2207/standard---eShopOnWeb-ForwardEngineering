@@ -1,0 +1,338 @@
+=== DOCUMENT: 16_GENERATION_MANIFEST.json ===
+
+{
+  "manifest_version": "1.0",
+  "system": "eShopOnWeb",
+  "generated_by": "Foundation Synthesis Agent",
+  "generation_phases": [
+    {
+      "phase": 1,
+      "name": "Domain Core",
+      "status": "READY",
+      "blockers": [],
+      "artifacts": [
+        {
+          "id": "ART-001",
+          "type": "CSharpClass",
+          "name": "BaseEntity",
+          "path": "src/ApplicationCore/Entities/BaseEntity.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-001 through ENT-007 all inherit; Id: int, protected set",
+          "template_inputs": {
+            "namespace": "Microsoft.eShopOnWeb.ApplicationCore.Entities",
+            "properties": [{ "name": "Id", "type": "int", "accessor": "protected set" }]
+          }
+        },
+        {
+          "id": "ART-002",
+          "type": "CSharpInterface",
+          "name": "IAggregateRoot",
+          "path": "src/ApplicationCore/Interfaces/IAggregateRoot.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "Marker interface; CatalogItem, Basket, Order, Buyer all implement",
+          "template_inputs": { "namespace": "Microsoft.eShopOnWeb.ApplicationCore.Interfaces", "isMarker": true }
+        },
+        {
+          "id": "ART-003",
+          "type": "CSharpClass",
+          "name": "CatalogItem",
+          "path": "src/ApplicationCore/Entities/CatalogItem.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-001; CatalogItemConfiguration.cs; BA Agent 1 Chunk 1",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "implements": ["IAggregateRoot"],
+            "properties": [
+              { "name": "Name", "type": "string", "guard": "NullOrEmpty" },
+              { "name": "Description", "type": "string", "guard": "NullOrEmpty" },
+              { "name": "Price", "type": "decimal", "guard": "NegativeOrZero" },
+              { "name": "PictureUri", "type": "string" },
+              { "name": "CatalogTypeId", "type": "int", "guard": "Zero" },
+              { "name": "CatalogType", "type": "CatalogType?", "navigation": true },
+              { "name": "CatalogBrandId", "type": "int", "guard": "Zero" },
+              { "name": "CatalogBrand", "type": "CatalogBrand?", "navigation": true }
+            ],
+            "methods": ["UpdateDetails(CatalogItemDetails)", "UpdateBrand(int)", "UpdateType(int)", "UpdatePictureUri(string)"],
+            "innerTypes": [{ "name": "CatalogItemDetails", "kind": "record", "properties": ["Name?:string", "Description?:string", "Price:decimal"] }]
+          }
+        },
+        {
+          "id": "ART-004",
+          "type": "CSharpClass",
+          "name": "CatalogBrand",
+          "path": "src/ApplicationCore/Entities/CatalogBrand.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-002",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "implements": ["IAggregateRoot"],
+            "properties": [{ "name": "Brand", "type": "string", "guard": "NullOrEmpty" }]
+          }
+        },
+        {
+          "id": "ART-005",
+          "type": "CSharpClass",
+          "name": "CatalogType",
+          "path": "src/ApplicationCore/Entities/CatalogType.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-003",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "implements": ["IAggregateRoot"],
+            "properties": [{ "name": "Type", "type": "string", "guard": "NullOrEmpty" }]
+          }
+        },
+        {
+          "id": "ART-006",
+          "type": "CSharpClass",
+          "name": "Basket",
+          "path": "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-004; BA Agent 1 Chunk 2",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "implements": ["IAggregateRoot"],
+            "properties": [
+              { "name": "BuyerId", "type": "string", "guard": "NullOrEmpty" },
+              { "name": "Items", "type": "IReadOnlyCollection<BasketItem>", "backing": "_items", "privateList": true },
+              { "name": "TotalItems", "type": "int", "computed": "Items.Sum(i => i.Quantity)" }
+            ],
+            "methods": [
+              "AddItem(int catalogItemId, decimal price, int quantity):void",
+              "RemoveEmptyItems():void",
+              "SetNewBuyerId(string buyerId):void"
+            ]
+          }
+        },
+        {
+          "id": "ART-007",
+          "type": "CSharpClass",
+          "name": "BasketItem",
+          "path": "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-005",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "properties": [
+              { "name": "UnitPrice", "type": "decimal" },
+              { "name": "Quantity", "type": "int", "guard": "OutOfRange(0, maxInt)" },
+              { "name": "CatalogItemId", "type": "int" },
+              { "name": "BasketId", "type": "int" }
+            ],
+            "methods": ["AddQuantity(int quantity):void", "SetQuantity(int quantity):void"]
+          }
+        },
+        {
+          "id": "ART-008",
+          "type": "CSharpClass",
+          "name": "Order",
+          "path": "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-006; OrderConfiguration.cs",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "implements": ["IAggregateRoot"],
+            "properties": [
+              { "name": "BuyerId", "type": "string", "guard": "NullOrEmpty" },
+              { "name": "OrderDate", "type": "DateTimeOffset", "default": "DateTimeOffset.Now" },
+              { "name": "ShipToAddress", "type": "Address", "required": true },
+              { "name": "OrderItems", "type": "IReadOnlyCollection<OrderItem>", "backing": "_orderItems", "privateList": true }
+            ],
+            "methods": ["Total():decimal => OrderItems.Sum(oi => oi.UnitPrice * oi.Units)"]
+          }
+        },
+        {
+          "id": "ART-009",
+          "type": "CSharpClass",
+          "name": "OrderItem",
+          "path": "src/ApplicationCore/Entities/OrderAggregate/OrderItem.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-007",
+          "template_inputs": {
+            "baseClass": "BaseEntity",
+            "properties": [
+              { "name": "ItemOrdered", "type": "CatalogItemOrdered", "ownedValueObject": true },
+              { "name": "UnitPrice", "type": "decimal", "guard": "NegativeOrZero" },
+              { "name": "Units", "type": "int", "guard": "OutOfRange(1, maxInt)" }
+            ]
+          }
+        },
+        {
+          "id": "ART-010",
+          "type": "CSharpClass",
+          "name": "Address",
+          "path": "src/ApplicationCore/Entities/OrderAggregate/Address.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-008; OrderConfiguration.cs column constraints",
+          "template_inputs": {
+            "kind": "ValueObject",
+            "properties": [
+              { "name": "Street", "type": "string", "maxLength": 180 },
+              { "name": "City", "type": "string", "maxLength": 100 },
+              { "name": "State", "type": "string", "maxLength": 60 },
+              { "name": "Country", "type": "string", "maxLength": 90 },
+              { "name": "ZipCode", "type": "string", "maxLength": 18 }
+            ]
+          }
+        },
+        {
+          "id": "ART-011",
+          "type": "CSharpClass",
+          "name": "CatalogItemOrdered",
+          "path": "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "ENT-009; immutable snapshot",
+          "template_inputs": {
+            "kind": "ValueObject",
+            "properties": [
+              { "name": "CatalogItemId", "type": "int", "guard": "Zero" },
+              { "name": "ProductName", "type": "string", "guard": "NullOrEmpty" },
+              { "name": "PictureUri", "type": "string", "guard": "NullOrEmpty" }
+            ]
+          }
+        },
+        {
+          "id": "ART-012",
+          "type": "CSharpClass",
+          "name": "GuardExtensions",
+          "path": "src/ApplicationCore/Extensions/GuardExtensions.cs",
+          "knowledge_confidence": "HIGH",
+          "source_evidence": "Custom EmptyBasketOnCheckout guard; BA Agent 2 BR-20",
+          "template_inputs": {
+            "extensionOn": "IGuardClause",
+            "methods": ["EmptyBasketOnCheckout(IReadOnlyCollection<BasketItem> basketItems)"]
+          }
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Specifications",
+      "status": "READY",
+      "blockers": [],
+      "artifacts": [
+        { "id": "ART-013", "type": "SpecificationClass", "name": "CatalogFilterSpecification", "path": "src/ApplicationCore/Specifications/CatalogFilterSpecification.cs", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 1", "template_inputs": { "entityType": "CatalogItem", "parameters": ["brandId:int?", "typeId:int?"] } },
+        { "id": "ART-014", "type": "SpecificationClass", "name": "CatalogFilterPaginatedSpecification", "path": "src/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 1", "template_inputs": { "entityType": "CatalogItem", "parameters": ["skip:int", "take:int", "brandId:int?", "typeId:int?"] } },
+        { "id": "ART-015", "type": "SpecificationClass", "name": "BasketWithItemsSpecification", "path": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 2", "template_inputs": { "entityType": "Basket", "includes": ["Items"], "filterVariants": ["byId:int", "byBuyerId:string"] } },
+        { "id": "ART-016", "type": "SpecificationClass", "name": "CustomerOrdersWithItemsSpecification", "path": "src/ApplicationCore/Specifications/CustomerOrdersWithItemsSpecification.cs", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 2", "template_inputs": { "entityType": "Order", "parameters": ["buyerId:string"], "includes": ["OrderItems.ItemOrdered"] } },
+        { "id": "ART-017", "type": "SpecificationClass", "name": "OrderWithItemsByIdSpec", "path": "src/ApplicationCore/Specifications/OrderWithItemsByIdSpec.cs", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 2", "template_inputs": { "entityType": "Order", "parameters": ["orderId:int"], "includes": ["OrderItems.ItemOrdered"] } },
+        { "id": "ART-018", "type": "SpecificationClass", "name": "CatalogItemsSpecification", "path": "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 1", "template_inputs": { "entityType": "CatalogItem", "parameters": ["ids:int[]"] } }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Application Services",
+      "status": "READY",
+      "blockers": [],
+      "artifacts": [
+        { "id": "ART-019", "type": "ServiceClass", "name": "BasketService", "path": "src/ApplicationCore/Services/BasketService.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-001; BA Agent 1 Chunk 2; GEN-SVC-01" },
+        { "id": "ART-020", "type": "ServiceClass", "name": "OrderService", "path": "src/ApplicationCore/Services/OrderService.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-002; BA Agent 1 Chunk 2; GEN-SVC-02" },
+        { "id": "ART-021", "type": "ServiceClass", "name": "UriComposer", "path": "src/ApplicationCore/Services/UriComposer.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-003; CatalogSettings.CatalogBaseUrl" }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Infrastructure",
+      "status": "READY",
+      "blockers": [],
+      "artifacts": [
+        { "id": "ART-022", "type": "DbContextClass", "name": "CatalogContext", "path": "src/Infrastructure/Data/CatalogContext.cs", "knowledge_confidence": "HIGH", "source_evidence": "DB-001; DA Agent 1; GEN-INFRA-01" },
+        { "id": "ART-023", "type": "EfConfigClass", "name": "CatalogItemConfiguration", "path": "src/Infrastructure/Data/Config/CatalogItemConfiguration.cs", "knowledge_confidence": "HIGH", "source_evidence": "AP-013; HiLo catalog_hilo; GEN-INFRA-02" },
+        { "id": "ART-024", "type": "EfConfigClass", "name": "OrderConfiguration", "path": "src/Infrastructure/Data/Config/OrderConfiguration.cs", "knowledge_confidence": "HIGH", "source_evidence": "AP-005; Address OwnsOne column constraints" },
+        { "id": "ART-025", "type": "RepositoryClass", "name": "EfRepository", "path": "src/Infrastructure/Data/EfRepository.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-005; AP-002" },
+        { "id": "ART-026", "type": "ServiceClass", "name": "BasketQueryService", "path": "src/Infrastructure/Data/Queries/BasketQueryService.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-006; direct EF LINQ for COUNT" },
+        { "id": "ART-027", "type": "ServiceClass", "name": "IdentityTokenClaimService", "path": "src/Infrastructure/Identity/IdentityTokenClaimService.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-004; GEN-SVC-03; JWT key MUST come from configuration" },
+        { "id": "ART-028", "type": "ServiceClass", "name": "SendGridEmailSender", "path": "src/Infrastructure/Services/EmailSender.cs", "knowledge_confidence": "MEDIUM", "source_evidence": "SVC-007 (stub replaced); MIS-006 blocker", "blockers": ["MIS-006"] },
+        { "id": "ART-029", "type": "SeedClass", "name": "CatalogContextSeed", "path": "src/Infrastructure/Data/CatalogContextSeed.cs", "knowledge_confidence": "HIGH", "source_evidence": "BR-37, BR-38, BR-39; idempotent seeding with 10-retry" },
+        { "id": "ART-030", "type": "SeedClass", "name": "AppIdentityDbContextSeed", "path": "src/Infrastructure/Identity/AppIdentityDbContextSeed.cs", "knowledge_confidence": "HIGH", "source_evidence": "BR-32; admin password MUST come from Key Vault; NEVER hardcode" }
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "PublicApi",
+      "status": "READY_WITH_CONDITIONS",
+      "blockers": ["MIS-001 — JWT signing key must be in Key Vault before deploy", "MIS-003 — issuer/audience URIs must be defined"],
+      "artifacts": [
+        { "id": "ART-031", "type": "EndpointClass", "name": "AuthenticateEndpoint", "path": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-008; AP-016" },
+        { "id": "ART-032", "type": "EndpointClass", "name": "CatalogItemListPagedEndpoint", "path": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-001; REMOVE Task.Delay(1000) — TD-07" },
+        { "id": "ART-033", "type": "EndpointClass", "name": "CatalogItemGetByIdEndpoint", "path": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-002" },
+        { "id": "ART-034", "type": "EndpointClass", "name": "CreateCatalogItemEndpoint", "path": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-003; Authorize Administrators JWT" },
+        { "id": "ART-035", "type": "EndpointClass", "name": "UpdateCatalogItemEndpoint", "path": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-004; Authorize Administrators JWT" },
+        { "id": "ART-036", "type": "EndpointClass", "name": "DeleteCatalogItemEndpoint", "path": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-005; Authorize Administrators JWT" },
+        { "id": "ART-037", "type": "EndpointClass", "name": "CatalogBrandListEndpoint", "path": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-006" },
+        { "id": "ART-038", "type": "EndpointClass", "name": "CatalogTypeListEndpoint", "path": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs", "knowledge_confidence": "HIGH", "source_evidence": "API-007" },
+        { "id": "ART-039", "type": "MiddlewareClass", "name": "ExceptionMiddleware", "path": "src/PublicApi/Middleware/ExceptionMiddleware.cs", "knowledge_confidence": "HIGH", "source_evidence": "AP-014; fix TD-04 — no exception.Message in prod" },
+        { "id": "ART-040", "type": "ProgramFile", "name": "PublicApi Program.cs", "path": "src/PublicApi/Program.cs", "knowledge_confidence": "HIGH", "source_evidence": "JWT config GEN-API-02; fix ValidateIssuer/Audience" }
+      ]
+    },
+    {
+      "phase": 6,
+      "name": "Web Application",
+      "status": "PARTIAL",
+      "blockers": ["MIS-004 — Web pages for catalog/basket/checkout/orders not fully extracted", "MIS-007 — shipping address form (TD-09)"],
+      "artifacts": [
+        { "id": "ART-041", "type": "RazorPage", "name": "Login", "path": "src/Web/Areas/Identity/Pages/Account/Login.cshtml", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 6; Login + basket transfer confirmed" },
+        { "id": "ART-042", "type": "RazorPage", "name": "Register", "path": "src/Web/Areas/Identity/Pages/Account/Register.cshtml", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 6; Register.cshtml.cs confirmed" },
+        { "id": "ART-043", "type": "RazorPage", "name": "ConfirmEmail", "path": "src/Web/Areas/Identity/Pages/Account/ConfirmEmail.cshtml", "knowledge_confidence": "HIGH", "source_evidence": "BA Agent 1 Chunk 6" },
+        { "id": "ART-044", "type": "RazorPage", "name": "Checkout", "path": "src/Web/Pages/Basket/Checkout.cshtml", "knowledge_confidence": "INFERRED", "source_evidence": "Checkout.cshtml.cs partially confirmed; address form MISSING (MIS-007)", "blockers": ["MIS-007"] },
+        { "id": "ART-045", "type": "ServiceClass", "name": "CachedCatalogViewModelService", "path": "src/Web/Services/CachedCatalogViewModelService.cs", "knowledge_confidence": "HIGH", "source_evidence": "AP-007; 30s IMemoryCache" },
+        { "id": "ART-046", "type": "MediatRHandler", "name": "GetMyOrdersHandler", "path": "src/Web/Features/MyOrders/GetMyOrdersHandler.cs", "knowledge_confidence": "HIGH", "source_evidence": "AP-003; SVC-010" },
+        { "id": "ART-047", "type": "ControllerClass", "name": "UserController", "path": "src/Web/Controllers/UserController.cs", "knowledge_confidence": "HIGH", "source_evidence": "AP-011; fix TD-10 remove [AllowAnonymous]+[Authorize] conflict" }
+      ]
+    },
+    {
+      "phase": 7,
+      "name": "BlazorAdmin",
+      "status": "READY",
+      "blockers": [],
+      "artifacts": [
+        { "id": "ART-048", "type": "ServiceClass", "name": "CatalogItemService", "path": "src/BlazorAdmin/Services/CatalogItemService.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-011; AP-018 parallel async fan-out" },
+        { "id": "ART-049", "type": "ServiceClass", "name": "CachedCatalogItemServiceDecorator", "path": "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-012; AP-008; 60s TTL; immediate invalidation" },
+        { "id": "ART-050", "type": "ServiceClass", "name": "CustomAuthStateProvider", "path": "src/BlazorAdmin/CustomAuthStateProvider.cs", "knowledge_confidence": "HIGH", "source_evidence": "SVC-013; AP-011; 60s poll; move to configuration" }
+      ]
+    },
+    {
+      "phase": 8,
+      "name": "Infrastructure as Code",
+      "status": "PARTIAL",
+      "blockers": ["MIS-005 — PublicApi Azure deployment decision (OQ-006)", "MIS-012 — SQL firewall restriction (TD-11)"],
+      "artifacts": [
+        { "id": "ART-051", "type": "BicepFile", "name": "main.bicep", "path": "infra/main.bicep", "knowledge_confidence": "HIGH", "source_evidence": "TA Agent 1+2; App Service + Key Vault + SQL confirmed" },
+        { "id": "ART-052", "type": "BicepFile", "name": "sqlserver.bicep (fixed firewall)", "path": "infra/core/database/sqlserver/sqlserver.bicep", "knowledge_confidence": "INFERRED", "source_evidence": "TD-11; replace open-all rule; blocked on IP list decision", "blockers": ["MIS-012"] },
+        { "id": "ART-053", "type": "BicepFile", "name": "PublicApi App Service (new)", "path": "infra/core/host/publicapi-appservice.bicep", "knowledge_confidence": "INFERRED", "source_evidence": "TD-12; PublicApi has no Azure deployment; OQ-006", "blockers": ["MIS-005"] },
+        { "id": "ART-054", "type": "GitHubWorkflow", "name": "dotnetcore.yml (upgraded)", "path": ".github/workflows/dotnetcore.yml", "knowledge_confidence": "HIGH", "source_evidence": "TA Agent 2 TD-14, TD-15; upgrade v1/v2 → v4; add secret scan + coverage gate" }
+      ]
+    }
+  ],
+
+  "missing_inputs": [
+    { "id": "MIS-001", "description": "JWT signing key value (256-bit random)", "blocking_phase": 1, "resolution": "Generate and store in Azure Key Vault" },
+    { "id": "MIS-002", "description": "Admin initial password (environment-specific)", "blocking_phase": 1, "resolution": "Store in Azure Key Vault; force reset on first login" },
+    { "id": "MIS-003", "description": "JWT issuer URI and audience URI", "blocking_phase": 5, "resolution": "Architecture decision: define production URI" },
+    { "id": "MIS-004", "description": "Web Razor pages: catalog browse, basket, checkout, order history", "blocking_phase": 6, "resolution": "Extract src/Web/Pages/ contents" },
+    { "id": "MIS-005", "description": "PublicApi Azure deployment decision", "blocking_phase": 8, "resolution": "OQ-006: separate App Service or merge into Web" },
+    { "id": "MIS-006", "description": "Email provider API key and service implementation", "blocking_phase": 6, "resolution": "Integrate SendGrid or Azure Communication Services" },
+    { "id": "MIS-007", "description": "Shipping address form fields and binding for Checkout page", "blocking_phase": 6, "resolution": "Implement address form UI; remove hardcoded address" },
+    { "id": "MIS-008", "description": "Order status enum and fulfilment workflow definition", "blocking_phase": 6, "resolution": "Business decision: define OrderStatus values and transitions" }
+  ],
+
+  "validation_gates": [
+    { "id": "G-SEC-01", "description": "JWT signing key not hardcoded in source", "check": "grep -r 'SecretKeyOfDoom' src/ → 0 matches", "severity": "BLOCK" },
+    { "id": "G-SEC-02", "description": "DEFAULT_PASSWORD not in source", "check": "grep -r 'Pass@word1' src/ → 0 matches", "severity": "BLOCK" },
+    { "id": "G-SEC-03", "description": "ValidateIssuer and ValidateAudience both true", "check": "grep 'ValidateIssuer = true' → match; grep 'ValidateAudience = true' → match", "severity": "BLOCK" },
+    { "id": "G-DB-01", "description": "EF migrations succeed against real SQL Server", "check": "dotnet ef database update on SQL Server (not InMemory)", "severity": "BLOCK" },
+    { "id": "G-DB-02", "description": "At least one integration test against real SQL Server", "check": "dotnet test --filter Category=Integration on SQL Server instance", "severity": "BLOCK" },
+    { "id": "G-DB-03", "description": "Unique index on CatalogItems.Name exists", "check": "SELECT * FROM sys.indexes WHERE name = 'UX_CatalogItems_Name' → 1 row", "severity": "BLOCK" },
+    { "id": "G-PERF-01", "description": "Task.Delay(1000) removed from CatalogItemListPagedEndpoint", "check": "grep -r 'Task.Delay' src/PublicApi/ → 0 matches", "severity": "BLOCK" },
+    { "id": "G-EMAIL-01", "description": "EmailSender.SendEmailAsync is not a stub", "check": "grep 'return Task.CompletedTask' src/Infrastructure/Services/EmailSender.cs → 0 matches", "severity": "WARN" },
+    { "id": "G-CI-01", "description": "No hardcoded JWT key or password detected by secret scanner", "check": "gitleaks detect --source . --exit-code 1", "severity": "BLOCK" }
+  ],
+
+  "generation_summary": {
+    "total_artifacts": 54,
+    "ready": 40,
+    "partial_or_inferred": 10,
+    "blocked": 4,
+    "critical_blockers": ["MIS-001 (JWT key)", "MIS-002 (admin password)", "MIS-003 (JWT issuer/audience)"]
+  }
+}

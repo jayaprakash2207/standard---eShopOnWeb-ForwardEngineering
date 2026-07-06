@@ -1,0 +1,99 @@
+{
+  "db_connection": "CODE-ONLY — db_connection_results empty in extraction; no live CLI session recorded.",
+  "data_sources": [
+    {
+      "name": "CatalogDb",
+      "type": "relational_database",
+      "engine": "PostgreSQL (Npgsql) — CONFIRMED via src/Infrastructure/Dependencies.cs UseNpgsql + appsettings.json (Host=localhost;Port=5432;Database=eShopCatalog). appsettings.Docker.json's SQL Server string is stale/legacy. See RC-001 in schema-catalogue.json.",
+      "connection_string_key": "ConnectionStrings.CatalogConnection",
+      "found_in": [
+        "src/PublicApi/appsettings.json",
+        "src/PublicApi/appsettings.Docker.json",
+        "src/Web/appsettings.Docker.json"
+      ],
+      "context_class": "CatalogContext (src/Infrastructure/Data/CatalogContext.cs)",
+      "tables_or_entities": ["CatalogBrand", "CatalogType", "CatalogItem", "Basket", "BasketItem", "Order", "OrderItem"],
+      "confidence": 0.8
+    },
+    {
+      "name": "IdentityDb",
+      "type": "relational_database",
+      "engine": "PostgreSQL (Npgsql) — CONFIRMED via src/Infrastructure/Dependencies.cs UseNpgsql + appsettings.json (Host=localhost;Port=5432;Database=eShopIdentity). appsettings.Docker.json's SQL Server string is stale/legacy. See RC-001 in schema-catalogue.json.",
+      "connection_string_key": "ConnectionStrings.IdentityConnection",
+      "found_in": [
+        "src/PublicApi/appsettings.json",
+        "src/PublicApi/appsettings.Docker.json",
+        "src/Web/appsettings.Docker.json"
+      ],
+      "context_class": "AppIdentityDbContext (INFERRED, not in supplied ef_entities)",
+      "tables_or_entities": ["AspNetUsers", "AspNetRoles", "AspNetUserRoles", "AspNetUserClaims", "AspNetUserLogins", "AspNetUserTokens", "AspNetRoleClaims"],
+      "confidence": 0.7
+    },
+    {
+      "name": "Browser localStorage cache (BlazorAdmin)",
+      "type": "application_cache",
+      "engine": "Browser localStorage via ILocalStorageService (Blazored.LocalStorage) — CONFIRMED, not IMemoryCache.",
+      "evidence": [
+        "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs (uses _localStorageService.GetItemAsync<CacheEntry<List<CatalogItem>>>)",
+        "src/BlazorAdmin/Services/CachedCatalogLookupDataServiceDecorator .cs",
+        "src/BlazorAdmin/Services/CacheEntry.cs (CacheEntry<T> { Value, DateCreated })"
+      ],
+      "notes": "Decorator pattern wraps CatalogItemService / CatalogLookupDataService, caching results in browser localStorage keyed entries. CacheEntry<T> stores a DateCreated timestamp but no explicit expiry/TTL field — the staleness check logic was not located in this pass (still UNKNOWN, confidence < 0.70 for exact TTL value). See storage-pattern-analysis.md and RC-004.",
+      "confidence": 0.85
+    },
+    {
+      "name": "Browser cookies (BlazorAdmin auth)",
+      "type": "client_storage",
+      "engine": "Browser cookie store via JS interop",
+      "evidence": ["src/BlazorAdmin/JavaScript/Cookies.cs", "src/BlazorAdmin/CustomAuthStateProvider.cs"],
+      "notes": "Used for auth token persistence on the Blazor admin client. confidence 0.75",
+      "confidence": 0.75
+    },
+    {
+      "name": "Redis (infra abbreviations only — not confirmed in use)",
+      "type": "cache",
+      "engine": "Redis",
+      "evidence": ["infra/abbreviations.json: cacheRedis = 'redis-'"],
+      "notes": "Only an Azure naming-convention abbreviation entry found; no Redis connection string, client registration, or usage found in the supplied entity/config extraction. UNKNOWN whether actually used — likely scaffolding left over from the azd template. confidence < 0.70 — marked UNKNOWN.",
+      "confidence": 0.5
+    }
+  ],
+  "external_integrations": [
+    {
+      "name": "Azure Container Apps / App Service hosting",
+      "type": "deployment_target",
+      "evidence": ["azure.yaml: services.web.host = appservice"],
+      "confidence": 0.9
+    },
+    {
+      "name": "GitHub Actions CI (dotnet build/test)",
+      "type": "ci_pipeline",
+      "evidence": [".github/workflows/dotnetcore.yml"],
+      "confidence": 0.9
+    }
+  ],
+  "change_records": [
+    {
+      "change_id": "RC-001b",
+      "type": "CORRECTED",
+      "finding_id": "data-source-inventory.json — CatalogDb/IdentityDb engine",
+      "what": "Engine corrected from SQL Server / Azure SQL Edge to PostgreSQL (Npgsql), consistent with RC-001 in schema-catalogue.json.",
+      "evidence_source": "entity/ORM code",
+      "evidence_detail": "src/Infrastructure/Dependencies.cs UseNpgsql calls; src/Web/appsettings.json connection strings",
+      "confidence_before": 0.8,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-004",
+      "type": "CORRECTED",
+      "finding_id": "data-source-inventory.json — BlazorAdmin cache engine",
+      "what": "Original said engine UNKNOWN, likely IMemoryCache. CONFIRMED the decorators use Blazored.LocalStorage's ILocalStorageService (browser localStorage), storing CacheEntry<T> objects with a Value and DateCreated timestamp but no explicit TTL field.",
+      "evidence_source": "spot check",
+      "evidence_detail": "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs:30,54 (_localStorageService.GetItemAsync<CacheEntry<...>>); src/BlazorAdmin/Services/CacheEntry.cs (Value, DateCreated)",
+      "confidence_before": 0.5,
+      "confidence_after": 0.85,
+      "phase_found": "Phase 4 spot check"
+    }
+  ]
+}

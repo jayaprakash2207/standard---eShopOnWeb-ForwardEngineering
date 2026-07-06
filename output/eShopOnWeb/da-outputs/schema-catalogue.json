@@ -1,0 +1,156 @@
+{
+  "db_connection": "CODE-ONLY — db_connection_results was empty in the supplied extraction and no live DB CLI session was available in this analysis context. No psql/sqlcmd run was attempted because no extraction artifact recorded one. HOWEVER, Phase 4 spot check of src/Infrastructure/Dependencies.cs and src/Web/appsettings.json confirms the active provider is PostgreSQL (Npgsql), not SQL Server — see RC-001.",
+  "databases": [
+    {
+      "logical_name": "CatalogDb",
+      "context_class": "CatalogContext",
+      "connection_string_key": "ConnectionStrings.CatalogConnection",
+      "engine": "PostgreSQL via Npgsql.EntityFrameworkCore.PostgreSQL — CONFIRMED: src/Infrastructure/Dependencies.cs calls c.UseNpgsql(configuration.GetConnectionString(\"CatalogConnection\")), and src/Web/appsettings.json CatalogConnection is 'Host=localhost;Port=5432;Database=eShopCatalog;Username=postgres;...'. Migration history also includes src/Infrastructure/Data/Migrations/20260526102924_InitialPostgres.cs. NOTE: src/Web/appsettings.Docker.json still defines a SQL Server-style connection string (Server=sqlserver,1433;...Initial Catalog=Microsoft.eShopOnWeb.CatalogDb) — this appears to be stale/legacy from the original SQL Server template and is not the provider actually registered in Dependencies.cs. See RC-001.",
+      "confidence": 0.9,
+      "tables": [
+        {
+          "table_name": "CatalogBrands",
+          "entity": "CatalogBrand",
+          "source_file": "src/ApplicationCore/Entities/CatalogBrand.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "Brand", "type": "string", "nullable": false, "confidence": 0.8 }
+          ],
+          "confidence": 0.8
+        },
+        {
+          "table_name": "CatalogTypes",
+          "entity": "CatalogType",
+          "source_file": "src/ApplicationCore/Entities/CatalogType.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "Type", "type": "string", "nullable": false, "confidence": 0.8 }
+          ],
+          "confidence": 0.8
+        },
+        {
+          "table_name": "Catalog",
+          "entity": "CatalogItem",
+          "source_file": "src/ApplicationCore/Entities/CatalogItem.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "Name", "type": "string", "nullable": false, "confidence": 0.8 },
+            { "name": "Description", "type": "string", "nullable": true, "confidence": 0.75 },
+            { "name": "Price", "type": "decimal", "nullable": false, "confidence": 0.8 },
+            { "name": "PictureUri", "type": "string", "nullable": true, "confidence": 0.75 },
+            { "name": "CatalogTypeId", "type": "int", "fk": "CatalogTypes.Id", "confidence": 0.8 },
+            { "name": "CatalogBrandId", "type": "int", "fk": "CatalogBrands.Id", "confidence": 0.8 },
+            { "name": "AvailableStock", "type": "int", "nullable": false, "confidence": 0.75 },
+            { "name": "RestockThreshold", "type": "int", "nullable": false, "confidence": 0.75 },
+            { "name": "MaxStockThreshold", "type": "int", "nullable": false, "confidence": 0.75 },
+            { "name": "OnReorder", "type": "bool", "nullable": false, "confidence": 0.75 }
+          ],
+          "confidence": 0.8,
+          "notes": "CatalogItemDetails struct exists alongside CatalogItem (src/ApplicationCore/Entities/CatalogItem.cs) — likely a DTO/value object, not its own table. INFERRED, confidence 0.7."
+        },
+        {
+          "table_name": "Baskets",
+          "entity": "Basket",
+          "source_file": "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "BuyerId", "type": "string", "nullable": true, "confidence": 0.8, "note": "Soft reference to AspNetUsers.Id in IdentityDb — cross-database FK, not enforced. See erd.md WARNING section." }
+          ],
+          "confidence": 0.8
+        },
+        {
+          "table_name": "BasketItems",
+          "entity": "BasketItem",
+          "source_file": "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "BasketId", "type": "int", "fk": "Baskets.Id", "confidence": 0.8 },
+            { "name": "CatalogItemId", "type": "int", "fk": "Catalog.Id", "confidence": 0.8 },
+            { "name": "UnitPrice", "type": "decimal", "nullable": false, "confidence": 0.75 },
+            { "name": "Quantity", "type": "int", "nullable": false, "confidence": 0.75 }
+          ],
+          "confidence": 0.8
+        },
+        {
+          "table_name": "Orders",
+          "entity": "Order",
+          "source_file": "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "BuyerId", "type": "string", "nullable": true, "confidence": 0.8, "note": "Soft reference to AspNetUsers.Id in IdentityDb." },
+            { "name": "OrderDate", "type": "datetime", "nullable": false, "confidence": 0.8 },
+            { "name": "ShipToAddress_Street", "type": "string", "nullable": true, "confidence": 0.75, "note": "Owned type Address (src/ApplicationCore/Entities/OrderAggregate/Address.cs) flattened into Orders table by EF Core owned-entity convention." },
+            { "name": "ShipToAddress_City", "type": "string", "nullable": true, "confidence": 0.75 },
+            { "name": "ShipToAddress_State", "type": "string", "nullable": true, "confidence": 0.75 },
+            { "name": "ShipToAddress_Country", "type": "string", "nullable": true, "confidence": 0.75 },
+            { "name": "ShipToAddress_ZipCode", "type": "string", "nullable": true, "confidence": 0.75 }
+          ],
+          "confidence": 0.8
+        },
+        {
+          "table_name": "OrderItems",
+          "entity": "OrderItem",
+          "source_file": "src/ApplicationCore/Entities/OrderAggregate/OrderItem.cs",
+          "columns": [
+            { "name": "Id", "type": "int", "pk": true, "confidence": 0.8 },
+            { "name": "OrderId", "type": "int", "fk": "Orders.Id", "confidence": 0.8 },
+            { "name": "ItemOrdered_CatalogItemId", "type": "int", "confidence": 0.75, "note": "Owned type CatalogItemOrdered (snapshot of CatalogItem at time of order) flattened into OrderItems." },
+            { "name": "ItemOrdered_ProductName", "type": "string", "confidence": 0.75 },
+            { "name": "ItemOrdered_PictureUri", "type": "string", "confidence": 0.75 },
+            { "name": "UnitPrice", "type": "decimal", "confidence": 0.75 },
+            { "name": "Units", "type": "int", "confidence": 0.75 }
+          ],
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "logical_name": "IdentityDb",
+      "context_class": "AppIdentityDbContext (INFERRED — not present in the EF entity list supplied, but referenced by IdentityConnection string and standard ASP.NET Core Identity scaffolding used by eShopOnWeb)",
+      "connection_string_key": "ConnectionStrings.IdentityConnection",
+      "engine": "PostgreSQL via Npgsql.EntityFrameworkCore.PostgreSQL — CONFIRMED: src/Infrastructure/Dependencies.cs calls options.UseNpgsql(configuration.GetConnectionString(\"IdentityConnection\")), and src/Web/appsettings.json IdentityConnection is 'Host=localhost;Port=5432;Database=eShopIdentity;Username=postgres;...'. Migration src/Infrastructure/Identity/Migrations/20260526102952_InitialPostgres.Designer.cs confirms Postgres for AppIdentityDbContext too. appsettings.Docker.json's SQL Server string for IdentityConnection is likewise stale/legacy. See RC-001.",
+      "confidence": 0.85,
+      "tables": [
+        { "table_name": "AspNetUsers", "confidence": 0.7, "note": "INFERRED — standard ASP.NET Core Identity table. Columns: Id, UserName, Email, PasswordHash, etc. Not present in supplied extraction." },
+        { "table_name": "AspNetRoles", "confidence": 0.7, "note": "INFERRED — standard ASP.NET Core Identity table." },
+        { "table_name": "AspNetUserRoles", "confidence": 0.7, "note": "INFERRED — standard ASP.NET Core Identity join table." },
+        { "table_name": "AspNetUserClaims", "confidence": 0.7, "note": "INFERRED" },
+        { "table_name": "AspNetUserLogins", "confidence": 0.7, "note": "INFERRED" },
+        { "table_name": "AspNetUserTokens", "confidence": 0.7, "note": "INFERRED" },
+        { "table_name": "AspNetRoleClaims", "confidence": 0.7, "note": "INFERRED" }
+      ]
+    }
+  ],
+  "entities_not_mapped_to_tables": [
+    { "name": "BaseEntity", "reason": "Abstract base class providing Id — not its own table. confidence 0.8" },
+    { "name": "Buyer", "reason": "CONFIRMED NOT MAPPED — src/Infrastructure/Data/CatalogContext.cs declares exactly 7 DbSets (Baskets, CatalogItems, CatalogBrands, CatalogTypes, Orders, OrderItems, BasketItems), and src/Infrastructure/Identity/AppIdentityDbContext.cs's OnModelCreating only calls base.OnModelCreating — no Buyer/PaymentMethod configuration anywhere. Buyer.cs (src/ApplicationCore/Entities/BuyerAggregate/) is dead/aspirational code with no repository registration or DbSet. confidence 0.9. See RC-002." },
+    { "name": "PaymentMethod", "reason": "CONFIRMED NOT MAPPED — same evidence as Buyer above; PaymentMethod.cs exists only as a class referenced from Buyer.cs, with no DbSet, EntityTypeConfiguration, or repository usage found in src/. Dead/aspirational code. confidence 0.9. See RC-002." },
+    { "name": "CatalogItemDetails", "reason": "struct, likely a value object / DTO, not a table. confidence 0.75" },
+    { "name": "Address", "reason": "Owned type embedded into Orders table (see Orders columns above). confidence 0.75" },
+    { "name": "CatalogItemOrdered", "reason": "Owned type embedded into OrderItems table. confidence 0.75" }
+  ],
+  "change_records": [
+    {
+      "change_id": "RC-001",
+      "type": "CORRECTED",
+      "finding_id": "schema-catalogue.json — databases[].engine",
+      "what": "Original said engine = 'SQL Server (azure-sql-edge in docker-compose)' for both CatalogDb and IdentityDb. CONFIRMED the active EF Core provider is PostgreSQL (Npgsql), per src/Infrastructure/Dependencies.cs (UseNpgsql) and src/Web/appsettings.json connection strings (Host=localhost;Port=5432;...). A separate SQL Server-style connection string still exists in appsettings.Docker.json, indicating the repo is mid-migration from SQL Server to Postgres and the Docker config is stale.",
+      "evidence_source": "spot check (Phase 4)",
+      "evidence_detail": "src/Infrastructure/Dependencies.cs (UseNpgsql x2); src/Web/appsettings.json CatalogConnection/IdentityConnection; src/Infrastructure/Data/Migrations/20260526102924_InitialPostgres.cs; src/Infrastructure/Identity/Migrations/20260526102952_InitialPostgres.Designer.cs",
+      "confidence_before": 0.8,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-002",
+      "type": "CORRECTED",
+      "finding_id": "schema-catalogue.json — entities_not_mapped_to_tables (Buyer, PaymentMethod)",
+      "what": "Original marked Buyer/PaymentMethod as UNKNOWN (confidence 0.7) whether mapped. CONFIRMED not mapped: CatalogContext.cs has exactly 7 DbSets and no Buyer/PaymentMethod; AppIdentityDbContext.OnModelCreating only calls base. Both classes are dead/aspirational code.",
+      "evidence_source": "entity/ORM code",
+      "evidence_detail": "src/Infrastructure/Data/CatalogContext.cs:14-20; src/Infrastructure/Identity/AppIdentityDbContext.cs:14-19; src/Infrastructure/Data/Migrations/CatalogContextModelSnapshot.cs (only Basket, BasketItem, CatalogBrand, CatalogItem, CatalogType, Order, OrderItem present)",
+      "confidence_before": 0.7,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    }
+  ]
+}

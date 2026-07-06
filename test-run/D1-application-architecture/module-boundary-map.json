@@ -1,0 +1,294 @@
+{
+  "modules": [
+    {
+      "module_id": "MOD-001",
+      "name": "Catalog",
+      "responsibility": "Manages product catalog including items, brands, and types. Supports browsing, filtering, pagination, and admin CRUD. Owns catalog image URI composition.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/CatalogItem.cs",
+        "src/ApplicationCore/Entities/CatalogBrand.cs",
+        "src/ApplicationCore/Entities/CatalogType.cs",
+        "src/ApplicationCore/Specifications/CatalogFilter*.cs",
+        "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+        "src/ApplicationCore/Specifications/CatalogItemNameSpecification.cs",
+        "src/ApplicationCore/Services/UriComposer.cs",
+        "src/ApplicationCore/CatalogSettings.cs",
+        "src/Infrastructure/Data/Config/CatalogItem*.cs",
+        "src/Infrastructure/Data/Config/CatalogBrand*.cs",
+        "src/Infrastructure/Data/Config/CatalogType*.cs",
+        "src/PublicApi/CatalogBrandEndpoints/",
+        "src/BlazorAdmin/Services/CatalogItemService.cs",
+        "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs",
+        "src/BlazorAdmin/Services/CatalogLookupDataService.cs",
+        "src/BlazorAdmin/Pages/CatalogItemPage/"
+      ],
+      "main_components": [
+        "CatalogItem (Entity)",
+        "CatalogBrand (Entity)",
+        "CatalogType (Entity)",
+        "UriComposer (Service)",
+        "CatalogBrandListEndpoint (API Endpoint)",
+        "CatalogItemService (Blazor Service)",
+        "CachedCatalogItemServiceDecorator (Blazor Service)",
+        "CatalogLookupDataService (Blazor Service)"
+      ],
+      "entry_points": [
+        "GET api/catalog-brands",
+        "GET api/catalog-items",
+        "GET api/catalog-items/{id}",
+        "POST api/catalog-items",
+        "PUT api/catalog-items",
+        "DELETE api/catalog-items/{id}",
+        "BlazorAdmin CatalogItemPage/List"
+      ],
+      "depends_on_modules": ["Infrastructure", "Authentication"],
+      "used_by_modules": ["Basket", "Order", "BlazorAdmin-UI"],
+      "afferent_coupling": 3,
+      "efferent_coupling": 2,
+      "boundary_quality": "Moderate",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/CatalogItem.cs",
+          "reason": "Rich domain entity with UpdateDetails, UpdateBrand, UpdateType, UpdatePictureUri methods"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "reason": "Minimal API endpoint for catalog brands; part of public interface"
+        },
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "BlazorAdmin catalog CRUD service calling PublicApi HTTP endpoints"
+        }
+      ],
+      "open_questions": [
+        "Are there additional catalog-item API endpoints (create, update, delete) beyond what was captured in the sample files?",
+        "Web project catalog controllers/pages not in extraction — likely exist but not captured"
+      ]
+    },
+    {
+      "module_id": "MOD-002",
+      "name": "Basket",
+      "responsibility": "Shopping cart management. Owns add-to-cart, quantity update, basket transfer (anonymous to authenticated), basket deletion, and item count query.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/BasketAggregate/",
+        "src/ApplicationCore/Interfaces/IBasketService.cs",
+        "src/ApplicationCore/Interfaces/IBasketQueryService.cs",
+        "src/ApplicationCore/Services/BasketService.cs",
+        "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+        "src/Infrastructure/Data/Config/BasketConfiguration.cs",
+        "src/Infrastructure/Data/Config/BasketItemConfiguration.cs",
+        "src/Infrastructure/Data/Queries/BasketQueryService.cs"
+      ],
+      "main_components": [
+        "Basket (Entity / AggregateRoot)",
+        "BasketItem (Entity)",
+        "BasketService (Application Service)",
+        "BasketQueryService (Infrastructure Query)",
+        "IBasketService (Interface)",
+        "IBasketQueryService (Interface)"
+      ],
+      "entry_points": [
+        "IBasketService.AddItemToBasket (called by Web controllers)",
+        "IBasketService.SetQuantities (called by Web controllers)",
+        "IBasketService.TransferBasketAsync (called on login event)",
+        "IBasketService.DeleteBasketAsync (called on checkout)",
+        "IBasketQueryService.CountTotalBasketItems (called by Web UI)"
+      ],
+      "depends_on_modules": ["Catalog", "Infrastructure"],
+      "used_by_modules": ["Order", "Web-UI"],
+      "afferent_coupling": 2,
+      "efferent_coupling": 2,
+      "boundary_quality": "Strong",
+      "confidence": 0.93,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+          "reason": "Well-encapsulated aggregate root with private list; AddItem, RemoveEmptyItems domain methods"
+        },
+        {
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "reason": "Clear service with TransferBasketAsync showing anonymous-to-auth cart transfer flow"
+        },
+        {
+          "file": "src/Infrastructure/Data/Queries/BasketQueryService.cs",
+          "reason": "DB-level count query, not in-memory; separation of query from command evident"
+        }
+      ],
+      "open_questions": [
+        "Are there Web Razor Page controllers handling basket HTTP endpoints? Not captured in extraction."
+      ]
+    },
+    {
+      "module_id": "MOD-003",
+      "name": "Order",
+      "responsibility": "Order creation from basket. Owns order aggregate including shipping address, order items with snapshotted catalog details, and order total calculation.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/OrderAggregate/",
+        "src/ApplicationCore/Interfaces/IOrderService.cs",
+        "src/ApplicationCore/Services/OrderService.cs",
+        "src/ApplicationCore/Specifications/CustomerOrdersSpecification.cs",
+        "src/ApplicationCore/Specifications/CustomerOrdersWithItemsSpecification.cs",
+        "src/ApplicationCore/Specifications/OrderWithItemsByIdSpec.cs",
+        "src/Infrastructure/Data/Config/OrderConfiguration.cs",
+        "src/Infrastructure/Data/Config/OrderItemConfiguration.cs"
+      ],
+      "main_components": [
+        "Order (Entity / AggregateRoot)",
+        "OrderItem (Entity)",
+        "Address (Value Object)",
+        "CatalogItemOrdered (Value Object / snapshot)",
+        "OrderService (Application Service)",
+        "IOrderService (Interface)"
+      ],
+      "entry_points": [
+        "IOrderService.CreateOrderAsync (called by Web checkout controller)"
+      ],
+      "depends_on_modules": ["Basket", "Catalog", "Infrastructure"],
+      "used_by_modules": ["Web-UI"],
+      "afferent_coupling": 1,
+      "efferent_coupling": 3,
+      "boundary_quality": "Strong",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Services/OrderService.cs",
+          "reason": "CreateOrderAsync reads basket, loads catalog items, builds snapshot CatalogItemOrdered, creates Order — clear orchestration"
+        },
+        {
+          "file": "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+          "reason": "Comment: 'snapshot of item ordered — catalog changes should not affect completed orders'"
+        },
+        {
+          "file": "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+          "reason": "DDD comment about private collection and AggregateRoot pattern intentional"
+        }
+      ],
+      "open_questions": [
+        "No order listing/detail endpoints visible in extraction — likely in Web Razor Pages. Need verification.",
+        "No payment integration visible — PaymentMethod entity exists in BuyerAggregate but is not wired to OrderService."
+      ]
+    },
+    {
+      "module_id": "MOD-004",
+      "name": "Authentication",
+      "responsibility": "User identity, JWT token issuance, ASP.NET Identity management, role-based authorization. Owns Administrators role seeding and default user creation.",
+      "source_folders": [
+        "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+        "src/ApplicationCore/Interfaces/ITokenClaimsService.cs",
+        "src/Infrastructure/Identity/",
+        "src/PublicApi/AuthEndpoints/",
+        "src/BlazorAdmin/CustomAuthStateProvider.cs",
+        "src/BlazorShared/Authorization/"
+      ],
+      "main_components": [
+        "AuthenticateEndpoint (API Endpoint)",
+        "IdentityTokenClaimService (Infrastructure Service)",
+        "CustomAuthStateProvider (Blazor Component)",
+        "AppIdentityDbContext (Infrastructure)",
+        "ApplicationUser (Entity)",
+        "AuthorizationConstants (Constants)"
+      ],
+      "entry_points": [
+        "POST api/authenticate",
+        "GET User (Blazor auth state fetch)",
+        "CustomAuthStateProvider.GetAuthenticationStateAsync"
+      ],
+      "depends_on_modules": ["Infrastructure"],
+      "used_by_modules": ["Catalog", "Basket", "Order", "BlazorAdmin-UI"],
+      "afferent_coupling": 4,
+      "efferent_coupling": 1,
+      "boundary_quality": "Moderate",
+      "confidence": 0.87,
+      "evidence": [
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "reason": "POST api/authenticate using SignInManager + ITokenClaimsService"
+        },
+        {
+          "file": "src/Infrastructure/Identity/IdentityTokenClaimService.cs",
+          "reason": "JWT generation with HMAC SHA256; hardcoded secret key — security concern"
+        },
+        {
+          "file": "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+          "reason": "JWT_SECRET_KEY hardcoded with TODO comment: 'Change this to env variable'"
+        }
+      ],
+      "open_questions": [
+        "How does the Web (MVC) project authenticate? Cookie-based or also JWT?",
+        "EmailSender is a stub — is there a real email provider in production?"
+      ]
+    },
+    {
+      "module_id": "MOD-005",
+      "name": "Buyer",
+      "responsibility": "Buyer identity and payment method storage. Currently incomplete — Buyer aggregate exists with PaymentMethod entity but no service or API surface is wired up.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/BuyerAggregate/"
+      ],
+      "main_components": [
+        "Buyer (Entity / AggregateRoot)",
+        "PaymentMethod (Entity)"
+      ],
+      "entry_points": [],
+      "depends_on_modules": [],
+      "used_by_modules": [],
+      "afferent_coupling": 0,
+      "efferent_coupling": 0,
+      "boundary_quality": "Weak",
+      "confidence": 0.70,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/BuyerAggregate/Buyer.cs",
+          "reason": "Buyer entity with IAggregateRoot, IdentityGuid, PaymentMethods collection — exists but unused"
+        },
+        {
+          "file": "src/ApplicationCore/Entities/BuyerAggregate/PaymentMethod.cs",
+          "reason": "Comment: 'actual card data must be stored in a PCI compliant system, like Stripe' — stub only"
+        }
+      ],
+      "open_questions": [
+        "Is Buyer aggregate used anywhere in Web or through a service not captured in extraction?",
+        "Is PaymentMethod persisted via EF? Not seen in CatalogContext — possible separate context or dead code."
+      ]
+    },
+    {
+      "module_id": "MOD-006",
+      "name": "Infrastructure-Cross-Cutting",
+      "responsibility": "EF Core data access, repository pattern implementation, logging adapter, email stub, dependency injection wiring. Shared across all modules.",
+      "source_folders": [
+        "src/Infrastructure/Data/EfRepository.cs",
+        "src/Infrastructure/Data/CatalogContext.cs",
+        "src/Infrastructure/Data/CatalogContextSeed.cs",
+        "src/Infrastructure/Logging/LoggerAdapter.cs",
+        "src/Infrastructure/Services/EmailSender.cs",
+        "src/Infrastructure/Dependencies.cs"
+      ],
+      "main_components": [
+        "EfRepository<T> (Generic Repository)",
+        "CatalogContext (EF DbContext)",
+        "LoggerAdapter<T> (Logging Cross-cut)",
+        "EmailSender (Stub Service)",
+        "Dependencies (DI wiring)"
+      ],
+      "entry_points": [],
+      "depends_on_modules": [],
+      "used_by_modules": ["Catalog", "Basket", "Order", "Authentication"],
+      "afferent_coupling": 4,
+      "efferent_coupling": 0,
+      "boundary_quality": "Strong",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/EfRepository.cs",
+          "reason": "EfRepository<T> : RepositoryBase<T>, IReadRepository<T>, IRepository<T> — implements Ardalis generic repository"
+        },
+        {
+          "file": "src/Infrastructure/Dependencies.cs",
+          "reason": "ConfigureServices wires CatalogContext and AppIdentityDbContext with InMemory/SqlServer switch"
+        }
+      ],
+      "open_questions": []
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+%%{init: {"theme": "default"}}%%
+graph TD
+    subgraph Web["Web Storefront (ASP.NET Core MVC)"]
+        WC[Controllers / Razor Pages\n⚠ Source not in Layer 1]
+    end
+
+    subgraph PublicApi["Public API (ASP.NET Core)"]
+        AE[AuthenticateEndpoint\nPOST api/authenticate]
+        CBL[CatalogBrandListEndpoint\nGET api/catalog-brands]
+        CIE[CatalogItemEndpoints\nGET/POST/PUT/DELETE\n⚠ Source not in Layer 1]
+    end
+
+    subgraph BlazorAdmin["BlazorAdmin (Blazor WASM)"]
+        BLP[List.razor\nCatalogItemPage]
+        CASP[CustomAuthStateProvider]
+        CIS[CatalogItemService]
+        DECO[CachedCatalogItemServiceDecorator]
+        CLS[CatalogLookupDataService]
+        HS[HttpService]
+        LS[Browser localStorage\nBlazoredLocalStorage]
+    end
+
+    subgraph ApplicationCore["ApplicationCore (Domain)"]
+        BS[BasketService]
+        OS[OrderService]
+        BSKT[Basket Aggregate\nBasket + BasketItem]
+        ORD[Order Aggregate\nOrder + OrderItem + Address]
+        CAT[Catalog Entities\nCatalogItem + Brand + Type]
+        SPEC[Specifications\nBasketWithItems, CatalogFilter\nOrderWithItems, etc.]
+        UC[UriComposer]
+    end
+
+    subgraph Infrastructure["Infrastructure"]
+        REPO[EfRepository&lt;T&gt;\nGeneric Repository]
+        CC[CatalogContext\n7 DbSets]
+        AIDC[AppIdentityDbContext]
+        ITCS[IdentityTokenClaimService\n⚠ Hardcoded JWT secret]
+        BQS[BasketQueryService\nDirect DbContext SUM]
+        ES[EmailSender\n⚠ STUB]
+        LA[LoggerAdapter&lt;T&gt;]
+    end
+
+    subgraph Database["SQL Server"]
+        CATADB[(CatalogConnection\nCatalog / Basket / Order tables)]
+        IDDB[(IdentityConnection\nAspNet* tables)]
+    end
+
+    WC --> BS
+    WC --> OS
+    AE --> ITCS
+    AE --> AIDC
+    CBL --> REPO
+    CIE --> REPO
+
+    BLP --> DECO
+    DECO --> CIS
+    CIS --> HS
+    CASP --> HS
+    CIS --> LS
+    DECO --> LS
+
+    HS --> PublicApi
+
+    BS --> REPO
+    OS --> REPO
+    OS --> UC
+    REPO --> CC
+    ITCS --> AIDC
+    BQS --> CC
+    CC --> CATADB
+    AIDC --> IDDB
+
+    classDef risk fill:#ffcccc,stroke:#cc0000
+    classDef unknown fill:#ffffcc,stroke:#ccaa00
+    class ITCS,ES risk
+    class WC,CIE unknown

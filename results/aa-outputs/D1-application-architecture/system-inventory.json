@@ -1,0 +1,198 @@
+{
+  "system_name": "eShopOnWeb",
+  "repo_root": "source/eShopOnWeb",
+  "applications": [
+    {
+      "name": "Web",
+      "type": "web_app",
+      "framework": "ASP.NET Core MVC + Razor Pages (.NET 8)",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "azure.yaml",
+          "reason": "services.web.project = ./src/Web; services.web.host = appservice"
+        },
+        {
+          "file": "src/Web/Dockerfile",
+          "reason": "Referenced in docker-compose.yml services.eshopwebmvc.build.dockerfile"
+        },
+        {
+          "file": "src/Web/Properties/launchSettings.json",
+          "reason": "Profile 'Web' with applicationUrl https://localhost:5001 — deployable web project"
+        },
+        {
+          "file": "src/Web/bundleconfig.json",
+          "reason": "Client-side bundle configuration confirms UI layer exists"
+        }
+      ],
+      "confidence": 0.98
+    },
+    {
+      "name": "PublicApi",
+      "type": "backend_api",
+      "framework": "ASP.NET Core Minimal API / ApiEndpoints (.NET 8)",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "src/PublicApi/Dockerfile",
+          "reason": "Referenced in docker-compose.yml services.eshoppublicapi.build.dockerfile"
+        },
+        {
+          "file": "src/PublicApi/Properties/launchSettings.json",
+          "reason": "Profile 'PublicApi' with launchUrl 'swagger' and applicationUrl https://localhost:5099 — REST API"
+        },
+        {
+          "file": "src/PublicApi/appsettings.json",
+          "reason": "ConnectionStrings.CatalogConnection and IdentityConnection confirm independent data access"
+        },
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "reason": "HttpPost('api/authenticate') endpoint — confirms HTTP API surface"
+        }
+      ],
+      "confidence": 0.98
+    },
+    {
+      "name": "BlazorAdmin",
+      "type": "frontend_spa",
+      "framework": "Blazor WebAssembly (.NET 8)",
+      "deployable": true,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Program.cs",
+          "reason": "WebAssemblyHostBuilder.CreateDefault — Blazor WASM entry point"
+        },
+        {
+          "file": "src/BlazorAdmin/Properties/launchSettings.json",
+          "reason": "Profile 'BlazorAdmin' with applicationUrl — standalone Blazor app"
+        },
+        {
+          "file": "src/BlazorAdmin/wwwroot/appsettings.json",
+          "reason": "baseUrls.apiBase = https://localhost:5099/api/ — calls PublicApi at runtime"
+        }
+      ],
+      "confidence": 0.95
+    },
+    {
+      "name": "ApplicationCore",
+      "type": "library",
+      "framework": ".NET 8 Class Library",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Interfaces/IBasketService.cs",
+          "reason": "Domain interfaces and entities — no entry point, referenced by Web and PublicApi"
+        },
+        {
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "reason": "Domain services — not independently deployable"
+        }
+      ],
+      "confidence": 0.99
+    },
+    {
+      "name": "Infrastructure",
+      "type": "library",
+      "framework": ".NET 8 Class Library — EF Core + ASP.NET Identity",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/CatalogContext.cs",
+          "reason": "EF Core DbContext — data access layer, not independently deployable"
+        },
+        {
+          "file": "src/Infrastructure/Dependencies.cs",
+          "reason": "ConfigureServices static method — wired into host startup, not standalone"
+        }
+      ],
+      "confidence": 0.99
+    },
+    {
+      "name": "BlazorShared",
+      "type": "library",
+      "framework": ".NET 8 Class Library — shared DTOs and interfaces",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": "src/BlazorShared/Interfaces/ICatalogItemService.cs",
+          "reason": "Shared interface contracts between BlazorAdmin and PublicApi responses"
+        },
+        {
+          "file": "src/BlazorShared/Models/CatalogItem.cs",
+          "reason": "Shared DTO models used by Blazor UI — library only"
+        }
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "supporting_projects": [
+    {
+      "name": "FunctionalTests",
+      "type": "test_project",
+      "framework": "unknown — not represented in Layer 1 JSON artifacts",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": ".github/workflows/dotnetcore.yml",
+          "reason": "dotnet test ./eShopOnWeb.sln — test projects expected in solution"
+        }
+      ],
+      "confidence": 0.6
+    },
+    {
+      "name": "UnitTests",
+      "type": "test_project",
+      "framework": "unknown",
+      "deployable": false,
+      "evidence": [
+        {
+          "file": ".github/workflows/dotnetcore.yml",
+          "reason": "dotnet test ./eShopOnWeb.sln — standard solution test layout assumed"
+        }
+      ],
+      "confidence": 0.6
+    }
+  ],
+  "deployable_units": [
+    {
+      "name": "eshopwebmvc",
+      "project": "Web",
+      "docker_image": "${DOCKER_REGISTRY-}eshopwebmvc",
+      "target_host": "Azure App Service (appservice)",
+      "evidence": "docker-compose.yml + azure.yaml"
+    },
+    {
+      "name": "eshoppublicapi",
+      "project": "PublicApi",
+      "docker_image": "${DOCKER_REGISTRY-}eshoppublicapi",
+      "target_host": "Docker / Azure App Service",
+      "evidence": "docker-compose.yml"
+    },
+    {
+      "name": "sqlserver",
+      "project": "Database",
+      "docker_image": "mcr.microsoft.com/azure-sql-edge",
+      "target_host": "Docker (local dev) / Azure SQL (production)",
+      "evidence": "docker-compose.yml"
+    },
+    {
+      "name": "BlazorAdmin",
+      "project": "BlazorAdmin",
+      "docker_image": "unknown — no Dockerfile found in Layer 1 artifacts",
+      "target_host": "Hosted inside Web project (embedded WASM) or standalone",
+      "evidence": "src/BlazorAdmin/Properties/launchSettings.json — separate launch profile exists; relationship to Web project unclear from Layer 1"
+    }
+  ],
+  "infrastructure": {
+    "cloud_provider": "Azure",
+    "evidence": "azure.yaml, infra/abbreviations.json, infra/main.parameters.json",
+    "iac_tool": "Azure Developer CLI (azd) + Bicep (infra/ folder)",
+    "database": "SQL Server (Azure SQL Edge for Docker, Azure SQL for prod)",
+    "connection_strings": ["CatalogConnection", "IdentityConnection"]
+  },
+  "open_questions": [
+    "Is BlazorAdmin deployed as part of the Web project or as a standalone WASM app? No Dockerfile found for BlazorAdmin.",
+    "Are FunctionalTests and UnitTests present in the solution? Their project files were not in the Layer 1 extraction.",
+    "Does the Web project embed BlazorAdmin via Razor page iframe or serve it as a sub-path?"
+  ]
+}

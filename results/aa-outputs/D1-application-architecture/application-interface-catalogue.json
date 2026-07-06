@@ -1,0 +1,233 @@
+{
+  "interfaces": [
+    {
+      "interface_id": "INT-001",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "api/authenticate",
+      "owner_module": "Identity",
+      "entry_component": "AuthenticateEndpoint",
+      "called_service": "SignInManager<ApplicationUser>, ITokenClaimsService",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "detail": "[HttpPost('api/authenticate')] — accepts AuthenticateRequest (Username, Password), returns AuthenticateResponse with JWT token"
+        }
+      ],
+      "confidence": 0.99,
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-002",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "api/catalog-brands",
+      "owner_module": "Catalog",
+      "entry_component": "CatalogBrandListEndpoint",
+      "called_service": "IRepository<CatalogBrand>",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "detail": "app.MapGet('api/catalog-brands') — returns ListCatalogBrandsResponse with CatalogBrandDto list"
+        }
+      ],
+      "confidence": 0.99,
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-003",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "api/catalog-types",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — CatalogTypeListEndpoint inferred from BlazorShared CatalogType [Endpoint(Name='catalog-types')]",
+      "called_service": "IRepository<CatalogType> (inferred)",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorShared/Models/CatalogType.cs",
+          "detail": "[Endpoint(Name = 'catalog-types')] attribute — BlazorAdmin's CatalogLookupDataService builds URL from this attribute"
+        }
+      ],
+      "confidence": 0.82,
+      "open_questions": [
+        "CatalogTypeListEndpoint source file not present in Layer 1 artifacts. Endpoint existence inferred from BlazorShared model attribute."
+      ]
+    },
+    {
+      "interface_id": "INT-004",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — CatalogItemListEndpoint inferred",
+      "called_service": "IRepository<CatalogItem> (inferred)",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "detail": "_httpService.HttpGet<PagedCatalogItemResponse>('catalog-items') — confirms endpoint exists"
+        }
+      ],
+      "confidence": 0.90,
+      "open_questions": [
+        "PublicApi/CatalogItemEndpoints/ folder not present in Layer 1 source. Full endpoint implementation unknown."
+      ]
+    },
+    {
+      "interface_id": "INT-005",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "api/catalog-items/{id}",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — CatalogItemGetByIdEndpoint inferred",
+      "called_service": "IRepository<CatalogItem> (inferred)",
+      "visibility": "external",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "detail": "_httpService.HttpGet<EditCatalogItemResult>('catalog-items/{id}') — confirms parameterized GET endpoint"
+        }
+      ],
+      "confidence": 0.88,
+      "open_questions": ["Endpoint source file not in Layer 1 artifacts."]
+    },
+    {
+      "interface_id": "INT-006",
+      "type": "HTTP_API",
+      "method": "POST",
+      "path_or_name": "api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — CatalogItemCreateEndpoint inferred",
+      "called_service": "IRepository<CatalogItem> (inferred)",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "detail": "_httpService.HttpPost<CreateCatalogItemResponse>('catalog-items', catalogItem)"
+        }
+      ],
+      "confidence": 0.88,
+      "open_questions": ["Endpoint source file not in Layer 1 artifacts. Authorization requirement unknown."]
+    },
+    {
+      "interface_id": "INT-007",
+      "type": "HTTP_API",
+      "method": "PUT",
+      "path_or_name": "api/catalog-items",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — CatalogItemUpdateEndpoint inferred",
+      "called_service": "IRepository<CatalogItem> (inferred)",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "detail": "_httpService.HttpPut<EditCatalogItemResult>('catalog-items', catalogItem)"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Endpoint source file not in Layer 1 artifacts."]
+    },
+    {
+      "interface_id": "INT-008",
+      "type": "HTTP_API",
+      "method": "DELETE",
+      "path_or_name": "api/catalog-items/{id}",
+      "owner_module": "Catalog",
+      "entry_component": "unknown — CatalogItemDeleteEndpoint inferred",
+      "called_service": "IRepository<CatalogItem> (inferred)",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "detail": "_httpService.HttpDelete<DeleteCatalogItemResponse>('catalog-items', catalogItemId)"
+        }
+      ],
+      "confidence": 0.85,
+      "open_questions": ["Endpoint source file not in Layer 1 artifacts."]
+    },
+    {
+      "interface_id": "INT-009",
+      "type": "HTTP_API",
+      "method": "GET",
+      "path_or_name": "User",
+      "owner_module": "Identity",
+      "entry_component": "unknown — User info endpoint inferred from BlazorAdmin",
+      "called_service": "ASP.NET Identity (inferred)",
+      "visibility": "internal",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/CustomAuthStateProvider.cs",
+          "detail": "_httpClient.GetFromJsonAsync<UserInfo>('User') — fetches current user info including claims and token"
+        }
+      ],
+      "confidence": 0.80,
+      "open_questions": [
+        "This endpoint may be served by the Web project (not PublicApi). The HttpClient base address is HostEnvironment.BaseAddress in BlazorAdmin/Program.cs — meaning it calls the same host as BlazorAdmin, not PublicApi."
+      ]
+    },
+    {
+      "interface_id": "INT-010",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/CatalogItemPage/List",
+      "owner_module": "Admin",
+      "entry_component": "List (Blazor Component)",
+      "called_service": "ICatalogItemService, ICatalogLookupDataService<CatalogBrand>, ICatalogLookupDataService<CatalogType>",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor.cs",
+          "detail": "Blazor component page — loads catalog items, types, brands on first render"
+        }
+      ],
+      "confidence": 0.92,
+      "open_questions": []
+    },
+    {
+      "interface_id": "INT-011",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "/CatalogItemPage/Create",
+      "owner_module": "Admin",
+      "entry_component": "Create (Blazor Component — inferred from List.razor.cs CreateComponent reference)",
+      "called_service": "ICatalogItemService.Create",
+      "visibility": "admin",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor.cs",
+          "detail": "private Create CreateComponent — CreateClick() calls CreateComponent.Open()"
+        }
+      ],
+      "confidence": 0.80,
+      "open_questions": ["Create.razor source not in Layer 1 artifacts."]
+    },
+    {
+      "interface_id": "INT-012",
+      "type": "FrontendRoute",
+      "method": "unknown",
+      "path_or_name": "Web MVC routes (Catalog browsing, Basket, Checkout, Orders)",
+      "owner_module": "Web",
+      "entry_component": "unknown — Web project Razor pages/controllers not present in Layer 1 source artifacts",
+      "called_service": "IBasketService, IOrderService, IRepository (inferred)",
+      "visibility": "user_facing",
+      "evidence": [
+        {
+          "file": "src/Web/Properties/launchSettings.json",
+          "detail": "Web project deployed to https://localhost:5001 — primary user-facing application"
+        },
+        {
+          "file": "src/Web/bundleconfig.json",
+          "detail": "wwwroot/css/site.min.css and wwwroot/js/site.min.js — confirms browser-rendered UI"
+        }
+      ],
+      "confidence": 0.70,
+      "open_questions": [
+        "Web project controllers/Razor pages not in Layer 1 source artifacts. All basket, checkout, catalog browse, and order routes are unknown.",
+        "Does the Web project embed BlazorAdmin or route to it separately?"
+      ]
+    }
+  ]
+}

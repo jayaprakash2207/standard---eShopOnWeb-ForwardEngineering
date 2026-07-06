@@ -1,0 +1,85 @@
+---
+title: eShopOnWeb — Dependency View (Module-Level)
+---
+flowchart LR
+  subgraph Presentation["Presentation / API Layer"]
+    Web["Web\n(MVC + Razor Pages)\n[source not extracted]"]
+    PublicApi["PublicApi\n(Minimal API)"]
+    BlazorAdmin["BlazorAdmin\n(Blazor WASM)"]
+  end
+
+  subgraph AppCore["ApplicationCore"]
+    BasketSvc["BasketService"]
+    OrderSvc["OrderService"]
+    UriComposer["UriComposer"]
+    BasketAgg["Basket Aggregate"]
+    OrderAgg["Order Aggregate"]
+    CatalogItemEntity["CatalogItem Entity"]
+    BuyerAgg["Buyer Aggregate\n(UNUSED)"]
+    Interfaces["Interfaces\n(IRepository, IBasketService, ...)"]
+    Specs["Specifications\n(Ardalis.Specification)"]
+    Constants["AuthorizationConstants\n(HARDCODED SECRETS)"]
+  end
+
+  subgraph Infra["Infrastructure"]
+    EfRepo["EfRepository&lt;T&gt;"]
+    CatalogCtx["CatalogContext\n(SHARED — violation)"]
+    IdentityCtx["AppIdentityDbContext"]
+    TokenSvc["IdentityTokenClaimService"]
+    EmailStub["EmailSender (stub)"]
+  end
+
+  subgraph SharedLib["BlazorShared (Library)"]
+    BlazorModels["BlazorShared.Models\n(DTOs used by Blazor + PublicApi)"]
+  end
+
+  subgraph External["External / Framework"]
+    EFCORE["EF Core 8"]
+    Identity["ASP.NET Identity"]
+    ArdalisSpec["Ardalis.Specification"]
+    ArdalisGuard["Ardalis.GuardClauses"]
+    AutoMapper["AutoMapper"]
+    Blazored["Blazored.LocalStorage"]
+    JWT["System.IdentityModel.Tokens.Jwt"]
+  end
+
+  Web -->|"calls (in-process)"| BasketSvc
+  Web -->|"calls (in-process)"| OrderSvc
+  PublicApi -->|"calls (in-process)"| BasketSvc
+  PublicApi -->|"calls (in-process)"| OrderSvc
+  PublicApi -->|"calls"| TokenSvc
+  PublicApi -->|"uses DTOs"| BlazorModels
+  BlazorAdmin -->|"HTTP"| PublicApi
+  BlazorAdmin -->|"uses DTOs"| BlazorModels
+
+  BasketSvc -->|"depends on"| Interfaces
+  BasketSvc -->|"uses"| Specs
+  BasketSvc -->|"uses"| BasketAgg
+  OrderSvc -->|"depends on"| Interfaces
+  OrderSvc -->|"uses"| Specs
+  OrderSvc -->|"uses"| BasketAgg
+  OrderSvc -->|"uses"| CatalogItemEntity
+  OrderSvc -->|"uses"| OrderAgg
+  OrderSvc -->|"calls"| UriComposer
+
+  EfRepo -->|"implements"| Interfaces
+  EfRepo -->|"uses"| CatalogCtx
+  EfRepo -->|"extends"| ArdalisSpec
+
+  CatalogCtx -->|"EF Core"| EFCORE
+  IdentityCtx -->|"EF Core"| EFCORE
+  TokenSvc -->|"uses"| JWT
+  TokenSvc -->|"uses"| IdentityCtx
+  TokenSvc -->|"reads"| Constants
+
+  CatalogItemEntity -->|"validates via"| ArdalisGuard
+  PublicApi -->|"maps via"| AutoMapper
+  BlazorAdmin -->|"caches via"| Blazored
+
+  %% VIOLATION: Order reads Basket directly
+  OrderSvc -.->|"VIOLATION: cross-module read"| BasketAgg
+
+  %% VIOLATION: Shared DbContext
+  CatalogCtx -.->|"VIOLATION: owns Basket + Order + Catalog"| BasketAgg
+  CatalogCtx -.->|"VIOLATION: owns Basket + Order + Catalog"| OrderAgg
+  CatalogCtx -.->|"VIOLATION: owns Basket + Order + Catalog"| CatalogItemEntity

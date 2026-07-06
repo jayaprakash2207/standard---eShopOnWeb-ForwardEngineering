@@ -1,0 +1,140 @@
+{
+  "extraction_date": "2026-07-06",
+  "db_connection": "CODE-ONLY",
+  "pii_fields": [
+    {
+      "id": "PII-01",
+      "table": "AspNetUsers",
+      "database": "IdentityDB",
+      "column": "UserName",
+      "pii_category": "Personal Identifier",
+      "data_type": "nvarchar(256)",
+      "description": "User's email address used as login username (e.g. demouser@microsoft.com). Directly identifies an individual. Also propagated to CatalogDB as Baskets.BuyerId and Orders.BuyerId.",
+      "also_stored_in": ["Baskets.BuyerId (CatalogDB)", "Orders.BuyerId (CatalogDB)"],
+      "encryption": "None — plaintext",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-02",
+      "table": "AspNetUsers",
+      "database": "IdentityDB",
+      "column": "Email",
+      "pii_category": "Personal Identifier",
+      "data_type": "nvarchar(256)",
+      "description": "User's email address (same value as UserName in this application).",
+      "encryption": "None — plaintext",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-03",
+      "table": "AspNetUsers",
+      "database": "IdentityDB",
+      "column": "NormalizedEmail",
+      "pii_category": "Personal Identifier (derived)",
+      "data_type": "nvarchar(256)",
+      "description": "Uppercase email for case-insensitive lookup.",
+      "encryption": "None",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-04",
+      "table": "AspNetUsers",
+      "database": "IdentityDB",
+      "column": "PasswordHash",
+      "pii_category": "Authentication Credential",
+      "data_type": "nvarchar(max)",
+      "description": "ASP.NET Identity PBKDF2 password hash. Not plaintext.",
+      "encryption": "Hashed — PBKDF2 via ASP.NET Identity. Not reversible.",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-05",
+      "table": "AspNetUsers",
+      "database": "IdentityDB",
+      "column": "PhoneNumber",
+      "pii_category": "Personal Identifier",
+      "data_type": "nvarchar(max)",
+      "description": "Phone number if collected. Not required — nullable. Not exposed in demo UI.",
+      "encryption": "None",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-06",
+      "table": "Baskets",
+      "database": "CatalogDB",
+      "column": "BuyerId",
+      "pii_category": "Personal Identifier (indirect)",
+      "data_type": "nvarchar(256)",
+      "description": "For authenticated users: email address (e.g. demouser@microsoft.com). For anonymous users: GUID string (not inherently PII but stored for up to 10 years via cookie). Email value directly identifies the person.",
+      "cross_db_reference": "AspNetUsers.UserName in IdentityDB",
+      "encryption": "None — plaintext",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-07",
+      "table": "Orders",
+      "database": "CatalogDB",
+      "column": "BuyerId",
+      "pii_category": "Personal Identifier",
+      "data_type": "nvarchar(256)",
+      "description": "Email address of customer who placed the order. Permanent historical record.",
+      "cross_db_reference": "AspNetUsers.UserName in IdentityDB",
+      "encryption": "None — plaintext",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-08",
+      "table": "Orders",
+      "database": "CatalogDB",
+      "column": "ShipToAddress_*",
+      "pii_category": "Physical Address",
+      "sub_columns": ["ShipToAddress_Street", "ShipToAddress_City", "ShipToAddress_State", "ShipToAddress_Country", "ShipToAddress_ZipCode"],
+      "data_type": "nvarchar",
+      "description": "Full shipping address. High PII sensitivity — physical location of customer. In demo app, all orders use a hardcoded test address. In production this would contain real customer addresses.",
+      "encryption": "None — plaintext",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-09",
+      "table": "OrderItems",
+      "database": "CatalogDB",
+      "column": "ItemOrdered_ProductName, UnitPrice, Units",
+      "pii_category": "Purchase History (Behavioral Data)",
+      "description": "Order line items linked to an Order (which has BuyerId). Constitutes behavioral/transactional data about a specific individual. Permanent historical record.",
+      "encryption": "None",
+      "confidence": 0.9
+    },
+    {
+      "id": "PII-10",
+      "table": "PaymentMethod (BuyerAggregate)",
+      "database": "CatalogDB — NOT PERSISTED",
+      "column": "CardId, Last4, Alias",
+      "pii_category": "Financial Data — PLACEHOLDER ONLY",
+      "description": "⚠️ SHADOW ENTITY — Buyer and PaymentMethod are defined in domain code (src/ApplicationCore/Entities/BuyerAggregate/) but are NOT mapped in CatalogContext and NOT included in any migration. These tables do NOT exist in the database. Code comment: 'actual card data must be stored in a PCI compliant system, like Stripe'. Confirmed dead code — never instantiated in any service, repository, or test file.",
+      "encryption": "N/A — not persisted",
+      "confidence": 0.85,
+      "confidence_note": "0.85 because live DB not connected to confirm no shadow tables were created manually outside migrations."
+    }
+  ],
+  "agent2_review_changes": [
+    {
+      "change_id": "RC-11",
+      "type": "ENRICHED",
+      "finding_id": "pii-inventory.json — pii_risk_notes (cookie security)",
+      "what": "Cookie IsEssential=true IS set (GDPR lawful basis), but Secure and HttpOnly are NOT. Test suite (CheckoutTest.cs) confirms hardcoded demo credentials 'demouser@microsoft.com' / 'Pass@word1' are used in functional tests, tightly coupling tests to the constant — cannot rotate password without updating tests.",
+      "evidence_source": "Phase 1 test review",
+      "evidence_detail": "src/Web/Pages/Basket/Index.cshtml.cs:94 — IsEssential=true confirmed. tests/FunctionalTests/Web/Pages/Basket/CheckoutTest.cs:48 — hardcoded 'Pass@word1' and 'demouser@microsoft.com'. tests/PublicApiIntegrationTests/ApiTokenHelper.cs:14 — hardcoded 'admin@microsoft.com' and AuthorizationConstants.JWT_SECRET_KEY used to mint test tokens.",
+      "confidence_before": 0.9,
+      "confidence_after": 0.95,
+      "phase_found": "Phase 1 test review"
+    }
+  ],
+  "pii_risk_notes": [
+    "No column-level encryption-at-rest observed for PII fields in CatalogDB or IdentityDB beyond ASP.NET Identity's password hashing.",
+    "BuyerId (email) is denormalized into CatalogDB (Baskets, Orders) with no FK to IdentityDB — a right-to-erasure request requires manual cleanup across both databases.",
+    "Anonymous basket GUIDs persist in Baskets table indefinitely — no TTL or cleanup job observed in codebase.",
+    "JWT_SECRET_KEY is hardcoded in AuthorizationConstants.cs (TODO: 'Change this to an environment variable'). Exposure of this key allows forging admin JWT tokens.",
+    "DEFAULT_PASSWORD is hardcoded in AuthorizationConstants.cs (TODO: 'Don't use this in production'). Both seeded accounts share this password.",
+    "All test suites use in-memory databases — no test validates data isolation or cleanup policies against SQL Server."
+  ]
+}

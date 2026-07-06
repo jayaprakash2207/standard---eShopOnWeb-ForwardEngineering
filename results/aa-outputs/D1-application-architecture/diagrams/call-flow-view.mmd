@@ -1,0 +1,65 @@
+%%{init: {"theme": "default"}}%%
+sequenceDiagram
+    autonumber
+    participant Admin as BlazorAdmin<br/>(Browser)
+    participant API as PublicApi<br/>(ASP.NET Core)
+    participant AppCore as ApplicationCore<br/>(Services)
+    participant Infra as Infrastructure<br/>(EfRepository)
+    participant DB as SQL Server
+
+    Note over Admin,DB: FLOW-001: Admin Authentication
+
+    Admin->>API: POST api/authenticate {Username, Password}
+    API->>Infra: SignInManager.PasswordSignInAsync()
+    Infra->>DB: SELECT AspNetUsers WHERE UserName=...
+    DB-->>Infra: ApplicationUser
+    Infra-->>API: SignInResult.Succeeded
+    API->>Infra: IdentityTokenClaimService.GetTokenAsync()
+    Note over Infra: ⚠ Uses hardcoded JWT_SECRET_KEY
+    Infra->>DB: GetRolesAsync(user)
+    DB-->>Infra: ["Administrators"]
+    Infra-->>API: JWT token (7-day expiry)
+    API-->>Admin: {Token, Username, Result=Succeeded}
+    Note over Admin: Sets Bearer header on HttpClient
+
+    Note over Admin,DB: FLOW-002: Admin Lists Catalog Items
+
+    Admin->>Admin: Check localStorage cache (TTL 60s)
+    alt Cache miss
+        Admin->>API: GET api/catalog-items<br/>GET api/catalog-brands<br/>GET api/catalog-types (parallel)
+        API->>Infra: EfRepository<CatalogItem>.ListAsync()
+        Infra->>DB: SELECT Catalog, CatalogBrands, CatalogTypes
+        DB-->>Infra: Entities
+        Infra-->>API: CatalogItem[], CatalogBrand[], CatalogType[]
+        API-->>Admin: PagedCatalogItemResponse, ListCatalogBrandsResponse, ...
+        Admin->>Admin: Join brand/type names onto items
+        Admin->>Admin: Store in localStorage (60s TTL)
+    else Cache hit
+        Admin->>Admin: Return cached data
+    end
+
+    Note over Admin,DB: FLOW-004: Shopper Checkout (Place Order — Web MVC)
+
+    participant Web as Web MVC<br/>(⚠ Source unknown)
+    participant Shopper as Shopper
+
+    Shopper->>Web: POST /checkout {basketId, address}
+    Web->>AppCore: OrderService.CreateOrderAsync(basketId, address)
+    AppCore->>Infra: EfRepository<Basket>.FirstOrDefaultAsync(BasketWithItemsSpec)
+    Infra->>DB: SELECT Baskets WHERE Id=... INCLUDE BasketItems
+    DB-->>Infra: Basket + Items
+    Infra-->>AppCore: Basket
+    Note over AppCore: Guard.Against.EmptyBasketOnCheckout
+    AppCore->>Infra: EfRepository<CatalogItem>.ListAsync(CatalogItemsSpec)
+    Infra->>DB: SELECT Catalog WHERE Id IN (...)
+    DB-->>Infra: CatalogItem[]
+    Infra-->>AppCore: CatalogItem[] with current prices
+    AppCore->>AppCore: Create CatalogItemOrdered snapshots
+    AppCore->>AppCore: new Order(buyerId, address, items)
+    AppCore->>Infra: EfRepository<Order>.AddAsync(order)
+    Infra->>DB: INSERT Orders + OrderItems
+    DB-->>Infra: Saved
+    Infra-->>AppCore: Order
+    AppCore-->>Web: Order created
+    Web-->>Shopper: Redirect to order confirmation
+    Note over AppCore,DB: ⚠ Basket NOT cleared in OrderService — risk of duplicate checkout

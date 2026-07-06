@@ -1,0 +1,32 @@
+%% Generated from source evidence. Unknown items are marked as unknown.
+flowchart TB
+  subgraph Repo[Repository]
+    PublicApi["PublicApi (backend_web_api)"]
+    Web["Web (backend_web_app)"]
+    BlazorAdmin["BlazorAdmin (frontend_spa)"]
+    ApplicationCore["ApplicationCore (library)"]
+    BlazorShared["BlazorShared (library)"]
+    Infrastructure["Infrastructure (database_support_library)"]
+    Infrastructure["Infrastructure (database_support_library)"]
+  end
+  PublicApi:::deployable
+  Web:::deployable
+  External1["sqlserver"]
+  PublicApi --> External1
+  Web --> External1
+  External2["catalog-items"]
+  PublicApi --> External2
+  Web --> External2
+  External3["catalog-items/{id}"]
+  PublicApi --> External3
+  Web --> External3
+  External4["catalog-items?PageSize=10"]
+  PublicApi --> External4
+  Web --> External4
+  External5["{_apiUrl}{uri}"]
+  PublicApi --> External5
+  Web --> External5
+  External6["{_apiUrl}{uri}/{id}"]
+  PublicApi --> External6
+  Web --> External6
+  classDef deployable stroke-width:3px

@@ -1,0 +1,26 @@
+%%{init: {"theme": "default"}}%%
+C4Context
+    title System Context — eShopOnWeb
+
+    Person(shopper, "Shopper", "Anonymous or authenticated customer browsing and purchasing items")
+    Person(admin, "Administrator", "Manages catalog items via BlazorAdmin UI")
+    Person(dev, "Developer", "Deploys and configures the system")
+
+    System_Boundary(eshop, "eShopOnWeb") {
+        System(web, "Web Storefront", "ASP.NET Core MVC .NET 8 — Catalog browse, basket, checkout, order history for shoppers")
+        System(api, "Public API", "ASP.NET Core REST API .NET 8 — Catalog data and authentication endpoints")
+        System(blazor, "BlazorAdmin", "Blazor WebAssembly SPA — Catalog item administration for admin users")
+    }
+
+    SystemDb(sqlserver, "SQL Server", "Stores catalog items, baskets, orders, and identity data — two connection strings (CatalogConnection, IdentityConnection)")
+
+    Rel(shopper, web, "Browses catalog, manages basket, places orders", "HTTPS")
+    Rel(admin, blazor, "Manages catalog items (CRUD)", "HTTPS")
+    Rel(dev, eshop, "Deploys via Azure Developer CLI (azd) or Docker Compose")
+
+    Rel(web, api, "Authenticates users; reads catalog data", "HTTPS/REST")
+    Rel(blazor, api, "CRUD catalog items; authenticates", "HTTPS/REST")
+    Rel(web, sqlserver, "Reads/writes basket, order, catalog, identity data", "SQL/TLS")
+    Rel(api, sqlserver, "Reads/writes catalog, identity data", "SQL/TLS")
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")

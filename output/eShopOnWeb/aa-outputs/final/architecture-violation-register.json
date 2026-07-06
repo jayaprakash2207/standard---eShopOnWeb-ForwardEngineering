@@ -1,0 +1,343 @@
+{
+  "generated_at": "2026-06-15T07:27:16+00:00",
+  "source_evidence_packs": [
+    "architecture-output/evidence-packs/layering-pattern-pack.json",
+    "architecture-output/evidence-packs/dependency-pack.json"
+  ],
+  "violations": [
+    {
+      "violation_id": "ARCH-VIOL-001",
+      "type": "layer_violation",
+      "description": "Controller-like component CatalogBrandListEndpoint depends directly on repository EfRepository.",
+      "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+      "affected_components": [
+        "CatalogBrandListEndpoint",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Catalog"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 16,
+          "reason": "method_parameter dependency IRepository<CatalogBrand> catalogBrandRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 36,
+          "reason": "CatalogBrandListEndpoint.HandleAsync calls catalogBrandRepository.ListAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "line": 16,
+          "reason": "CatalogBrandListEndpoint dependency IRepository<CatalogBrand> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-002",
+      "type": "layer_violation",
+      "description": "Controller-like component CatalogItemGetByIdEndpoint depends directly on repository EfRepository.",
+      "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+      "affected_components": [
+        "CatalogItemGetByIdEndpoint",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Catalog"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+          "line": 14,
+          "reason": "method_parameter dependency IRepository<CatalogItem> itemRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+          "line": 34,
+          "reason": "CatalogItemGetByIdEndpoint.HandleAsync calls itemRepository.GetByIdAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs",
+          "line": 14,
+          "reason": "CatalogItemGetByIdEndpoint dependency IRepository<CatalogItem> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-003",
+      "type": "layer_violation",
+      "description": "Controller-like component CreateCatalogItemEndpoint depends directly on repository EfRepository.",
+      "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+      "affected_components": [
+        "CreateCatalogItemEndpoint",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Catalog"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 18,
+          "reason": "method_parameter dependency IRepository<CatalogItem> itemRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 43,
+          "reason": "CreateCatalogItemEndpoint.HandleAsync calls itemRepository.CountAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 50,
+          "reason": "CreateCatalogItemEndpoint.HandleAsync calls itemRepository.AddAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 57,
+          "reason": "CreateCatalogItemEndpoint.HandleAsync calls itemRepository.UpdateAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+          "line": 18,
+          "reason": "CreateCatalogItemEndpoint dependency IRepository<CatalogItem> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-004",
+      "type": "layer_violation",
+      "description": "Controller-like component DeleteCatalogItemEndpoint depends directly on repository EfRepository.",
+      "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+      "affected_components": [
+        "DeleteCatalogItemEndpoint",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Catalog"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "line": 16,
+          "reason": "method_parameter dependency IRepository<CatalogItem> itemRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "line": 30,
+          "reason": "DeleteCatalogItemEndpoint.HandleAsync calls itemRepository.GetByIdAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "line": 34,
+          "reason": "DeleteCatalogItemEndpoint.HandleAsync calls itemRepository.DeleteAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+          "line": 16,
+          "reason": "DeleteCatalogItemEndpoint dependency IRepository<CatalogItem> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-005",
+      "type": "layer_violation",
+      "description": "Controller-like component UpdateCatalogItemEndpoint depends directly on repository EfRepository.",
+      "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+      "affected_components": [
+        "UpdateCatalogItemEndpoint",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Catalog"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "line": 16,
+          "reason": "method_parameter dependency IRepository<CatalogItem> itemRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "line": 37,
+          "reason": "UpdateCatalogItemEndpoint.HandleAsync calls itemRepository.GetByIdAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "line": 49,
+          "reason": "UpdateCatalogItemEndpoint.HandleAsync calls itemRepository.UpdateAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs",
+          "line": 16,
+          "reason": "UpdateCatalogItemEndpoint dependency IRepository<CatalogItem> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-006",
+      "type": "layer_violation",
+      "description": "Controller-like component CatalogTypeListEndpoint depends directly on repository EfRepository.",
+      "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+      "affected_components": [
+        "CatalogTypeListEndpoint",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Catalog"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+          "line": 16,
+          "reason": "method_parameter dependency IRepository<CatalogType> catalogTypeRepository on method HandleAsync"
+        },
+        {
+          "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+          "line": 36,
+          "reason": "CatalogTypeListEndpoint.HandleAsync calls catalogTypeRepository.ListAsync()"
+        },
+        {
+          "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+          "line": 16,
+          "reason": "CatalogTypeListEndpoint dependency IRepository<CatalogType> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-007",
+      "type": "layer_violation",
+      "description": "Controller-like component IndexModel depends directly on repository EfRepository.",
+      "file": "src/Web/Pages/Basket/Index.cshtml.cs",
+      "affected_components": [
+        "IndexModel",
+        "EfRepository"
+      ],
+      "affected_modules": [
+        "DataAccess",
+        "Web",
+        "Admin",
+        "Basket"
+      ],
+      "severity": "Medium",
+      "migration_impact": "This dependency should be reviewed before extracting or rewriting the affected UI/API flow.",
+      "recommendation": "Route the flow through an application service or query abstraction before forward engineering.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "src/Web/Pages/Basket/Index.cshtml.cs",
+          "line": 10,
+          "reason": "constructor dependency IRepository<CatalogItem> itemRepository"
+        },
+        {
+          "file": "src/Web/Pages/Basket/Index.cshtml.cs",
+          "line": 36,
+          "reason": "IndexModel.OnPost calls _itemRepository.GetByIdAsync()"
+        },
+        {
+          "file": "src/Web/Pages/Basket/Index.cshtml.cs",
+          "line": 10,
+          "reason": "IndexModel dependency IRepository<CatalogItem> can resolve to registered implementation EfRepository"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-008",
+      "type": "circular_dependency",
+      "description": "Module dependency cycle detected: Admin -> ApplicationCore -> Basket -> Catalog -> DataAccess -> Identity -> Order -> Web",
+      "file": "unknown",
+      "affected_components": [],
+      "affected_modules": [
+        "Admin",
+        "ApplicationCore",
+        "Basket",
+        "Catalog",
+        "DataAccess",
+        "Identity",
+        "Order",
+        "Web"
+      ],
+      "severity": "High",
+      "migration_impact": "Modules in the cycle are poor early extraction candidates until dependency direction is clarified.",
+      "recommendation": "Review cycle edges and introduce clearer application/service contracts before extraction.",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/dependency-pack.json",
+          "reason": "module cycle detected from dependency evidence pack"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-009",
+      "type": "high_coupling",
+      "description": "Component EfRepository has high coupling score 16.",
+      "file": "unknown",
+      "affected_components": [
+        "EfRepository"
+      ],
+      "affected_modules": [],
+      "severity": "Medium",
+      "migration_impact": "Changing or extracting this component may affect multiple flows.",
+      "recommendation": "Review inbound/outbound dependencies before redesign.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/dependency-pack.json",
+          "reason": "high coupling candidate"
+        }
+      ]
+    },
+    {
+      "violation_id": "ARCH-VIOL-010",
+      "type": "high_coupling",
+      "description": "Component UriComposer has high coupling score 8.",
+      "file": "unknown",
+      "affected_components": [
+        "UriComposer"
+      ],
+      "affected_modules": [],
+      "severity": "Medium",
+      "migration_impact": "Changing or extracting this component may affect multiple flows.",
+      "recommendation": "Review inbound/outbound dependencies before redesign.",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "file": "architecture-output/evidence-packs/dependency-pack.json",
+          "reason": "high coupling candidate"
+        }
+      ]
+    }
+  ]
+}

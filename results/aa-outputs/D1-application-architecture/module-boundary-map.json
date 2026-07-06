@@ -1,0 +1,338 @@
+{
+  "modules": [
+    {
+      "module_id": "MOD-001",
+      "name": "Catalog",
+      "responsibility": "Manages catalog items, brands, and types. Owns product data including name, description, price, picture URI, brand and type associations. Exposes read/write operations for catalog management.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/CatalogItem.cs",
+        "src/ApplicationCore/Entities/CatalogBrand.cs",
+        "src/ApplicationCore/Entities/CatalogType.cs",
+        "src/ApplicationCore/Specifications/CatalogFilter*.cs",
+        "src/ApplicationCore/Specifications/CatalogItemNameSpecification.cs",
+        "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+        "src/Infrastructure/Data/Config/CatalogItem*.cs",
+        "src/Infrastructure/Data/Config/CatalogBrand*.cs",
+        "src/Infrastructure/Data/Config/CatalogType*.cs",
+        "src/PublicApi/CatalogBrandEndpoints/",
+        "src/BlazorAdmin/Services/CatalogItemService.cs",
+        "src/BlazorAdmin/Services/CachedCatalogItemServiceDecorator.cs",
+        "src/BlazorAdmin/Services/CatalogLookupDataService.cs",
+        "src/BlazorAdmin/Pages/CatalogItemPage/"
+      ],
+      "main_components": [
+        "CatalogItem (Entity)",
+        "CatalogBrand (Entity)",
+        "CatalogType (Entity)",
+        "CatalogBrandListEndpoint (API Endpoint)",
+        "CatalogItemService (BlazorAdmin Service)",
+        "CachedCatalogItemServiceDecorator (BlazorAdmin Service)",
+        "CatalogLookupDataService (BlazorAdmin Service)",
+        "CatalogSettings (Config)"
+      ],
+      "entry_points": [
+        "GET api/catalog-brands (CatalogBrandListEndpoint)",
+        "GET api/catalog-items (inferred from CatalogItemService.List())",
+        "GET api/catalog-items/{id}",
+        "POST api/catalog-items",
+        "PUT api/catalog-items",
+        "DELETE api/catalog-items/{id}",
+        "BlazorAdmin /CatalogItemPage/List (Blazor route)"
+      ],
+      "depends_on_modules": ["Infrastructure", "CrossCutting"],
+      "used_by_modules": ["Basket", "Order", "Admin"],
+      "afferent_coupling": 3,
+      "efferent_coupling": 2,
+      "boundary_quality": "Moderate",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/CatalogItem.cs",
+          "reason": "Core catalog entity with rich domain methods (UpdateDetails, UpdateBrand, UpdateType, UpdatePictureUri)"
+        },
+        {
+          "file": "src/PublicApi/CatalogBrandEndpoints/CatalogBrandListEndpoint.cs",
+          "reason": "REST endpoint mapped to GET api/catalog-brands — confirms external API surface"
+        },
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "Blazor service calls api/catalog-items endpoints for full CRUD — tight coupling to PublicApi"
+        }
+      ],
+      "open_questions": [
+        "Complete set of CatalogItem API endpoints (Create, Edit, Delete, GetById) not fully visible in Layer 1 source artifacts — PublicApi/CatalogItemEndpoints/ folder was not present in provided source files.",
+        "Is catalog image storage managed locally or via Azure Blob? PictureUri uses a template replacement pattern suggesting external URL."
+      ]
+    },
+    {
+      "module_id": "MOD-002",
+      "name": "Basket",
+      "responsibility": "Manages shopping basket lifecycle: creation, item addition, quantity updates, anonymous-to-authenticated transfer, deletion, and checkout guard. Owns Basket and BasketItem aggregates.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+        "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+        "src/ApplicationCore/Interfaces/IBasketService.cs",
+        "src/ApplicationCore/Interfaces/IBasketQueryService.cs",
+        "src/ApplicationCore/Services/BasketService.cs",
+        "src/ApplicationCore/Extensions/GuardExtensions.cs",
+        "src/ApplicationCore/Exceptions/BasketNotFoundException.cs",
+        "src/ApplicationCore/Exceptions/EmptyBasketOnCheckoutException.cs",
+        "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+        "src/Infrastructure/Data/Config/BasketConfiguration.cs",
+        "src/Infrastructure/Data/Config/BasketItemConfiguration.cs",
+        "src/Infrastructure/Data/Queries/BasketQueryService.cs"
+      ],
+      "main_components": [
+        "Basket (Aggregate Root Entity)",
+        "BasketItem (Entity)",
+        "BasketService (Application Service)",
+        "BasketQueryService (Infrastructure Query Service)",
+        "IBasketService (Interface)",
+        "IBasketQueryService (Interface)",
+        "BasketWithItemsSpecification (Specification)",
+        "EmptyBasketOnCheckoutException (Domain Exception)"
+      ],
+      "entry_points": [
+        "IBasketService.AddItemToBasket (called by Web/API controllers — not visible in Layer 1)",
+        "IBasketService.SetQuantities",
+        "IBasketService.DeleteBasketAsync",
+        "IBasketService.TransferBasketAsync",
+        "IBasketQueryService.CountTotalBasketItems"
+      ],
+      "depends_on_modules": ["Catalog", "Infrastructure", "CrossCutting"],
+      "used_by_modules": ["Order", "Web"],
+      "afferent_coupling": 2,
+      "efferent_coupling": 2,
+      "boundary_quality": "Strong",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+          "reason": "Aggregate root with clear encapsulation — private _items list, public read-only Items, domain methods AddItem/RemoveEmptyItems"
+        },
+        {
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "reason": "Application service implementing IBasketService — all basket operations go through this service, uses IRepository<Basket>"
+        },
+        {
+          "file": "src/Infrastructure/Data/Queries/BasketQueryService.cs",
+          "reason": "Query-optimized service for basket item count — direct EF Core usage to avoid in-memory sum"
+        }
+      ],
+      "open_questions": [
+        "Where are basket-related API/Razor page controllers in the Web project? Not present in Layer 1 source artifacts.",
+        "Anonymous basket transfer flow — is it triggered by cookie/session middleware or explicit controller action?"
+      ]
+    },
+    {
+      "module_id": "MOD-003",
+      "name": "Order",
+      "responsibility": "Manages order creation from basket checkout. Owns Order, OrderItem, Address, and CatalogItemOrdered aggregates. Converts basket items to immutable order items with price snapshot.",
+      "source_folders": [
+        "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/OrderItem.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/Address.cs",
+        "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+        "src/ApplicationCore/Interfaces/IOrderService.cs",
+        "src/ApplicationCore/Services/OrderService.cs",
+        "src/ApplicationCore/Specifications/CustomerOrdersSpecification.cs",
+        "src/ApplicationCore/Specifications/CustomerOrdersWithItemsSpecification.cs",
+        "src/ApplicationCore/Specifications/OrderWithItemsByIdSpec.cs",
+        "src/Infrastructure/Data/Config/OrderConfiguration.cs",
+        "src/Infrastructure/Data/Config/OrderItemConfiguration.cs"
+      ],
+      "main_components": [
+        "Order (Aggregate Root Entity)",
+        "OrderItem (Entity)",
+        "Address (Value Object)",
+        "CatalogItemOrdered (Value Object / Snapshot)",
+        "OrderService (Application Service)",
+        "IOrderService (Interface)"
+      ],
+      "entry_points": [
+        "IOrderService.CreateOrderAsync (called by Web checkout — not visible in Layer 1)"
+      ],
+      "depends_on_modules": ["Basket", "Catalog", "Infrastructure", "CrossCutting"],
+      "used_by_modules": ["Web"],
+      "afferent_coupling": 1,
+      "efferent_coupling": 3,
+      "boundary_quality": "Strong",
+      "confidence": 0.90,
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+          "reason": "DDD aggregate root — private _orderItems list, encapsulated Total() calculation, guard validations in constructor"
+        },
+        {
+          "file": "src/ApplicationCore/Services/OrderService.cs",
+          "reason": "CreateOrderAsync reads basket, fetches catalog items, creates CatalogItemOrdered snapshots, then saves Order — full checkout orchestration"
+        },
+        {
+          "file": "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+          "reason": "Snapshot value object — comment says 'If catalog item details change, details of the item that was part of a completed order should not change'"
+        }
+      ],
+      "open_questions": [
+        "Where is the checkout controller/page in the Web project? Not in Layer 1 source artifacts.",
+        "Is there any order status management (fulfilled, cancelled) beyond creation? Not visible in available artifacts.",
+        "Is email notification sent on order creation? IEmailSender is defined but EmailSender is a stub (Task.CompletedTask)."
+      ]
+    },
+    {
+      "module_id": "MOD-004",
+      "name": "Identity",
+      "responsibility": "Manages authentication and authorization. Owns ASP.NET Identity integration, JWT token generation, user and role management, and identity database context.",
+      "source_folders": [
+        "src/Infrastructure/Identity/AppIdentityDbContext.cs",
+        "src/Infrastructure/Identity/AppIdentityDbContextSeed.cs",
+        "src/Infrastructure/Identity/ApplicationUser.cs",
+        "src/Infrastructure/Identity/IdentityTokenClaimService.cs",
+        "src/Infrastructure/Identity/UserNotFoundException.cs",
+        "src/ApplicationCore/Interfaces/ITokenClaimsService.cs",
+        "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+        "src/BlazorShared/Authorization/",
+        "src/PublicApi/AuthEndpoints/"
+      ],
+      "main_components": [
+        "AppIdentityDbContext (EF Core Identity DbContext)",
+        "ApplicationUser (IdentityUser extension)",
+        "IdentityTokenClaimService (JWT Token Generator)",
+        "AuthenticateEndpoint (API Endpoint — POST api/authenticate)",
+        "ITokenClaimsService (Interface)",
+        "AuthorizationConstants (Hardcoded JWT secret — RISK)"
+      ],
+      "entry_points": [
+        "POST api/authenticate (AuthenticateEndpoint)",
+        "GET User (BlazorAdmin CustomAuthStateProvider fetches user info)"
+      ],
+      "depends_on_modules": ["Infrastructure", "CrossCutting"],
+      "used_by_modules": ["Web", "PublicApi", "Admin"],
+      "afferent_coupling": 3,
+      "efferent_coupling": 1,
+      "boundary_quality": "Moderate",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Identity/IdentityTokenClaimService.cs",
+          "reason": "JWT token creation using hardcoded key from AuthorizationConstants.JWT_SECRET_KEY — security risk"
+        },
+        {
+          "file": "src/PublicApi/AuthEndpoints/AuthenticateEndpoint.cs",
+          "reason": "POST api/authenticate — SignInManager.PasswordSignInAsync then ITokenClaimsService.GetTokenAsync"
+        },
+        {
+          "file": "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+          "reason": "Hardcoded JWT_SECRET_KEY and DEFAULT_PASSWORD with TODO comments — known risk"
+        }
+      ],
+      "open_questions": [
+        "Does the Web project use cookie-based authentication separately from the JWT used by PublicApi? Both IdentityConnection and CatalogConnection exist.",
+        "Is the BlazorAdmin authentication flow via token from PublicApi only, or does it also use cookie auth from Web?"
+      ]
+    },
+    {
+      "module_id": "MOD-005",
+      "name": "Admin",
+      "responsibility": "Provides administrative interface for catalog management via Blazor WebAssembly UI. Allows CRUD operations on catalog items through PublicApi. Manages local browser cache for catalog data.",
+      "source_folders": [
+        "src/BlazorAdmin/",
+        "src/BlazorShared/"
+      ],
+      "main_components": [
+        "List (Blazor Page Component)",
+        "CatalogItemService (Blazor Service)",
+        "CachedCatalogItemServiceDecorator (Decorator Service)",
+        "CachedCatalogLookupDataServiceDecorator (Decorator Service)",
+        "CatalogLookupDataService (Blazor Service)",
+        "HttpService (HTTP Client Wrapper)",
+        "ToastService (UI Notification)",
+        "CustomAuthStateProvider (Auth)",
+        "BlazorComponent / BlazorLayoutComponent (Base Classes)"
+      ],
+      "entry_points": [
+        "Blazor route /CatalogItemPage/List",
+        "Blazor route /CatalogItemPage/Create (inferred)",
+        "Blazor route /CatalogItemPage/Edit (inferred)",
+        "Blazor route /CatalogItemPage/Delete (inferred)",
+        "Blazor route /CatalogItemPage/Details (inferred)"
+      ],
+      "depends_on_modules": ["Catalog", "Identity"],
+      "used_by_modules": [],
+      "afferent_coupling": 0,
+      "efferent_coupling": 2,
+      "boundary_quality": "Moderate",
+      "confidence": 0.82,
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Pages/CatalogItemPage/List.razor.cs",
+          "reason": "Blazor component loading catalog items, types, brands via ICatalogItemService and ICatalogLookupDataService"
+        },
+        {
+          "file": "src/BlazorAdmin/ServicesConfiguration.cs",
+          "reason": "DI registration of all BlazorAdmin services — all catalog-focused, no basket/order UI"
+        },
+        {
+          "file": "src/BlazorAdmin/wwwroot/appsettings.json",
+          "reason": "baseUrls.apiBase = PublicApi URL — confirms dependency on PublicApi for data"
+        }
+      ],
+      "open_questions": [
+        "Are there Blazor admin pages for orders or users? Only CatalogItemPage is visible in Layer 1.",
+        "Is BlazorAdmin embedded within the Web project or deployed independently?"
+      ]
+    },
+    {
+      "module_id": "MOD-006",
+      "name": "CrossCutting",
+      "responsibility": "Provides shared infrastructure concerns: logging abstraction (IAppLogger/LoggerAdapter), JSON serialization extensions, guard clause extensions, shared exception types, URI composition, and email sender stub.",
+      "source_folders": [
+        "src/ApplicationCore/Interfaces/IAppLogger.cs",
+        "src/ApplicationCore/Interfaces/IEmailSender.cs",
+        "src/ApplicationCore/Interfaces/IUriComposer.cs",
+        "src/ApplicationCore/Interfaces/IAggregateRoot.cs",
+        "src/ApplicationCore/Interfaces/IRepository.cs",
+        "src/ApplicationCore/Interfaces/IReadRepository.cs",
+        "src/ApplicationCore/Extensions/JsonExtensions.cs",
+        "src/ApplicationCore/Extensions/GuardExtensions.cs",
+        "src/ApplicationCore/Services/UriComposer.cs",
+        "src/Infrastructure/Logging/LoggerAdapter.cs",
+        "src/Infrastructure/Services/EmailSender.cs",
+        "src/Infrastructure/Data/EfRepository.cs"
+      ],
+      "main_components": [
+        "IAppLogger / LoggerAdapter (Logging Abstraction)",
+        "IRepository / IReadRepository (Repository Interfaces)",
+        "EfRepository (Generic EF Repository)",
+        "UriComposer (URI builder for catalog images)",
+        "EmailSender (Stub — not implemented)",
+        "JsonExtensions (Serialization helpers)",
+        "BasketGuards (Guard clause extension)"
+      ],
+      "entry_points": [],
+      "depends_on_modules": [],
+      "used_by_modules": ["Catalog", "Basket", "Order", "Identity", "Admin"],
+      "afferent_coupling": 5,
+      "efferent_coupling": 0,
+      "boundary_quality": "Strong",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/EfRepository.cs",
+          "reason": "Generic EfRepository<T> implements IRepository<T> and IReadRepository<T> using Ardalis.Specification — used by all domain modules"
+        },
+        {
+          "file": "src/ApplicationCore/Interfaces/IAppLogger.cs",
+          "reason": "Comment says 'eliminates need to depend directly on ASP.NET Core logging types' — explicit decoupling intent"
+        },
+        {
+          "file": "src/Infrastructure/Services/EmailSender.cs",
+          "reason": "Stub implementation — Task.CompletedTask only with TODO comment — unimplemented concern"
+        }
+      ],
+      "open_questions": [
+        "EmailSender is a stub (returns Task.CompletedTask). Is email notification planned? What triggers it?",
+        "Is there any caching infrastructure (Redis, memory cache) beyond the BlazorAdmin local storage cache?"
+      ]
+    }
+  ]
+}

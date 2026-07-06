@@ -1,0 +1,103 @@
+{
+  "extraction_date": "2026-07-06",
+  "db_connection": "CODE-ONLY — sqlcmd not approved. Command attempted: sqlcmd -S localhost,1433 -U SA -P \"***\" -Q \"SELECT name FROM sys.databases\"",
+  "data_sources": [
+    {
+      "id": "DS-01",
+      "name": "CatalogDB",
+      "type": "relational_database",
+      "engine": "SQL Server (Azure SQL Edge — mcr.microsoft.com/azure-sql-edge in docker-compose.yml)",
+      "connection_key": "ConnectionStrings.CatalogConnection",
+      "host": "localhost (dev) / sqlserver (docker-compose service name)",
+      "port": 1433,
+      "ef_context": "CatalogContext",
+      "used_by": ["Web MVC (src/Web)", "PublicApi (src/PublicApi)"],
+      "tables": ["Baskets", "BasketItems", "Catalog", "CatalogBrands", "CatalogTypes", "Orders", "OrderItems"],
+      "sequences": ["catalog_hilo (increment 10)", "catalog_brand_hilo (increment 10)", "catalog_type_hilo (increment 10)"],
+      "migration_tool": "Entity Framework Core Migrations",
+      "migration_files": [
+        "20201202111507_InitialModel",
+        "20211026175614_FixBuyerId",
+        "20211231093753_FixShipToAddress"
+      ],
+      "in_memory_fallback": "UseInMemoryDatabase('Catalog') when config key UseOnlyInMemoryDatabase=true",
+      "confidence": 0.9
+    },
+    {
+      "id": "DS-02",
+      "name": "IdentityDB",
+      "type": "relational_database",
+      "engine": "SQL Server (same Docker instance as CatalogDB — sqlserver service)",
+      "connection_key": "ConnectionStrings.IdentityConnection",
+      "host": "localhost (dev) / sqlserver (docker-compose)",
+      "port": 1433,
+      "ef_context": "AppIdentityDbContext",
+      "used_by": ["Web MVC (src/Web)", "PublicApi (src/PublicApi)"],
+      "tables": ["AspNetUsers", "AspNetRoles", "AspNetRoleClaims", "AspNetUserClaims", "AspNetUserLogins", "AspNetUserRoles", "AspNetUserTokens"],
+      "migration_tool": "Entity Framework Core Migrations",
+      "migration_files": ["20201202111612_InitialIdentityModel"],
+      "in_memory_fallback": "UseInMemoryDatabase('Identity') when UseOnlyInMemoryDatabase=true",
+      "confidence": 0.9
+    },
+    {
+      "id": "DS-03",
+      "name": "Browser LocalStorage (BlazorAdmin)",
+      "type": "client_side_cache",
+      "engine": "Blazored.LocalStorage (browser localStorage API via Blazor WASM)",
+      "used_by": ["BlazorAdmin (src/BlazorAdmin)"],
+      "cached_entities": [
+        "CatalogItem list (key: 'items')",
+        "CatalogBrand list (key: 'CatalogBrand')",
+        "CatalogType list (key: 'CatalogType')"
+      ],
+      "ttl": "1 minute absolute (CacheEntry.DateCreated.AddMinutes(1) > DateTime.UtcNow)",
+      "invalidation": "CatalogItem writes call RefreshLocalStorageList() — removes and re-fetches. Brand/Type lists cleared on BlazorAdmin startup only (ClearLocalStorageCache in Program.cs). Brand/Type NOT refreshed on CatalogItem write operations.",
+      "implementation": "Decorator pattern: CachedCatalogItemServiceDecorator wraps CatalogItemService; CachedCatalogLookupDataServiceDecorator<T> wraps CatalogLookupDataService<T>",
+      "confidence": 0.9
+    },
+    {
+      "id": "DS-04",
+      "name": "IMemoryCache — Web MVC Catalog View",
+      "type": "server_side_in_process_cache",
+      "engine": "ASP.NET Core IMemoryCache (in-process per server instance)",
+      "used_by": ["Web MVC (src/Web) — CachedCatalogViewModelService"],
+      "cached_entities": [
+        "CatalogItems paginated (key: 'items-{pageIndex}-{itemsPage}-{brandId}-{typeId}')",
+        "CatalogBrands (key: 'brands')",
+        "CatalogTypes (key: 'types')"
+      ],
+      "ttl": "30 seconds SLIDING expiration (CacheHelpers.DefaultCacheDuration = TimeSpan.FromSeconds(30))",
+      "invalidation": "TTL-only. NO explicit invalidation on admin writes. BlazorAdmin/PublicApi catalog edits will not immediately appear in Web MVC storefront — up to 30s stale.",
+      "implementation": "Decorator pattern: CachedCatalogViewModelService wraps CatalogViewModelService",
+      "scale_risk": "In-process — not shared across multiple Web instances. Each instance has its own cache state.",
+      "confidence": 0.9
+    },
+    {
+      "id": "DS-05",
+      "name": "HTTP Cookie — Anonymous Basket Identity",
+      "type": "cookie",
+      "engine": "ASP.NET Core Response.Cookies",
+      "used_by": ["Web MVC (src/Web) — GetOrSetBasketCookieAndUserName in basket page code"],
+      "cookie_name": "Constants.BASKET_COOKIENAME (defined in src/Web/Constants.cs)",
+      "content": "GUID string used as anonymous BuyerId in Baskets table",
+      "ttl": "10 years (DateTime.Today.AddYears(10))",
+      "scope": "Web MVC only",
+      "security_notes": "No Secure or HttpOnly flags confirmed in code review. GUID persists in Baskets table indefinitely — no cleanup mechanism for stale anonymous baskets.",
+      "on_login": "TransferBasketAsync migrates items from anonymous GUID basket to authenticated user basket, then deletes anonymous basket.",
+      "confidence": 0.8
+    },
+    {
+      "id": "DS-06",
+      "name": "Static File System — Product Images",
+      "type": "filesystem",
+      "engine": "Local filesystem / Docker volume served via ASP.NET Core static files middleware",
+      "used_by": ["Web MVC", "PublicApi"],
+      "path_pattern": "images/products/{n}.png",
+      "base_url_config": "CatalogSettings.CatalogBaseUrl (resolved at runtime by UriComposer)",
+      "stored_value": "PictureUri column in Catalog table stores template 'http://catalogbaseurltobereplaced/images/products/{n}.png'",
+      "upload_status": "DISABLED — security concern noted in CreateCatalogItemEndpoint.cs (ref GitHub issue #537). New items use eCatalog-item-default.png placeholder.",
+      "production_recommendation": "Upload to blob storage and serve via CDN after verification (per code comment in CreateCatalogItemEndpoint.cs)",
+      "confidence": 0.9
+    }
+  ]
+}

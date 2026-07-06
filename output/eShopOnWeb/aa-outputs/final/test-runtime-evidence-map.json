@@ -1,0 +1,439 @@
+{
+  "generated_at": "2026-06-15T07:27:16+00:00",
+  "runtime_execution_status": "not_run",
+  "runtime_execution_reason": "Runtime/test execution was not enabled for this run; static test-source evidence was captured instead.",
+  "runtime_execution_evidence": null,
+  "source_final_artifacts": [
+    "architecture-output/final/component-registry.json",
+    "architecture-output/final/business-capability-map.json",
+    "architecture-output/test-runtime/dotnet-test-execution.json"
+  ],
+  "summary": {
+    "test_component_count": 45,
+    "capabilities_with_test_source_evidence": 1,
+    "runtime_executed": false,
+    "runtime_test_projects": 0,
+    "runtime_completed_successfully": 0,
+    "runtime_failed_or_not_available": 0
+  },
+  "capability_test_evidence": [
+    {
+      "capability_id": "CAP-003",
+      "capability": "Verification",
+      "test_components": [
+        {
+          "component_id": "COMP-0205",
+          "name": "TestApiApplication",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/PublicApi/ApiTestFixture.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0206",
+          "name": "ApiTokenHelper",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/PublicApi/ApiTokenHelper.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0207",
+          "name": "WebPageHelpers",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/WebPageHelpers.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0208",
+          "name": "TestApplication",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/WebTestFixture.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0209",
+          "name": "AccountControllerSignIn",
+          "type": "Controller",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Controllers/AccountControllerSignIn.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0210",
+          "name": "CatalogControllerIndex",
+          "type": "Controller",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Controllers/CatalogControllerIndex.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0211",
+          "name": "OrderIndexOnGet",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Controllers/OrderControllerIndex.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0212",
+          "name": "HomePageOnGet",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Pages/HomePageOnGet.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0213",
+          "name": "BasketPageCheckout",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Pages/Basket/BasketPageCheckout.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0214",
+          "name": "CheckoutTest",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Pages/Basket/CheckoutTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0215",
+          "name": "IndexTest",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/FunctionalTests/Web/Pages/Basket/IndexTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0216",
+          "name": "SetQuantities",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/IntegrationTests/Repositories/BasketRepositoryTests/SetQuantities.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0217",
+          "name": "GetById",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/IntegrationTests/Repositories/OrderRepositoryTests/GetById.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0218",
+          "name": "GetByIdWithItemsAsync",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/IntegrationTests/Repositories/OrderRepositoryTests/GetByIdWithItemsAsync.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0219",
+          "name": "ApiTokenHelper",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/ApiTokenHelper.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0220",
+          "name": "ProgramTest",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/ProgramTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0221",
+          "name": "AuthenticateEndpoint",
+          "type": "Controller",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/AuthEndpoints/AuthenticateEndpointTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0222",
+          "name": "CatalogItemGetByIdEndpointTest",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/CatalogItemEndpoints/CatalogItemGetByIdEndpointTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0223",
+          "name": "CatalogItemListPagedEndpoint",
+          "type": "Controller",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0224",
+          "name": "CreateCatalogItemEndpointTest",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/CatalogItemEndpoints/CreateCatalogItemEndpointTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0225",
+          "name": "DeleteCatalogItemEndpointTest",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/PublicApiIntegrationTests/CatalogItemEndpoints/DeleteCatalogItemEndpointTest.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0226",
+          "name": "BasketAddItem",
+          "type": "Entity",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketAddItem.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0227",
+          "name": "BasketRemoveEmptyItems",
+          "type": "Entity",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketRemoveEmptyItems.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0228",
+          "name": "BasketTotalItems",
+          "type": "Entity",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketTotalItems.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0229",
+          "name": "OrderTotal",
+          "type": "Entity",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Entities/OrderTests/OrderTotal.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0230",
+          "name": "JsonExtensions",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Extensions/JsonExtensions.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0231",
+          "name": "TestChild",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Extensions/TestChild.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0232",
+          "name": "TestParent",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Extensions/TestParent.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0233",
+          "name": "AddItemToBasket",
+          "type": "Service",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/AddItemToBasket.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0234",
+          "name": "DeleteBasket",
+          "type": "Service",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/DeleteBasket.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0235",
+          "name": "TransferBasket",
+          "type": "Service",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/TransferBasket.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0236",
+          "name": "Results",
+          "type": "Service",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/TransferBasket.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0237",
+          "name": "BasketWithItems",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0238",
+          "name": "CatalogFilterPaginatedSpecification",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0239",
+          "name": "CatalogFilterSpecification",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Specifications/CatalogFilterSpecification.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0240",
+          "name": "CatalogItemsSpecification",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0241",
+          "name": "CustomerOrdersWithItemsSpecification",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/ApplicationCore/Specifications/CustomerOrdersWithItemsSpecification.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0242",
+          "name": "AddressBuilder",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/Builders/AddressBuilder.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0243",
+          "name": "BasketBuilder",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/Builders/BasketBuilder.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0244",
+          "name": "OrderBuilder",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/Builders/OrderBuilder.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0245",
+          "name": "GetMyOrders",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/MediatorHandlers/OrdersTests/GetMyOrders.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0246",
+          "name": "GetOrderDetails",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/MediatorHandlers/OrdersTests/GetOrderDetails.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0247",
+          "name": "GenerateBrandsCacheKey",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/Web/Extensions/CacheHelpersTests/GenerateBrandsCacheKey.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0248",
+          "name": "GenerateCatalogItemCacheKey",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/Web/Extensions/CacheHelpersTests/GenerateCatalogItemCacheKey.cs",
+          "confidence": 0.96
+        },
+        {
+          "component_id": "COMP-0249",
+          "name": "GenerateTypesCacheKey",
+          "type": "Unknown",
+          "module": "Verification",
+          "file": "tests/UnitTests/Web/Extensions/CacheHelpersTests/GenerateTypesCacheKey.cs",
+          "confidence": 0.96
+        }
+      ],
+      "source_files": [
+        "tests/FunctionalTests/PublicApi/ApiTestFixture.cs",
+        "tests/FunctionalTests/PublicApi/ApiTokenHelper.cs",
+        "tests/FunctionalTests/Web/WebPageHelpers.cs",
+        "tests/FunctionalTests/Web/WebTestFixture.cs",
+        "tests/FunctionalTests/Web/Controllers/AccountControllerSignIn.cs",
+        "tests/FunctionalTests/Web/Controllers/CatalogControllerIndex.cs",
+        "tests/FunctionalTests/Web/Controllers/OrderControllerIndex.cs",
+        "tests/FunctionalTests/Web/Pages/HomePageOnGet.cs",
+        "tests/FunctionalTests/Web/Pages/Basket/BasketPageCheckout.cs",
+        "tests/FunctionalTests/Web/Pages/Basket/CheckoutTest.cs",
+        "tests/FunctionalTests/Web/Pages/Basket/IndexTest.cs",
+        "tests/IntegrationTests/Repositories/BasketRepositoryTests/SetQuantities.cs",
+        "tests/IntegrationTests/Repositories/OrderRepositoryTests/GetById.cs",
+        "tests/IntegrationTests/Repositories/OrderRepositoryTests/GetByIdWithItemsAsync.cs",
+        "tests/PublicApiIntegrationTests/ApiTokenHelper.cs",
+        "tests/PublicApiIntegrationTests/ProgramTest.cs",
+        "tests/PublicApiIntegrationTests/AuthEndpoints/AuthenticateEndpointTest.cs",
+        "tests/PublicApiIntegrationTests/CatalogItemEndpoints/CatalogItemGetByIdEndpointTest.cs",
+        "tests/PublicApiIntegrationTests/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+        "tests/PublicApiIntegrationTests/CatalogItemEndpoints/CreateCatalogItemEndpointTest.cs",
+        "tests/PublicApiIntegrationTests/CatalogItemEndpoints/DeleteCatalogItemEndpointTest.cs",
+        "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketAddItem.cs",
+        "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketRemoveEmptyItems.cs",
+        "tests/UnitTests/ApplicationCore/Entities/BasketTests/BasketTotalItems.cs",
+        "tests/UnitTests/ApplicationCore/Entities/OrderTests/OrderTotal.cs",
+        "tests/UnitTests/ApplicationCore/Extensions/JsonExtensions.cs",
+        "tests/UnitTests/ApplicationCore/Extensions/TestChild.cs",
+        "tests/UnitTests/ApplicationCore/Extensions/TestParent.cs",
+        "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/AddItemToBasket.cs",
+        "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/DeleteBasket.cs",
+        "tests/UnitTests/ApplicationCore/Services/BasketServiceTests/TransferBasket.cs",
+        "tests/UnitTests/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+        "tests/UnitTests/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs",
+        "tests/UnitTests/ApplicationCore/Specifications/CatalogFilterSpecification.cs",
+        "tests/UnitTests/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+        "tests/UnitTests/ApplicationCore/Specifications/CustomerOrdersWithItemsSpecification.cs",
+        "tests/UnitTests/Builders/AddressBuilder.cs",
+        "tests/UnitTests/Builders/BasketBuilder.cs",
+        "tests/UnitTests/Builders/OrderBuilder.cs",
+        "tests/UnitTests/MediatorHandlers/OrdersTests/GetMyOrders.cs",
+        "tests/UnitTests/MediatorHandlers/OrdersTests/GetOrderDetails.cs",
+        "tests/UnitTests/Web/Extensions/CacheHelpersTests/GenerateBrandsCacheKey.cs",
+        "tests/UnitTests/Web/Extensions/CacheHelpersTests/GenerateCatalogItemCacheKey.cs",
+        "tests/UnitTests/Web/Extensions/CacheHelpersTests/GenerateTypesCacheKey.cs"
+      ],
+      "test_component_count": 45,
+      "forward_engineering_use": "candidate_contract_or_regression_test_source"
+    }
+  ],
+  "open_questions": [
+    "Confirm whether tests should also be executed in a controlled full-build environment.",
+    "Confirm which test components map to behavior contracts that must be preserved in forward engineering."
+  ]
+}

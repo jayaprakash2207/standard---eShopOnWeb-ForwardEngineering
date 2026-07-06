@@ -1,0 +1,122 @@
+{
+  "db_connection": "CODE-ONLY — db_connection_results empty in extraction. All classifications below are INFERRED from entity/field naming conventions typical of eShopOnWeb-style apps; not confirmed against live data.",
+  "pii_fields": [
+    {
+      "table": "AspNetUsers",
+      "field": "Email",
+      "classification": "PII - direct identifier",
+      "sensitivity": "HIGH",
+      "status": "INFERRED",
+      "confidence": 0.7,
+      "notes": "Standard ASP.NET Identity column. Used as login/username in eShopOnWeb."
+    },
+    {
+      "table": "AspNetUsers",
+      "field": "UserName",
+      "classification": "PII - direct identifier",
+      "sensitivity": "HIGH",
+      "status": "INFERRED",
+      "confidence": 0.7,
+      "notes": "Typically equals Email in this app's Identity setup."
+    },
+    {
+      "table": "AspNetUsers",
+      "field": "PasswordHash",
+      "classification": "Sensitive credential (not PII per se, but high-sensitivity secret)",
+      "sensitivity": "CRITICAL",
+      "status": "INFERRED",
+      "confidence": 0.7
+    },
+    {
+      "table": "AspNetUsers",
+      "field": "PhoneNumber",
+      "classification": "PII - direct identifier",
+      "sensitivity": "MEDIUM",
+      "status": "INFERRED",
+      "confidence": 0.65,
+      "notes": "Standard Identity column, may be unused/null in this app. Confidence below 0.70 threshold — UNKNOWN whether populated."
+    },
+    {
+      "table": "Orders",
+      "field": "BuyerId",
+      "classification": "PII - pseudo-identifier (links to AspNetUsers.Id)",
+      "sensitivity": "MEDIUM",
+      "status": "CONFIRMED via entity (Order.cs)",
+      "confidence": 0.8
+    },
+    {
+      "table": "Orders",
+      "field": "ShipToAddress_Street / _City / _State / _Country / _ZipCode",
+      "classification": "PII - physical address (shipping address)",
+      "sensitivity": "HIGH",
+      "status": "CONFIRMED via entity (Address.cs, owned type)",
+      "confidence": 0.8
+    },
+    {
+      "table": "Baskets",
+      "field": "BuyerId",
+      "classification": "PII - pseudo-identifier",
+      "sensitivity": "MEDIUM",
+      "status": "CONFIRMED via entity (Basket.cs)",
+      "confidence": 0.8
+    },
+    {
+      "table": "PaymentMethod (Buyer/PaymentMethod entities — CONFIRMED NOT PERSISTED)",
+      "field": "N/A — no table exists",
+      "classification": "Not currently PII / not currently PCI-DSS scope",
+      "sensitivity": "N/A (CONFIRMED NOT PERSISTED)",
+      "status": "CONFIRMED via code: PaymentMethod.cs and Buyer.cs are not registered as DbSets in CatalogContext (7 DbSets total, none for Buyer/PaymentMethod) and AppIdentityDbContext.OnModelCreating adds no custom entities. No PCI-DSS exposure today.",
+      "confidence": 0.9,
+      "action_required": "None for current schema. If Buyer/PaymentMethod is implemented in future, re-flag for PCI-DSS review at that time."
+    },
+    {
+      "table": "AuthorizationConstants (src/ApplicationCore/Constants/AuthorizationConstants.cs)",
+      "field": "AUTH_KEY, JWT_SECRET_KEY, DEFAULT_PASSWORD",
+      "classification": "Hardcoded secrets / credentials checked into source control",
+      "sensitivity": "CRITICAL",
+      "status": "CONFIRMED via code — AUTH_KEY and JWT_SECRET_KEY are hardcoded placeholder strings ('...OfDoomThatMustBeAMinimumNumberOfBytes'), and DEFAULT_PASSWORD = \"Pass@word1\" is used for seeded demo accounts. Both have // TODO comments acknowledging they should not be used in production.",
+      "confidence": 0.9,
+      "action_required": "Flag for Gate G1: confirm these values are never used outside local/demo environments and are replaced by environment-variable-sourced secrets in any real deployment."
+    },
+    {
+      "table": "OrderItems",
+      "field": "ItemOrdered_* (CatalogItemOrdered snapshot)",
+      "classification": "Not PII — product data snapshot",
+      "sensitivity": "LOW",
+      "status": "CONFIRMED via entity",
+      "confidence": 0.8
+    }
+  ],
+  "non_pii_tables": [
+    "Catalog", "CatalogBrands", "CatalogTypes", "AspNetRoles", "AspNetUserRoles", "AspNetRoleClaims"
+  ],
+  "summary": {
+    "highest_sensitivity_concern": "Hardcoded secrets/credentials in AuthorizationConstants.cs (AUTH_KEY, JWT_SECRET_KEY, DEFAULT_PASSWORD = 'Pass@word1') — PaymentMethod entity is now CONFIRMED not persisted and is no longer a concern.",
+    "gdpr_relevant_tables": ["AspNetUsers", "Orders", "Baskets"],
+    "recommendation": "Confirm hardcoded secrets in AuthorizationConstants.cs are dev/demo-only and overridden via environment/config in real deployments before any data migration that touches IdentityDb."
+  },
+  "change_records": [
+    {
+      "change_id": "RC-002d",
+      "type": "CORRECTED",
+      "finding_id": "pii-inventory.json — PaymentMethod entry",
+      "what": "PaymentMethod reclassified from 'INFERRED, potential PCI-DSS scope' (confidence 0.65) to 'CONFIRMED NOT PERSISTED, not currently PCI-DSS scope' (confidence 0.9), consistent with RC-002 in schema-catalogue.json.",
+      "evidence_source": "entity/ORM code",
+      "evidence_detail": "src/Infrastructure/Data/CatalogContext.cs (7 DbSets only); src/Infrastructure/Identity/AppIdentityDbContext.cs",
+      "confidence_before": 0.65,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-006",
+      "type": "ADDED",
+      "finding_id": "pii-inventory.json — AuthorizationConstants hardcoded secrets",
+      "what": "New finding: AuthorizationConstants.cs contains hardcoded AUTH_KEY, JWT_SECRET_KEY, and DEFAULT_PASSWORD = 'Pass@word1', each with // TODO comments noting they shouldn't be used in production.",
+      "evidence_source": "spot check",
+      "evidence_detail": "src/ApplicationCore/Constants/AuthorizationConstants.cs:5,8,11",
+      "confidence_before": 0.0,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    }
+  ]
+}

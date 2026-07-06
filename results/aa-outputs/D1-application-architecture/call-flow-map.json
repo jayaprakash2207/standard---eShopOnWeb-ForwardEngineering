@@ -1,0 +1,434 @@
+{
+  "flows": [
+    {
+      "flow_id": "FLOW-001",
+      "name": "User Authentication (BlazorAdmin)",
+      "entry_point": "POST api/authenticate",
+      "steps": [
+        {
+          "step": 1,
+          "component": "AuthenticateEndpoint",
+          "layer": "API",
+          "module": "Identity",
+          "operation": "Receives AuthenticateRequest {Username, Password}"
+        },
+        {
+          "step": 2,
+          "component": "SignInManager<ApplicationUser>",
+          "layer": "Infrastructure",
+          "module": "Identity",
+          "operation": "PasswordSignInAsync(username, password, isPersistent=false, lockoutOnFailure=true)"
+        },
+        {
+          "step": 3,
+          "component": "IdentityTokenClaimService",
+          "layer": "Infrastructure",
+          "module": "Identity",
+          "operation": "GetTokenAsync(username) — creates JWT with user claims and roles, 7-day expiry"
+        },
+        {
+          "step": 4,
+          "component": "AppIdentityDbContext",
+          "layer": "Data Access",
+          "module": "Identity",
+          "operation": "UserManager.FindByNameAsync, GetRolesAsync — reads AspNetUsers and AspNetUserRoles tables"
+        },
+        {
+          "step": 5,
+          "component": "AuthenticateEndpoint",
+          "layer": "API",
+          "module": "Identity",
+          "operation": "Returns AuthenticateResponse {Result, Token, Username, IsLockedOut, ...}"
+        },
+        {
+          "step": 6,
+          "component": "CustomAuthStateProvider",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "Sets HttpClient.DefaultRequestHeaders.Authorization = Bearer {token}; notifies Blazor auth state changed"
+        }
+      ],
+      "modules_touched": ["Identity", "Admin"],
+      "external_systems_touched": ["SQL Server (Identity DB — AspNetUsers, AspNetRoles)"],
+      "data_access_components": ["AppIdentityDbContext"],
+      "risk_flags": [
+        "JWT_SECRET_KEY is hardcoded in source (AuthorizationConstants.JWT_SECRET_KEY) — plaintext secret in repository",
+        "7-day JWT expiry with no refresh mechanism visible — long-lived tokens increase security risk"
+      ],
+      "confidence": 0.95,
+      "open_questions": ["How does the Web (MVC) project authenticate? Does it use cookie-based auth separately from this JWT endpoint?"]
+    },
+    {
+      "flow_id": "FLOW-002",
+      "name": "Admin Lists Catalog Items (BlazorAdmin)",
+      "entry_point": "Blazor route /CatalogItemPage/List — OnAfterRenderAsync",
+      "steps": [
+        {
+          "step": 1,
+          "component": "List (Blazor Page)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "OnAfterRenderAsync(firstRender=true) — triggers data load"
+        },
+        {
+          "step": 2,
+          "component": "CachedCatalogItemServiceDecorator",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "List() — checks localStorage for 'items' key; if fresh (< 1 min old) returns cached list"
+        },
+        {
+          "step": 3,
+          "component": "CatalogItemService (BlazorAdmin)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "List() — fires 3 parallel Tasks: brandListTask, typeListTask, itemListTask via HttpService"
+        },
+        {
+          "step": 4,
+          "component": "HttpService",
+          "layer": "Integration",
+          "module": "Admin",
+          "operation": "HttpGet<PagedCatalogItemResponse>('catalog-items') → GET {apiBase}catalog-items"
+        },
+        {
+          "step": 5,
+          "component": "unknown CatalogItemListEndpoint",
+          "layer": "API",
+          "module": "Catalog",
+          "operation": "GET api/catalog-items — returns PagedCatalogItemResponse (source not in Layer 1)"
+        },
+        {
+          "step": 6,
+          "component": "EfRepository<CatalogItem>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "ListAsync() — queries CatalogContext.CatalogItems"
+        },
+        {
+          "step": 7,
+          "component": "CatalogContext",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "SELECT from Catalog table (SQL Server)"
+        },
+        {
+          "step": 8,
+          "component": "CatalogItemService (BlazorAdmin)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "Joins brand/type names onto catalog items after all tasks complete"
+        },
+        {
+          "step": 9,
+          "component": "CachedCatalogItemServiceDecorator",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "Stores result in localStorage for 1-minute cache"
+        },
+        {
+          "step": 10,
+          "component": "List (Blazor Page)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "CallRequestRefresh() — triggers UI re-render via RefreshBroadcast singleton"
+        }
+      ],
+      "modules_touched": ["Admin", "Catalog"],
+      "external_systems_touched": ["SQL Server (Catalog DB — Catalog table, CatalogBrands, CatalogTypes)"],
+      "data_access_components": ["EfRepository<CatalogItem>", "CatalogContext"],
+      "risk_flags": [
+        "Browser localStorage used as cache — cache is per-browser tab, not shared; multiple tabs can have stale data",
+        "CatalogItemService always fires 3 parallel HTTP calls regardless of which data is needed — no lazy loading",
+        "CatalogItemListEndpoint implementation unknown — cannot verify pagination, filtering, or authorization"
+      ],
+      "confidence": 0.82,
+      "open_questions": [
+        "Is the catalog-items list endpoint paginated? CatalogItemService.ListPaged uses ?PageSize=10 but List() has no pagination parameter.",
+        "Is the admin UI protected by [Authorize(Roles=Administrators)]? Authorization enforcement on API side is unknown."
+      ]
+    },
+    {
+      "flow_id": "FLOW-003",
+      "name": "Add Item to Basket",
+      "entry_point": "unknown — Web project basket controller (POST /basket/add-item inferred)",
+      "steps": [
+        {
+          "step": 1,
+          "component": "unknown Web Basket Controller/Page",
+          "layer": "Presentation/UI",
+          "module": "Basket",
+          "operation": "Receives basketId (or username), catalogItemId, price, quantity"
+        },
+        {
+          "step": 2,
+          "component": "BasketService",
+          "layer": "Application Service",
+          "module": "Basket",
+          "operation": "AddItemToBasket(username, catalogItemId, price, quantity)"
+        },
+        {
+          "step": 3,
+          "component": "EfRepository<Basket>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "FirstOrDefaultAsync(BasketWithItemsSpecification(username)) — load basket with items"
+        },
+        {
+          "step": 4,
+          "component": "CatalogContext",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "SELECT Baskets WHERE BuyerId = username INCLUDE BasketItems"
+        },
+        {
+          "step": 5,
+          "component": "Basket (Entity)",
+          "layer": "Domain",
+          "module": "Basket",
+          "operation": "AddItem(catalogItemId, price, quantity) — either adds new BasketItem or increments existing"
+        },
+        {
+          "step": 6,
+          "component": "EfRepository<Basket>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "UpdateAsync(basket) — persists updated basket with items"
+        },
+        {
+          "step": 7,
+          "component": "CatalogContext",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "UPDATE Baskets + INSERT/UPDATE BasketItems (SQL Server)"
+        }
+      ],
+      "modules_touched": ["Basket", "CrossCutting"],
+      "external_systems_touched": ["SQL Server (Catalog DB — Baskets, BasketItems tables)"],
+      "data_access_components": ["EfRepository<Basket>", "CatalogContext"],
+      "risk_flags": ["Web basket controller source not available — entry point and authorization unknown"],
+      "confidence": 0.85,
+      "open_questions": [
+        "How is the price passed to AddItemToBasket? Is it taken from the catalog item at add-time or from the request? If from request, there is a price manipulation risk.",
+        "Is there a maximum basket quantity enforced?"
+      ]
+    },
+    {
+      "flow_id": "FLOW-004",
+      "name": "Checkout — Place Order",
+      "entry_point": "unknown — Web checkout controller/page (POST /checkout inferred)",
+      "steps": [
+        {
+          "step": 1,
+          "component": "unknown Web Checkout Controller/Page",
+          "layer": "Presentation/UI",
+          "module": "Order",
+          "operation": "Receives basketId and shippingAddress"
+        },
+        {
+          "step": 2,
+          "component": "OrderService",
+          "layer": "Application Service",
+          "module": "Order",
+          "operation": "CreateOrderAsync(basketId, shippingAddress)"
+        },
+        {
+          "step": 3,
+          "component": "EfRepository<Basket>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "FirstOrDefaultAsync(BasketWithItemsSpecification(basketId)) — loads basket"
+        },
+        {
+          "step": 4,
+          "component": "Guard (Domain)",
+          "layer": "Domain",
+          "module": "CrossCutting",
+          "operation": "Guard.Against.Null(basket) + Guard.Against.EmptyBasketOnCheckout(basket.Items) — throws if empty"
+        },
+        {
+          "step": 5,
+          "component": "EfRepository<CatalogItem>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "ListAsync(CatalogItemsSpecification(catalogItemIds)) — fetches catalog items for price snapshot"
+        },
+        {
+          "step": 6,
+          "component": "CatalogContext",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "SELECT from Catalog WHERE Id IN (...) — bulk fetch"
+        },
+        {
+          "step": 7,
+          "component": "UriComposer",
+          "layer": "Application Service",
+          "module": "CrossCutting",
+          "operation": "ComposePicUri(catalogItem.PictureUri) — replaces placeholder URL with actual base URL"
+        },
+        {
+          "step": 8,
+          "component": "Order (Entity)",
+          "layer": "Domain",
+          "module": "Order",
+          "operation": "new Order(buyerId, shippingAddress, items) — creates order aggregate with items as OrderItem snapshots"
+        },
+        {
+          "step": 9,
+          "component": "EfRepository<Order>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "AddAsync(order) — persists new order"
+        },
+        {
+          "step": 10,
+          "component": "CatalogContext",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "INSERT into Orders + OrderItems (SQL Server)"
+        }
+      ],
+      "modules_touched": ["Order", "Basket", "Catalog", "CrossCutting"],
+      "external_systems_touched": ["SQL Server (Catalog DB — Orders, OrderItems, Baskets, Catalog tables)"],
+      "data_access_components": ["EfRepository<Basket>", "EfRepository<CatalogItem>", "EfRepository<Order>", "CatalogContext"],
+      "risk_flags": [
+        "Basket is NOT deleted after order creation — no explicit basket cleanup in OrderService.CreateOrderAsync",
+        "All reads and writes occur in the same CatalogContext — no transaction scope defined explicitly; relies on EF Core implicit transaction",
+        "Price at order time uses catalogItem.Price from DB — correct snapshot behavior, but if catalog price changes between add-to-basket and checkout, the basket UnitPrice may differ from current DB price"
+      ],
+      "confidence": 0.88,
+      "open_questions": [
+        "Is the basket deleted/cleared after successful order creation? Not visible in OrderService.",
+        "Is there payment processing? PaymentMethod entity exists in Buyer aggregate but is not referenced anywhere in visible code.",
+        "Is there any inventory/stock tracking? Not visible in the codebase artifacts."
+      ]
+    },
+    {
+      "flow_id": "FLOW-005",
+      "name": "Anonymous Basket Transfer on Login",
+      "entry_point": "IBasketService.TransferBasketAsync (called on login — Web project event handler inferred)",
+      "steps": [
+        {
+          "step": 1,
+          "component": "unknown Web Login Handler",
+          "layer": "Presentation/UI",
+          "module": "Basket",
+          "operation": "User logs in — triggers basket transfer for anonymous session"
+        },
+        {
+          "step": 2,
+          "component": "BasketService",
+          "layer": "Application Service",
+          "module": "Basket",
+          "operation": "TransferBasketAsync(anonymousId, userName)"
+        },
+        {
+          "step": 3,
+          "component": "EfRepository<Basket>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "FirstOrDefaultAsync(BasketWithItemsSpecification(anonymousId)) — load anonymous basket"
+        },
+        {
+          "step": 4,
+          "component": "BasketService",
+          "layer": "Application Service",
+          "module": "Basket",
+          "operation": "If no anonymous basket exists, returns early. Otherwise finds or creates user basket."
+        },
+        {
+          "step": 5,
+          "component": "Basket (Entity)",
+          "layer": "Domain",
+          "module": "Basket",
+          "operation": "AddItem for each anonymous basket item into user basket"
+        },
+        {
+          "step": 6,
+          "component": "EfRepository<Basket>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "UpdateAsync(userBasket) + DeleteAsync(anonymousBasket)"
+        }
+      ],
+      "modules_touched": ["Basket", "CrossCutting"],
+      "external_systems_touched": ["SQL Server (Baskets, BasketItems tables)"],
+      "data_access_components": ["EfRepository<Basket>", "CatalogContext"],
+      "risk_flags": [
+        "If user basket already has items AND anonymous basket has same items, AddItem will increment quantity — potential unintended quantity doubling",
+        "Transfer happens in two separate UpdateAsync + DeleteAsync calls — no explicit transaction; partial failure possible"
+      ],
+      "confidence": 0.87,
+      "open_questions": ["What triggers TransferBasketAsync? Login event in Web? Cookie event? Not visible in Layer 1 artifacts."]
+    },
+    {
+      "flow_id": "FLOW-006",
+      "name": "Admin Creates Catalog Item (BlazorAdmin)",
+      "entry_point": "Blazor /CatalogItemPage/Create — CreateClick()",
+      "steps": [
+        {
+          "step": 1,
+          "component": "List (Blazor Page)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "CreateClick() → CreateComponent.Open()"
+        },
+        {
+          "step": 2,
+          "component": "Create (Blazor Component — source unknown)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "User fills form and submits"
+        },
+        {
+          "step": 3,
+          "component": "CachedCatalogItemServiceDecorator",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "Create(CreateCatalogItemRequest) → delegates to CatalogItemService.Create"
+        },
+        {
+          "step": 4,
+          "component": "CatalogItemService (BlazorAdmin)",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "HttpService.HttpPost<CreateCatalogItemResponse>('catalog-items', catalogItem)"
+        },
+        {
+          "step": 5,
+          "component": "unknown CatalogItemCreateEndpoint",
+          "layer": "API",
+          "module": "Catalog",
+          "operation": "POST api/catalog-items — validates, creates CatalogItem entity"
+        },
+        {
+          "step": 6,
+          "component": "EfRepository<CatalogItem>",
+          "layer": "Data Access",
+          "module": "CrossCutting",
+          "operation": "AddAsync(catalogItem) — inserts into Catalog table"
+        },
+        {
+          "step": 7,
+          "component": "CachedCatalogItemServiceDecorator",
+          "layer": "Presentation/UI",
+          "module": "Admin",
+          "operation": "RefreshLocalStorageList() — clears and reloads localStorage cache"
+        }
+      ],
+      "modules_touched": ["Admin", "Catalog", "CrossCutting"],
+      "external_systems_touched": ["SQL Server (Catalog table)"],
+      "data_access_components": ["EfRepository<CatalogItem>", "CatalogContext"],
+      "risk_flags": [
+        "Create endpoint source not in Layer 1 — authorization (Administrators role required?) is unknown",
+        "Image upload via base64 in CreateCatalogItemRequest — large images could cause request size issues"
+      ],
+      "confidence": 0.78,
+      "open_questions": [
+        "How is the picture stored? CreateCatalogItemRequest has PictureBase64 and PictureName fields — is there a file upload endpoint?",
+        "Is the create endpoint protected by [Authorize(Roles=Administrators)]?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+%% Generated from source evidence. Unknown items are marked as unknown.
+flowchart TB
+  subgraph Catalog["Catalog"]
+    Catalog_CachedCatalogItemServiceDecorator["CachedCatalogItemServiceDecorator (FrontendService)"]
+    Catalog_CachedCatalogLookupDataServiceDecorator["CachedCatalogLookupDataServiceDecorator (FrontendService)"]
+    Catalog_CachedCatalogViewModelService["CachedCatalogViewModelService (Service)"]
+    Catalog_CatalogBrand["CatalogBrand (Entity)"]
+    Catalog_CatalogBrand["CatalogBrand (DTO)"]
+  end
+  subgraph Identity["Identity"]
+    Identity_AppIdentityDbContext["AppIdentityDbContext (Repository)"]
+    Identity_AppIdentityDbContextSeed["AppIdentityDbContextSeed (BatchJob)"]
+    Identity_ApplicationUser["ApplicationUser (Entity)"]
+    Identity_AuthenticateEndpoint["AuthenticateEndpoint (Controller)"]
+    Identity_AuthenticateRequest["AuthenticateRequest (DTO)"]
+  end
+  subgraph Verification["Verification"]
+    Verification_AccountControllerSignIn["AccountControllerSignIn (Controller)"]
+    Verification_AddItemToBasket["AddItemToBasket (Service)"]
+    Verification_AddressBuilder["AddressBuilder (Unknown)"]
+    Verification_ApiTokenHelper["ApiTokenHelper (Unknown)"]
+    Verification_ApiTokenHelper["ApiTokenHelper (Unknown)"]
+  end
+  subgraph Admin["Admin"]
+    Admin_App["App (FrontendComponent)"]
+    Admin_BlazorComponent["BlazorComponent (FrontendComponent)"]
+    Admin_BlazorLayoutComponent["BlazorLayoutComponent (FrontendComponent)"]
+    Admin_CacheEntry["CacheEntry (FrontendService)"]
+    Admin_Cookies["Cookies (Unknown)"]
+  end
+  subgraph Basket["Basket"]
+    Basket_Basket["Basket (Entity)"]
+    Basket_Basket["Basket (FrontendComponent)"]
+    Basket_BasketComponentViewModel["BasketComponentViewModel (DTO)"]
+    Basket_BasketConfiguration["BasketConfiguration (Configuration)"]
+    Basket_BasketGuards["BasketGuards (Service)"]
+  end
+  subgraph Order["Order"]
+    Order_Address["Address (Entity)"]
+    Order_Buyer["Buyer (Entity)"]
+    Order_CustomerOrdersSpecification["CustomerOrdersSpecification (Repository)"]
+    Order_CustomerOrdersWithItemsSpecification["CustomerOrdersWithItemsSpecification (Repository)"]
+    Order_Detail["Detail (FrontendComponent)"]
+  end
+  subgraph Web["Web"]
+    Web_ApiHealthCheck["ApiHealthCheck (Service)"]
+    Web_BaseApiController["BaseApiController (Controller)"]
+    Web_CacheHelpers["CacheHelpers (Service)"]
+    Web_EmailSenderExtensions["EmailSenderExtensions (Service)"]
+    Web_Error["Error (FrontendComponent)"]
+  end
+  subgraph ApplicationCore["ApplicationCore"]
+    ApplicationCore_BaseEntity["BaseEntity (Entity)"]
+    ApplicationCore_DuplicateException["DuplicateException (Unknown)"]
+    ApplicationCore_IAggregateRoot["IAggregateRoot (Entity)"]
+    ApplicationCore_IAppLogger["IAppLogger (Service)"]
+    ApplicationCore_IBasketQueryService["IBasketQueryService (Service)"]
+  end

@@ -1,0 +1,59 @@
+{
+  "db_connection": "CODE-ONLY — db_connection_results empty in extraction. Complexity scoring below is based on code structure (entity count, cross-DB references, owned types) — no live schema diff was possible.",
+  "overall_complexity": "MEDIUM",
+  "rationale": "Small entity surface (7 EF entities in CatalogContext + standard ASP.NET Identity schema), but two separate databases with an unenforced cross-database FK (BuyerId) increase migration risk — any migration tooling that assumes a single schema/transaction boundary will not be able to enforce referential integrity across CatalogDb and IdentityDb.",
+  "per_table_complexity": [
+    { "table": "CatalogBrands", "complexity": "LOW", "reason": "Simple lookup table, 2 columns, no FK dependents besides Catalog.", "confidence": 0.8 },
+    { "table": "CatalogTypes", "complexity": "LOW", "reason": "Simple lookup table, 2 columns.", "confidence": 0.8 },
+    { "table": "Catalog", "complexity": "MEDIUM", "reason": "Referenced by BasketItems and OrderItems; FK delete-behavior unknown (UNKNOWN, see data-quality-report.md). Migrating this table requires checking for orphaned-row handling.", "confidence": 0.75 },
+    { "table": "Baskets", "complexity": "MEDIUM", "reason": "Cross-database soft FK (BuyerId -> IdentityDb.AspNetUsers.Id) cannot be validated by migration tooling automatically.", "confidence": 0.8 },
+    { "table": "BasketItems", "complexity": "LOW", "reason": "Straightforward child table with two FKs into CatalogDb only.", "confidence": 0.8 },
+    { "table": "Orders", "complexity": "MEDIUM", "reason": "Owned-type Address flattened into columns (5 extra columns) + cross-database soft FK BuyerId.", "confidence": 0.8 },
+    { "table": "OrderItems", "complexity": "MEDIUM", "reason": "Owned-type CatalogItemOrdered flattened into columns; denormalized snapshot data needs careful handling during schema migration (don't accidentally re-link to live Catalog).", "confidence": 0.8 },
+    { "table": "AspNetUsers / AspNetRoles / Identity tables", "complexity": "LOW", "reason": "Standard ASP.NET Core Identity schema — well-documented, tooling (dotnet ef) handles migrations automatically. INFERRED, confidence 0.7." }
+  ],
+  "cross_database_concerns": [
+    {
+      "concern": "BuyerId soft references (Baskets.BuyerId, Orders.BuyerId -> AspNetUsers.Id)",
+      "impact": "Any migration that changes AspNetUsers.Id type/format (e.g. switching from string GUID to int) would silently break Basket/Order ownership with no DB-level error.",
+      "confidence": 0.8
+    }
+  ],
+  "unresolved_items": [],
+  "resolved_items": [
+    {
+      "item": "Buyer / PaymentMethod entities not present in supplied ef_entities list",
+      "resolution": "CONFIRMED dead/aspirational code — not mapped to any DbContext (CatalogContext has only 7 DbSets; AppIdentityDbContext.OnModelCreating only calls base). No migration impact.",
+      "confidence": 0.9
+    }
+  ],
+  "estimated_effort": {
+    "schema_migration": "LOW-MEDIUM — 9 confirmed tables (7 CatalogDb + ~6-7 Identity tables, standard scaffolding). NOTE: schema is already on PostgreSQL (Npgsql) per InitialPostgres migrations dated 2026-05-26 — see RC-001 in schema-catalogue.json — so a SQL-Server-to-Postgres migration may already be largely complete; remaining risk is the stale SQL Server connection strings still present in appsettings.Docker.json.",
+    "data_migration": "UNKNOWN — row counts not available (db not connected)",
+    "application_code_changes": "MEDIUM — repository/specification pattern (IRepository, IReadRepository) centralizes data access, which helps; but cross-DB BuyerId logic is spread across BasketService and OrderService (src/ApplicationCore/Services/)."
+  },
+  "change_records": [
+    {
+      "change_id": "RC-002b",
+      "type": "CORRECTED",
+      "finding_id": "migration-complexity.json — unresolved_items (Buyer/PaymentMethod)",
+      "what": "Moved from unresolved_items to resolved_items: Buyer/PaymentMethod confirmed not mapped to any table, so they carry zero migration impact.",
+      "evidence_source": "entity/ORM code",
+      "evidence_detail": "src/Infrastructure/Data/CatalogContext.cs (7 DbSets only); src/Infrastructure/Identity/AppIdentityDbContext.cs (no custom entity config)",
+      "confidence_before": 0.6,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    },
+    {
+      "change_id": "RC-001c",
+      "type": "ENRICHED",
+      "finding_id": "migration-complexity.json — estimated_effort.schema_migration",
+      "what": "Added note that the codebase already has PostgreSQL migrations (InitialPostgres, 2026-05-26) registered via Npgsql, so a prior SQL Server -> Postgres migration appears largely done; the only loose end is stale SQL Server connection strings in appsettings.Docker.json.",
+      "evidence_source": "migration files",
+      "evidence_detail": "src/Infrastructure/Data/Migrations/20260526102924_InitialPostgres.cs; src/Infrastructure/Identity/Migrations/20260526102952_InitialPostgres.Designer.cs",
+      "confidence_before": 0.75,
+      "confidence_after": 0.9,
+      "phase_found": "Phase 4 spot check"
+    }
+  ]
+}

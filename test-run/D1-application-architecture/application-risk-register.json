@@ -1,0 +1,178 @@
+{
+  "risks": [
+    {
+      "risk_id": "APP-RISK-001",
+      "category": "Shared Data Model",
+      "description": "Single CatalogContext DbContext spans Basket, Catalog, and Order domains. Schema changes to any one domain risk breaking all others. No independent schema ownership or migration isolation.",
+      "affected_modules": ["Basket", "Catalog", "Order", "Infrastructure-Cross-Cutting"],
+      "affected_components": ["CatalogContext", "EfRepository<T>"],
+      "severity": "High",
+      "forward_engineering_impact": "Cannot independently deploy Catalog, Basket, or Order as separate services without first splitting CatalogContext. This is the #1 migration blocker.",
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/CatalogContext.cs",
+          "reason": "7 DbSets across 3 business domains in one context"
+        },
+        {
+          "file": "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs",
+          "reason": "All tables created in single migration: Baskets, CatalogBrands, CatalogTypes, Catalog (items), Orders, OrderItems, BasketItems"
+        }
+      ],
+      "recommendation": "Plan bounded context split as prerequisite step. Design separate schema per module before service extraction.",
+      "confidence": 0.99
+    },
+    {
+      "risk_id": "APP-RISK-002",
+      "category": "Migration Blocker",
+      "description": "Hardcoded JWT secret key and default credentials in source code (AuthorizationConstants). Any deployment of forward-engineered services will inherit this critical security flaw unless explicitly addressed.",
+      "affected_modules": ["Authentication"],
+      "affected_components": ["AuthorizationConstants", "IdentityTokenClaimService"],
+      "severity": "Critical",
+      "forward_engineering_impact": "Blocks production deployment of any service using JWT authentication. Must be resolved in sprint 1 of any migration.",
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Constants/AuthorizationConstants.cs",
+          "reason": "JWT_SECRET_KEY hardcoded; DEFAULT_PASSWORD hardcoded"
+        }
+      ],
+      "recommendation": "Rotate secret immediately. Move to Azure Key Vault or environment variables. Remove default password from source.",
+      "confidence": 0.99
+    },
+    {
+      "risk_id": "APP-RISK-003",
+      "category": "Cross-Module Leakage",
+      "description": "OrderService reads Basket data directly via IRepository<Basket>. If Basket module is extracted, this coupling will break the Order module. Checkout flow requires coordination across two domain boundaries without a formal interface.",
+      "affected_modules": ["Order", "Basket"],
+      "affected_components": ["OrderService"],
+      "severity": "High",
+      "forward_engineering_impact": "If Basket → Catalog extraction sequence is chosen, Order module cannot be migrated before this coupling is resolved. Requires design of a checkout domain event or checkout request DTO.",
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Services/OrderService.cs",
+          "reason": "IRepository<Basket> injected; basket.Items directly accessed"
+        }
+      ],
+      "recommendation": "Introduce CheckoutSummary DTO. Basket module produces it; Order module consumes it. Decouple at application service boundary.",
+      "confidence": 0.95
+    },
+    {
+      "risk_id": "APP-RISK-004",
+      "category": "High Coupling",
+      "description": "EfRepository<T> is a single generic repository used across all domains. No domain isolation. Any change to repository behavior (caching, auditing, soft-delete) applies universally without per-domain control.",
+      "affected_modules": ["Basket", "Catalog", "Order", "Authentication"],
+      "affected_components": ["EfRepository<T>"],
+      "severity": "Medium",
+      "forward_engineering_impact": "When modules are extracted, each will need its own repository implementation. The generic EfRepository pattern is portable but will need to be replicated per service.",
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/EfRepository.cs",
+          "reason": "Single class implements IReadRepository<T> and IRepository<T> for all aggregate roots"
+        }
+      ],
+      "recommendation": "Acceptable for now. Plan per-module repository classes when splitting contexts.",
+      "confidence": 0.90
+    },
+    {
+      "risk_id": "APP-RISK-005",
+      "category": "Unknown Entry Point",
+      "description": "The Web project (MVC/Razor Pages) controllers and pages are not captured in the Layer 1 extraction. Key flows — basket management UI, checkout page, order history, catalog browsing — are present in the deployable unit but not analyzed. Architecture of the primary user-facing application is incomplete.",
+      "affected_modules": ["Basket", "Order", "Catalog", "Authentication"],
+      "affected_components": ["unknown Web controllers/pages"],
+      "severity": "High",
+      "forward_engineering_impact": "Cannot safely plan migration sequence without knowing what the Web project exposes. May contain additional services, controllers, or business logic not visible in this extraction.",
+      "evidence": [
+        {
+          "file": "azure.yaml",
+          "reason": "services.web.project = './src/Web' — primary deployable unit; no source captured in extraction"
+        }
+      ],
+      "recommendation": "Run a second extraction pass specifically targeting src/Web — controllers, Razor pages, ViewModels, and startup configuration.",
+      "confidence": 0.99
+    },
+    {
+      "risk_id": "APP-RISK-006",
+      "category": "Unclear Module Boundary",
+      "description": "The Buyer aggregate (Buyer, PaymentMethod) has no service, no repository registration, no DbContext DbSet, and no API surface. Its purpose and ownership are unclear. It may be dead code, planned future functionality, or used in the Web project (not extracted).",
+      "affected_modules": ["Buyer"],
+      "affected_components": ["Buyer", "PaymentMethod"],
+      "severity": "Medium",
+      "forward_engineering_impact": "If Buyer is intended as a future payment/profile module, it needs domain service and repository design before forward engineering. If dead code, it should be removed to avoid confusion during migration.",
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Entities/BuyerAggregate/Buyer.cs",
+          "reason": "IAggregateRoot marker — intended as domain aggregate but no service"
+        }
+      ],
+      "recommendation": "Human review required. Decision: scope Buyer as future Payment module or remove.",
+      "confidence": 0.80
+    },
+    {
+      "risk_id": "APP-RISK-007",
+      "category": "Integration Scatter",
+      "description": "BlazorAdmin makes multiple independent HTTP calls per page (brands, types, items) and joins them client-side. As the admin catalog grows, this fan-out pattern increases API call count proportionally. No API aggregation layer exists.",
+      "affected_modules": ["Catalog", "BlazorAdmin-UI"],
+      "affected_components": ["CatalogItemService (Blazor)", "HttpService"],
+      "severity": "Medium",
+      "forward_engineering_impact": "When Catalog API is redesigned, the client-side join pattern should be replaced with a server-side composed response. Admin API should return enriched items directly.",
+      "evidence": [
+        {
+          "file": "src/BlazorAdmin/Services/CatalogItemService.cs",
+          "reason": "Task.WhenAll for 3 parallel API calls then client-side LINQ join per page load"
+        }
+      ],
+      "recommendation": "Design CatalogItemListResponse with embedded brand/type names. Eliminate client-side join.",
+      "confidence": 0.90
+    },
+    {
+      "risk_id": "APP-RISK-008",
+      "category": "Authentication",
+      "description": "Two separate DbContexts (CatalogContext for business, AppIdentityDbContext for identity) require two separate database connections and migrations. Authentication state is maintained separately from domain state. If identity database is unavailable, entire application authentication fails.",
+      "affected_modules": ["Authentication", "Infrastructure-Cross-Cutting"],
+      "affected_components": ["AppIdentityDbContext", "CatalogContext"],
+      "severity": "Medium",
+      "forward_engineering_impact": "Separate identity DB is good practice for microservice decomposition. In forward engineering, identity/auth service can be extracted independently. This is actually an architectural strength.",
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Dependencies.cs",
+          "reason": "Two separate DbContext registrations: CatalogContext (CatalogConnection) and AppIdentityDbContext (IdentityConnection)"
+        }
+      ],
+      "recommendation": "Preserve this separation. Plan to extract Identity/Auth as a standalone service in later migration phases.",
+      "confidence": 0.95
+    },
+    {
+      "risk_id": "APP-RISK-009",
+      "category": "Forward Engineering Risk",
+      "description": "Basket transfer on user login (anonymous → authenticated) is a stateful flow that requires transactional consistency across two Basket records. If Basket is extracted to a separate service, this two-record transaction cannot span services without distributed transaction support.",
+      "affected_modules": ["Basket"],
+      "affected_components": ["BasketService"],
+      "severity": "Medium",
+      "forward_engineering_impact": "Basket extraction must account for the TransferBasketAsync pattern. Either: (a) keep basket transfer in a dedicated checkout/session service, or (b) use optimistic/eventual consistency with compensating actions.",
+      "evidence": [
+        {
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "reason": "TransferBasketAsync: loads two baskets, copies items, deletes anonymous basket — effectively a 2-record transaction"
+        }
+      ],
+      "recommendation": "Document this as a distributed transaction risk in migration planning. Design with idempotency.",
+      "confidence": 0.90
+    },
+    {
+      "risk_id": "APP-RISK-010",
+      "category": "Large Component",
+      "description": "CatalogContext.cs accumulates EF entity configurations for all domains via ApplyConfigurationsFromAssembly. As the application grows, this DbContext will continue to expand. Its size is currently manageable but will become a regression risk.",
+      "affected_modules": ["Infrastructure-Cross-Cutting"],
+      "affected_components": ["CatalogContext"],
+      "severity": "Low",
+      "forward_engineering_impact": "Already handled by splitting recommendation in APP-RISK-001. Track separately because configuration discovery via Assembly scan makes it harder to audit what's registered.",
+      "evidence": [
+        {
+          "file": "src/Infrastructure/Data/CatalogContext.cs",
+          "reason": "builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()) — implicit config loading"
+        }
+      ],
+      "recommendation": "Explicitly register entity configurations per bounded context when splitting.",
+      "confidence": 0.88
+    }
+  ]
+}
