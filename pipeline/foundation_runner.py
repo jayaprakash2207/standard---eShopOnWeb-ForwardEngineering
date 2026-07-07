@@ -208,7 +208,7 @@ def run(output_dir: str) -> None:
     combined_output = call_claude(foundation_prompt, label="Foundation Synthesis", timeout=3600, allow_tools=False)
 
     # ── Save raw combined output ───────────────────────────────────────────────
-    save_output(output_dir, "foundation_raw_output.md", combined_output)
+    save_output(output_dir, "Foundation_Raw_Output.md", combined_output)
 
     # ── Split into individual documents ───────────────────────────────────────
     print("\n[Foundation] Splitting documents...")

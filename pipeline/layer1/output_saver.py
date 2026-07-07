@@ -16,10 +16,10 @@ class OutputSaver:
         saved: Dict[str, str] = {}
 
         file_map = {
-            "source_code": "source_code.json",
-            "database": "database.json",
-            "config": "config.json",
-            "logs": "logs.json",
+            "source_code": "Source_Code.json",
+            "database": "Database.json",
+            "config": "Config.json",
+            "logs": "Logs.json",
         }
 
         for key, filename in file_map.items():
@@ -27,7 +27,7 @@ class OutputSaver:
                 saved[key] = self._write(cleaned[key], output_dir, filename)
 
         summary = self._build_summary(cleaned, metadata, saved)
-        saved["summary"] = self._write(summary, output_dir, "extraction_summary.json")
+        saved["summary"] = self._write(summary, output_dir, "Extraction_Summary.json")
 
         return {"saved_files": saved, "summary": summary}
 

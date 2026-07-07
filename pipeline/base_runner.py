@@ -76,11 +76,11 @@ def load_layer1(input_dir: str) -> dict:
         return {}
 
     return {
-        "source_code": read("source_code.json"),
-        "database":    read("database.json"),
-        "config":      read("config.json"),
-        "logs":        read("logs.json"),
-        "summary":     read("extraction_summary.json"),
+        "source_code": read("Source_Code.json"),
+        "database":    read("Database.json"),
+        "config":      read("Config.json"),
+        "logs":        read("Logs.json"),
+        "summary":     read("Extraction_Summary.json"),
     }
 
 
