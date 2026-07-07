@@ -2,6 +2,8 @@
 
 A complete, production-ready enterprise architecture package reverse-engineered from the eShopOnWeb .NET 8 reference application. Includes 20 architecture documents, a 274-node knowledge graph, 8 ready-to-paste AI prompts, and a **fully automated pipeline** that runs the entire analysis with a single command.
 
+**Production hardened:** auto-retries on Claude API failures (3 attempts, 30s wait), resumes from last completed step if interrupted — safe to re-run at any time.
+
 ---
 
 ## Two Ways to Use This
@@ -332,6 +334,10 @@ standard---eShopOnWeb-ForwardEngineering/
 ---
 
 ## Changelog
+
+### v1.3 (2026-07-07)
+- **Retry logic** — Every Claude call now automatically retries up to 3 times (30s wait between attempts) on rate limits, timeouts, or session errors. Only fails after all 3 attempts are exhausted.
+- **Resume logic** — Every agent checks if its output file already exists before running. If yes, it skips and reuses the saved output. Foundation Call 1 and Call 2 each check for their raw output files. Re-running the same command after any interruption resumes from where it stopped — no wasted time, no duplicate work.
 
 ### v1.2 (2026-07-07)
 - **Foundation truncation fix** — Foundation step now makes 2 sequential Claude calls (Call 1: KG + docs 01–10, Call 2: docs 11–20). Previously Claude hit its output limit after doc 06, leaving 15 documents unwritten. All 25 documents are now produced correctly.
