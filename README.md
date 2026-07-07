@@ -135,59 +135,152 @@ python pipeline/foundation_runner.py --output $out
 
 ## Pipeline Architecture
 
+The pipeline runs **8 steps** using 9 Claude agent calls across 4 analysis layers. Steps 1–3 are sequential. Steps 4–7 fan out into **3 parallel threads**. Step 8 synthesises everything.
+
+### Execution Flow
+
 ```
-INPUT: Legacy codebase (GitHub URL / local path)
-         │
-         ▼
-┌─────────────────────────────────────────────────────────┐
-│  STEP 1 — Layer 1 (Python AST, NO LLM, ~5 min)         │
-│  → source_code.json  database.json  config.json         │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│  STEP 2 — BA Agent 1: Structural Scout (~15 min)        │
-│  → 6 inventory files (entities, states, roles, caps)   │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│  STEP 3 — BA Agent 2: Deep Analyst (~15 min)            │
-│  → 8 business docs (rules, processes, value streams)   │
-└──────────┬───────────┴──────────────┬───────────────────┘
-           │                          │
-    ┌──────▼──────┐  ┌───────▼──────┐  ┌──────▼──────┐
-    │  THREAD 1   │  │  THREAD 2    │  │  THREAD 3   │
-    │  DA track   │  │  TA track    │  │  AA track   │
-    │  Steps 4-5  │  │  Steps 6-7   │  │  Steps 8-9  │
-    │  ~20 min    │  │  ~20 min     │  │  ~25 min    │
-    │             │  │              │  │  (Claude,   │
-    │  schema,ERD │  │  blueprint,  │  │  not Python)│
-    │  PII, flows │  │  security,   │  │             │
-    │             │  │  NFRs, debt  │  │  services,  │
-    └──────┬──────┘  └───────┬──────┘  │  APIs, DI   │
-           │                 │         │  wiring     │
-           └─────────────────┴─────────┴──────┬──────┘
-                                              │
-                                              ▼
-┌─────────────────────────────────────────────────────────┐
-│  STEP 10 — Foundation: Knowledge Graph + 20 Docs        │
-│  (~30 min)                                              │
-│  → ENTERPRISE_KNOWLEDGE_GRAPH.json                      │
-│  → CANONICAL_ENTERPRISE_MODEL.md                        │
-│  → ARCHITECTURE_INVENTORY.md                            │
-│  → TRACEABILITY_MATRIX.md                               │
-│  → 20 forward-engineering documents                     │
-└─────────────────────────────────────────────────────────┘
+INPUT: Legacy codebase (GitHub URL or local path)
+       │
+       ▼
+┌──────────────────────────────────────────────────────────┐
+│  STEP 1 — Layer 1: Source Extraction                     │
+│  Pure Python AST — zero LLM calls — ~5 min              │
+│                                                          │
+│  Reads: .cs, .json, .yml, .csproj, migrations           │
+│  → Source_Extraction/Source_Code.json                    │
+│     (all classes, methods, fields, namespaces)           │
+│  → Source_Extraction/Database.json                       │
+│     (tables, columns, relationships, indexes)            │
+│  → Source_Extraction/Config.json                         │
+│     (all config keys/values from appsettings files)      │
+│  → Source_Extraction/Logs.json                           │
+│     (log patterns and event names)                       │
+│  → Source_Extraction/Extraction_Summary.json             │
+└──────────────────────────┬───────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────┐
+│  STEP 2 — BA Agent 1: Structural Scout                   │
+│  Claude agent — ~15 min                                  │
+│                                                          │
+│  Reads: Layer 1 JSON + source files                      │
+│  Maps what exists — entity names, state values, roles,   │
+│  method signatures. No interpretation, no meaning.       │
+│  → Business_Analysis/BA_Structural_Scout.md              │
+│     6 structured inventory files:                        │
+│     entity list · state machines · roles & permissions   │
+│     business capabilities · API surface · module map     │
+└──────────────────────────┬───────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────┐
+│  STEP 3 — BA Agent 2: Deep Analyst                       │
+│  Claude agent — ~15 min                                  │
+│                                                          │
+│  Reads: BA_Structural_Scout.md + Layer 1 JSON            │
+│  Reads method bodies, validation logic, state            │
+│  transitions, call chains — interprets business meaning  │
+│  → Business_Analysis/BA_Deep_Analyst.md                  │
+│     8 business architecture artifacts:                   │
+│     business rules catalogue · process models            │
+│     value streams · domain boundaries · capability map   │
+└────────┬──────────────────┬──────────────────┬───────────┘
+         │                  │                  │
+         ▼                  ▼                  ▼
+  ┌─────────────┐   ┌──────────────┐   ┌──────────────┐
+  │ DATA TRACK  │   │ TECH TRACK   │   │  APP TRACK   │
+  │ Thread 1    │   │ Thread 2     │   │  Thread 3    │
+  ├─────────────┤   ├──────────────┤   ├──────────────┤
+  │ STEP 4      │   │ STEP 4       │   │  STEP 4      │
+  │ DA Agent 1  │   │ TA Agent 1   │   │  AA Agent 1  │
+  │ Data        │   │ Stack Scout  │   │  App         │
+  │ Extractor   │   │ ~15 min      │   │  Extractor   │
+  │ ~15 min     │   │              │   │  ~25 min     │
+  │             │   │ Inventories: │   │              │
+  │ Schema,ERD, │   │ runtime,     │   │ Component    │
+  │ data dict,  │   │ frameworks,  │   │ registry, DI │
+  │ PII reg,    │   │ data stores, │   │ wiring, call │
+  │ data flows  │   │ security     │   │ flows, arch  │
+  │             │   │ libs, CI/CD, │   │ violations   │
+  │             │   │ infra        │   │              │
+  ├─────────────┤   ├──────────────┤   ├──────────────┤
+  │ STEP 5      │   │ STEP 5       │   │  STEP 5      │
+  │ DA Agent 2  │   │ TA Agent 2   │   │  AA Agent 2  │
+  │ Data        │   │ Deep Analyst │   │  Quality     │
+  │ Reviewer    │   │ ~15 min      │   │  Review      │
+  │ ~15 min     │   │              │   │  ~15 min     │
+  │             │   │ Arch pattern │   │              │
+  │ Validates   │   │ catalog, NFR │   │ PASS /       │
+  │ schema,     │   │ spec, secu-  │   │ PARTIAL /    │
+  │ enriches    │   │ rity arch,   │   │ FAIL verdict │
+  │ findings,   │   │ tech debt    │   │ + evidence   │
+  │ open qs     │   │ register     │   │ traceability │
+  └──────┬──────┘   └──────┬───────┘   └──────┬───────┘
+         └──────────────────┴──────────────────┘
+                            │
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│  STEP 8 — Foundation: Knowledge Graph + 20 Documents     │
+│  2 sequential Claude calls — ~30 min total               │
+│                                                          │
+│  Reads: Business_Analysis/ · Data_Analysis/              │
+│         Technology_Analysis/ · Application_Analysis/     │
+│                                                          │
+│  Call 1 (~15 min) → KG + foundation views + docs 01–10  │
+│  Call 2 (~15 min) → docs 11–20 (receives KG as context) │
+│                                                          │
+│  → Foundation_KnowledgeGraph/                            │
+│      ENTERPRISE_KNOWLEDGE_GRAPH.json  (274 nodes)        │
+│      CANONICAL_ENTERPRISE_MODEL.md                       │
+│      ARCHITECTURE_INVENTORY.md                           │
+│      TRACEABILITY_MATRIX.md                              │
+│      FORWARD_ENGINEERING_INPUT_MAP.md                    │
+│  → ForwardEngineering_Docs/                              │
+│      01_BRD.md through 20_UI_UX_SPECIFICATION.md         │
+└──────────────────────────────────────────────────────────┘
 
 Total wall clock: ~1.5–2 hours
+Parallel tracks wall clock = slowest thread only (~25 min), not the sum
 ```
 
-**Key design decisions:**
-- Layer 1 is deterministic Python — zero LLM calls, zero token cost, reads what is actually in the code
-- BA agents run sequentially (Agent 2 needs Agent 1's output)
-- DA, TA, AA run in 3 parallel threads — wall clock = slowest track only
-- AA layer uses Claude (not Python) — catches correct method signatures, DI wiring, architecture violations
+### Step-by-Step Reference
+
+| Step | Agent | Input | Output File | Produces |
+|---|---|---|---|---|
+| 1 | Layer 1 (Python) | Source code | Source_Code.json · Database.json · Config.json · Logs.json | Full class/method/field inventory, DB schema, all config keys — **no LLM** |
+| 2 | BA Agent 1 | Layer 1 JSON + source | BA_Structural_Scout.md | Entity list, state machines, roles, capabilities, API surface, module map |
+| 3 | BA Agent 2 | BA_Structural_Scout.md | BA_Deep_Analyst.md | Business rules, processes, value streams, domain boundaries, capability map |
+| 4† | DA Agent 1 | Layer 1 JSON | DA_Data_Extractor.md | Schema catalogue, ERD, data dictionary, PII register, data flows |
+| 5† | DA Agent 2 | DA_Data_Extractor.md | DA_Data_Reviewer.md | Validated schema, enriched findings, open questions for review |
+| 4† | TA Agent 1 | Layer 1 JSON + infra files | TA_Stack_Scout.md | Runtime, frameworks, data stores, security libs, CI/CD, infra inventory |
+| 5† | TA Agent 2 | TA_Stack_Scout.md | TA_Deep_Analyst.md | Architecture pattern catalogue, NFR spec, security analysis, tech debt register |
+| 4† | AA Agent 1 | Layer 1 JSON + service files | AA_App_Extractor.md | Component registry, module boundaries, call flow map, DI wiring, violations |
+| 5† | AA Agent 2 | AA_App_Extractor.md | AA_Quality_Review.md | PASS / PARTIAL / FAIL verdict, evidence traceability report |
+| 8 | Foundation (2 calls) | All \*_Analysis/ folders | 5 KG files + 20 FE docs | Enterprise Knowledge Graph + 20 forward-engineering documents |
+
+> **†** Steps marked 4† and 5† run inside 3 parallel threads simultaneously. Wall clock time = slowest thread, not the sum.
+
+### Resilience — Retry and Resume
+
+Every Claude call has two automatic protections built into [pipeline/base_runner.py](pipeline/base_runner.py):
+
+**Retry** — on any failure (rate limit, timeout, non-zero exit code) the runner waits 30 seconds and retries, up to 3 attempts. Only raises an error after all 3 attempts fail.
+
+**Resume** — before calling Claude, every runner checks whether its output file already exists and is non-empty. If yes, it loads the saved file and skips the call. Foundation checks `Foundation_Raw_Output_Part1.md` before Call 1 and `Foundation_Raw_Output_Part2.md` before Call 2.
+
+Practical effect: re-running the same command after any interruption resumes from exactly where it stopped — no repeated work, no overwritten outputs.
+
+### Key Design Decisions
+
+| Decision | Reason |
+|---|---|
+| Layer 1 is pure Python AST — no LLM | Deterministic, zero token cost, reads what is actually in the code — not what Claude guesses |
+| BA agents run sequentially before all others | BA_Structural_Scout.md gives the entity and capability map that DA, TA, and AA agents all use as their starting point |
+| DA / TA / AA run in 3 parallel threads | All three tracks are independent — no cross-track data dependency — so running them in parallel cuts wall clock by ~2/3 |
+| AA uses Claude, not Python | Catches DI wiring patterns, constructor injection, architecture violations, and cross-layer call chains that static Python AST analysis cannot see |
+| Foundation uses 2 sequential Claude calls | Claude has a per-response output limit. Generating all 25 documents in one call hits that limit after ~doc 06. Call 1 produces the KG + docs 01–10; Call 2 receives the KG as context and produces docs 11–20 |
+| All output files are plain text or JSON | No proprietary formats — any downstream tool, LLM, or human can read them directly |
 
 ---
 
