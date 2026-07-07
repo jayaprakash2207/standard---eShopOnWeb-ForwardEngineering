@@ -233,44 +233,55 @@ def run(output_dir: str) -> None:
     foundation_dir.mkdir(parents=True, exist_ok=True)
     fwd_eng_dir.mkdir(parents=True, exist_ok=True)
 
+    part1_raw = Path(output_dir) / "Foundation_Raw_Output_Part1.md"
+    part2_raw = Path(output_dir) / "Foundation_Raw_Output_Part2.md"
+
     # ── Call 1: KG + foundation docs + docs 01–10 ─────────────────────────────
-    print("\n[Foundation] Call 1 — Enterprise Knowledge Graph + docs 01–10...")
-    call1_prompt = (
-        f"{CALL1_PROMPT}\n\n"
-        f"# All Layer Outputs\n\n"
-        f"{all_layer_text}\n\n"
-        f"Begin Part 1 now."
-    )
-    call1_output = call_claude(call1_prompt, label="Foundation Call 1 (KG + docs 01-10)", timeout=3600, allow_tools=False)
-    save_output(output_dir, "Foundation_Raw_Output_Part1.md", call1_output)
-
-    docs1 = _split_documents(call1_output)
-    saved1 = _save_docs(docs1, foundation_dir, fwd_eng_dir)
-    print(f"  Call 1: {len(saved1)} documents saved.")
-
-    if not docs1:
-        print("  [Warning] Call 1 — no markers found. Saving raw output.")
-        save_output(str(foundation_dir), "Foundation_Call1_Raw.md", call1_output)
+    if part1_raw.exists() and part1_raw.stat().st_size > 0:
+        print("\n[Foundation] Call 1 — already done, loading saved output...")
+        call1_output = part1_raw.read_text(encoding="utf-8")
+        docs1 = _split_documents(call1_output)
+        print(f"  Loaded {len(docs1)} documents from previous run.")
+    else:
+        print("\n[Foundation] Call 1 — Enterprise Knowledge Graph + docs 01–10...")
+        call1_prompt = (
+            f"{CALL1_PROMPT}\n\n"
+            f"# All Layer Outputs\n\n"
+            f"{all_layer_text}\n\n"
+            f"Begin Part 1 now."
+        )
+        call1_output = call_claude(call1_prompt, label="Foundation Call 1 (KG + docs 01-10)", timeout=3600, allow_tools=False)
+        save_output(output_dir, "Foundation_Raw_Output_Part1.md", call1_output)
+        docs1 = _split_documents(call1_output)
+        saved1 = _save_docs(docs1, foundation_dir, fwd_eng_dir)
+        print(f"  Call 1: {len(saved1)} documents saved.")
+        if not docs1:
+            print("  [Warning] Call 1 — no markers found. Saving raw output.")
+            save_output(str(foundation_dir), "Foundation_Call1_Raw.md", call1_output)
 
     # ── Call 2: docs 11–20 (receives KG as context) ───────────────────────────
-    print("\n[Foundation] Call 2 — docs 11–20...")
-    call2_prompt = (
-        f"{CALL2_PROMPT}"
-        f"{call1_output}\n\n"
-        f"Begin Part 2 now."
-    )
-    call2_output = call_claude(call2_prompt, label="Foundation Call 2 (docs 11-20)", timeout=3600, allow_tools=False)
-    save_output(output_dir, "Foundation_Raw_Output_Part2.md", call2_output)
+    if part2_raw.exists() and part2_raw.stat().st_size > 0:
+        print("\n[Foundation] Call 2 — already done, loading saved output...")
+        call2_output = part2_raw.read_text(encoding="utf-8")
+        docs2 = _split_documents(call2_output)
+        print(f"  Loaded {len(docs2)} documents from previous run.")
+    else:
+        print("\n[Foundation] Call 2 — docs 11–20...")
+        call2_prompt = (
+            f"{CALL2_PROMPT}"
+            f"{call1_output}\n\n"
+            f"Begin Part 2 now."
+        )
+        call2_output = call_claude(call2_prompt, label="Foundation Call 2 (docs 11-20)", timeout=3600, allow_tools=False)
+        save_output(output_dir, "Foundation_Raw_Output_Part2.md", call2_output)
+        docs2 = _split_documents(call2_output)
+        saved2 = _save_docs(docs2, foundation_dir, fwd_eng_dir)
+        print(f"  Call 2: {len(saved2)} documents saved.")
+        if not docs2:
+            print("  [Warning] Call 2 — no markers found. Saving raw output.")
+            save_output(str(fwd_eng_dir), "Foundation_Call2_Raw.md", call2_output)
 
-    docs2 = _split_documents(call2_output)
-    saved2 = _save_docs(docs2, foundation_dir, fwd_eng_dir)
-    print(f"  Call 2: {len(saved2)} documents saved.")
-
-    if not docs2:
-        print("  [Warning] Call 2 — no markers found. Saving raw output.")
-        save_output(str(fwd_eng_dir), "Foundation_Call2_Raw.md", call2_output)
-
-    total = len(saved1) + len(saved2)
+    total = len(docs1) + len(docs2)
     print(f"\n[Foundation] Complete — {total} documents saved.")
     print(f"  Foundation_KnowledgeGraph: {foundation_dir}")
     print(f"  ForwardEngineering_Docs:   {fwd_eng_dir}")

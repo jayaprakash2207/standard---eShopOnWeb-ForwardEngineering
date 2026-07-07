@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, load_layer1, read_source_files,
-                         save_output, load_prior_output)
+                         save_output, load_prior_output, output_already_exists)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "Prompts_Ready_To_Use" / "01_BA_Agent1_StructuralScout.md"
 OUTPUT_FILE = "BA_Structural_Scout.md"
@@ -72,6 +72,9 @@ def build_prompt(input_dir: str, repo_root: str) -> str:
 
 
 def run(input_dir: str, repo_root: str, output_dir: str) -> str:
+    if output_already_exists(output_dir, OUTPUT_FILE):
+        print(f"\n[BA Agent 1] Already done — skipping (found {OUTPUT_FILE})")
+        return load_prior_output(output_dir, OUTPUT_FILE)
     print("\n[BA Agent 1] Structural Scout — starting...")
     prompt = build_prompt(input_dir, repo_root)
     output = call_claude(prompt, label="BA Agent 1", timeout=1800)

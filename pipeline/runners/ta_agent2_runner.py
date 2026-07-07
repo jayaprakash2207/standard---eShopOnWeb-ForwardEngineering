@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, load_layer1, read_source_files,
-                         save_output, load_prior_output)
+                         save_output, load_prior_output, output_already_exists)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "Prompts_Ready_To_Use" / "06_TA_Agent2_DeepAnalyst.md"
 OUTPUT_FILE = "TA_Deep_Analyst.md"
@@ -51,6 +51,9 @@ def build_prompt(input_dir: str, repo_root: str, output_dir: str) -> str:
 
 
 def run(input_dir: str, repo_root: str, output_dir: str) -> str:
+    if output_already_exists(output_dir, OUTPUT_FILE):
+        print(f"\n[TA Agent 2] Already done — skipping (found {OUTPUT_FILE})")
+        return load_prior_output(output_dir, OUTPUT_FILE)
     print("\n[TA Agent 2] Deep Analyst — starting...")
     prompt = build_prompt(input_dir, repo_root, output_dir)
     output = call_claude(prompt, label="TA Agent 2", timeout=1800)

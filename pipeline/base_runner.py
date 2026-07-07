@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -33,33 +34,51 @@ def claude_cmd(allow_tools: bool = True) -> list:
     return base
 
 
-def call_claude(prompt: str, label: str, timeout: int = 1800, allow_tools: bool = True) -> str:
+def call_claude(prompt: str, label: str, timeout: int = 1800, allow_tools: bool = True,
+                max_retries: int = 3, retry_wait: int = 30) -> str:
     """
     Call claude -p with prompt on stdin. Returns the output text.
-    Raises RuntimeError on non-zero exit.
+    Retries up to max_retries times on failure, waiting retry_wait seconds between attempts.
+    Raises RuntimeError if all attempts fail.
     """
     cmd = claude_cmd(allow_tools=allow_tools)
-    print(f"  [{label}] calling Claude CLI...")
-    try:
-        proc = subprocess.run(
-            cmd,
-            input=prompt,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=timeout,
-        )
-    except subprocess.TimeoutExpired:
-        raise RuntimeError(f"[{label}] Claude call timed out after {timeout}s")
-    except Exception as exc:
-        raise RuntimeError(f"[{label}] Claude call failed: {exc}")
+    last_error = None
 
-    if proc.returncode != 0:
-        stderr = (proc.stderr or "")[:600].strip()
-        raise RuntimeError(f"[{label}] Claude exited {proc.returncode}: {stderr}")
+    for attempt in range(1, max_retries + 1):
+        if attempt > 1:
+            print(f"  [{label}] retry {attempt}/{max_retries} (waiting {retry_wait}s)...")
+            time.sleep(retry_wait)
+        else:
+            print(f"  [{label}] calling Claude CLI...")
 
-    return proc.stdout or ""
+        try:
+            proc = subprocess.run(
+                cmd,
+                input=prompt,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=timeout,
+            )
+        except subprocess.TimeoutExpired:
+            last_error = f"[{label}] Claude call timed out after {timeout}s"
+            print(f"  [{label}] attempt {attempt} timed out — {'retrying' if attempt < max_retries else 'giving up'}.")
+            continue
+        except Exception as exc:
+            last_error = f"[{label}] Claude call failed: {exc}"
+            print(f"  [{label}] attempt {attempt} error: {exc} — {'retrying' if attempt < max_retries else 'giving up'}.")
+            continue
+
+        if proc.returncode != 0:
+            stderr = (proc.stderr or "")[:600].strip()
+            last_error = f"[{label}] Claude exited {proc.returncode}: {stderr}"
+            print(f"  [{label}] attempt {attempt} non-zero exit ({proc.returncode}) — {'retrying' if attempt < max_retries else 'giving up'}.")
+            continue
+
+        return proc.stdout or ""
+
+    raise RuntimeError(last_error or f"[{label}] all {max_retries} attempts failed.")
 
 
 # ── Layer 1 output loader ──────────────────────────────────────────────────────
@@ -147,3 +166,10 @@ def load_prior_output(output_dir: str, filename: str) -> str:
     if path.exists():
         return path.read_text(encoding="utf-8")
     return ""
+
+
+def output_already_exists(output_dir: str, filename: str) -> bool:
+    """Return True if the output file already exists and is non-empty.
+    Used to skip steps that completed in a previous run (resume logic)."""
+    path = Path(output_dir) / filename
+    return path.exists() and path.stat().st_size > 0
