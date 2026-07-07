@@ -333,6 +333,10 @@ standard---eShopOnWeb-ForwardEngineering/
 
 ## Changelog
 
+### v1.2 (2026-07-07)
+- **Foundation truncation fix** — Foundation step now makes 2 sequential Claude calls (Call 1: KG + docs 01–10, Call 2: docs 11–20). Previously Claude hit its output limit after doc 06, leaving 15 documents unwritten. All 25 documents are now produced correctly.
+- **Descriptive naming** — All output folders and files renamed from short codes (`ba-outputs`, `ba_agent1_output.md`) to readable names (`Business_Analysis/BA_Structural_Scout.md`). Applies to `results/`, `Test_Run/`, `Data_Analysis_Legacy/`, and all other output locations.
+- **Batch-by-batch commands** — Added step-by-step PowerShell commands so the pipeline can be run one agent at a time to stay within per-session token limits.
+
 ### v1.1 (2026-07-06)
 - **Token cost reduction (~30–40%)** — DA, TA, and AA agent prompts now read from Layer 1 JSON first instead of re-reading the same source files that BA already extracted. Same output, lower cost.
-- **Foundation output fix** — Foundation agent now runs without file-writing tools, so all 25 documents (5 foundation + 20 forward-engineering) are correctly saved to `foundation/` and `forward-engineering/` under the output root.
