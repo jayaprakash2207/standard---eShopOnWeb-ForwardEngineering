@@ -191,7 +191,7 @@ Total wall clock: ~1.5–2 hours
 
 ## Quickstart — Manual Prompts
 
-The `prompts-ready-to-use/` folder contains 8 fully assembled prompts. Paste each one directly into Claude with access to the target codebase.
+The `Prompts_Ready_To_Use/` folder contains 8 fully assembled prompts. Paste each one directly into Claude with access to the target codebase.
 
 ```
 STEP 1 → 01_BA_Agent1_StructuralScout.md     Business layer scan
@@ -204,7 +204,7 @@ STEP 7 → 07_AA_Agent1_AppExtractor.md        Application layer extraction
 STEP 8 → 08_AA_Agent2_QualityReview.md       Application layer quality review
 ```
 
-Run Agent 1 first, paste its output, then run Agent 2 in the same conversation. See `prompts-ready-to-use/00_README.md` for full instructions.
+Run Agent 1 first, paste its output, then run Agent 2 in the same conversation. See `Prompts_Ready_To_Use/00_README.md` for full instructions.
 
 ---
 
@@ -215,9 +215,9 @@ The analysis of eShopOnWeb is already complete and included in this repo. No nee
 ### Read the results
 
 ```
-forward-engineering-package/17_FORWARD_ENGINEERING_READINESS_REPORT.md  ← start here
-enterprise-foundation-package/ENTERPRISE_KNOWLEDGE_GRAPH.json            ← 274-node graph
-forward-engineering-package/                                              ← 20 documents
+Forward_Engineering_Package/17_FORWARD_ENGINEERING_READINESS_REPORT.md  ← start here
+Enterprise_Foundation_Package/ENTERPRISE_KNOWLEDGE_GRAPH.json            ← 274-node graph
+Forward_Engineering_Package/                                              ← 20 documents
 ```
 
 ### Use for code generation
@@ -225,8 +225,8 @@ forward-engineering-package/                                              ← 20
 Feed to Claude (or any LLM) in this order:
 
 ```
-1. forward-engineering-package/16_GENERATION_MANIFEST.json
-2. forward-engineering-package/15_FORWARD_ENGINEERING_SPECIFICATION.md
+1. Forward_Engineering_Package/16_GENERATION_MANIFEST.json
+2. Forward_Engineering_Package/15_FORWARD_ENGINEERING_SPECIFICATION.md
 3. Documents by layer:
    Business    → 01–04
    Data        → 05–09
@@ -266,14 +266,14 @@ standard---eShopOnWeb-ForwardEngineering/
 │
 ├── source/eShopOnWeb/                   ← Original .NET 8 source code
 │
-├── enterprise-foundation-package/        ← Knowledge graph (canonical)
+├── Enterprise_Foundation_Package/        ← Knowledge graph (canonical)
 │   ├── ENTERPRISE_KNOWLEDGE_GRAPH.json  ← 274-node graph
 │   ├── CANONICAL_ENTERPRISE_MODEL.md
 │   ├── TRACEABILITY_MATRIX.md
 │   ├── ARCHITECTURE_INVENTORY.md
 │   └── FORWARD_ENGINEERING_INPUT_MAP.md
 │
-├── forward-engineering-package/          ← 20 architecture documents
+├── Forward_Engineering_Package/          ← 20 architecture documents
 │   ├── 01_BRD.md
 │   ├── 02_BUSINESS_CAPABILITY_MODEL.md
 │   ├── 03_USE_CASE_SPECIFICATION.md
@@ -295,7 +295,7 @@ standard---eShopOnWeb-ForwardEngineering/
 │   ├── 19_FRONTEND_ARCHITECTURE.md
 │   └── 20_UI_UX_SPECIFICATION.md
 │
-├── prompts-ready-to-use/                 ← 8 manual prompts
+├── Prompts_Ready_To_Use/                 ← 8 manual prompts
 │   ├── 00_README.md
 │   └── 01–08 *.md
 │
@@ -327,7 +327,7 @@ standard---eShopOnWeb-ForwardEngineering/
 - `target_stack` is intentionally empty — the package is technology-neutral. This is a deliberate human decision.
 - `Buyer` / `CustomerProfile` entities are aspirational — not implemented in the legacy source.
 - `DISC-001` — stock fields (`AvailableStock`, `RestockThreshold`, `MaxStockThreshold`, `OnReorder`) were verified absent from the real source and removed from all data artifacts.
-- The automated pipeline and the manual prompts use the same 8 prompt files from `prompts-ready-to-use/` — the runners load and inject them headlessly.
+- The automated pipeline and the manual prompts use the same 8 prompt files from `Prompts_Ready_To_Use/` — the runners load and inject them headlessly.
 
 ---
 

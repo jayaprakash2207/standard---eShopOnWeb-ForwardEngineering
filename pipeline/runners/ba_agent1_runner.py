@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output, load_prior_output)
 
-PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "01_BA_Agent1_StructuralScout.md"
+PROMPT_FILE = Path(__file__).parent.parent.parent / "Prompts_Ready_To_Use" / "01_BA_Agent1_StructuralScout.md"
 OUTPUT_FILE = "BA_Structural_Scout.md"
 
 

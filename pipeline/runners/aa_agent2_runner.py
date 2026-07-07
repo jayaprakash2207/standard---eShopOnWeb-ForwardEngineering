@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, save_output, load_prior_output)
 
-PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "08_AA_Agent2_QualityReview.md"
+PROMPT_FILE = Path(__file__).parent.parent.parent / "Prompts_Ready_To_Use" / "08_AA_Agent2_QualityReview.md"
 OUTPUT_FILE = "AA_Quality_Review.md"
 
 

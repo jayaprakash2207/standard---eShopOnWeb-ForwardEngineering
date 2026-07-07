@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output)
 
-PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "07_AA_Agent1_AppExtractor.md"
+PROMPT_FILE = Path(__file__).parent.parent.parent / "Prompts_Ready_To_Use" / "07_AA_Agent1_AppExtractor.md"
 OUTPUT_FILE = "AA_App_Extractor.md"
 
 

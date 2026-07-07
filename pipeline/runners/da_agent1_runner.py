@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output)
 
-PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "03_DA_Agent1_DataExtractor.md"
+PROMPT_FILE = Path(__file__).parent.parent.parent / "Prompts_Ready_To_Use" / "03_DA_Agent1_DataExtractor.md"
 OUTPUT_FILE = "DA_Data_Extractor.md"
 
 

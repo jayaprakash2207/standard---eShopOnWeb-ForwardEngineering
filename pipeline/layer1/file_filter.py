@@ -24,6 +24,7 @@ class FileFilter:
         "logs", "log",
         # BA Pipeline's own output dirs (if a previous run wrote into the source tree)
         "da-outputs", "ba_documents", "aa-outputs", "architecture-output",
+        "architecture_output", "data_analysis_legacy", "legacy_output", "skill_files",
         "evidence-packs", "llm-stages",
         "source_extraction", "business_analysis", "data_analysis",
         "technology_analysis", "application_analysis",
