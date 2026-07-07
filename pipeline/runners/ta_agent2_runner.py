@@ -13,13 +13,13 @@ from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output, load_prior_output)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "06_TA_Agent2_DeepAnalyst.md"
-OUTPUT_FILE = "ta_agent2_output.md"
+OUTPUT_FILE = "TA_Deep_Analyst.md"
 
 
 def build_prompt(input_dir: str, repo_root: str, output_dir: str) -> str:
     prompt_text = PROMPT_FILE.read_text(encoding="utf-8")
 
-    agent1_output = load_prior_output(output_dir, "ta_agent1_output.md")
+    agent1_output = load_prior_output(output_dir, "TA_Stack_Scout.md")
     if not agent1_output:
         raise RuntimeError("TA Agent 1 output not found — run TA Agent 1 first.")
 

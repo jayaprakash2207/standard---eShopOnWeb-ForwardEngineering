@@ -13,13 +13,13 @@ from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output, load_prior_output)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "04_DA_Agent2_DataReviewer.md"
-OUTPUT_FILE = "da_agent2_output.md"
+OUTPUT_FILE = "DA_Data_Reviewer.md"
 
 
 def build_prompt(input_dir: str, repo_root: str, output_dir: str) -> str:
     prompt_text = PROMPT_FILE.read_text(encoding="utf-8")
 
-    agent1_output = load_prior_output(output_dir, "da_agent1_output.md")
+    agent1_output = load_prior_output(output_dir, "DA_Data_Extractor.md")
     if not agent1_output:
         raise RuntimeError("DA Agent 1 output not found — run DA Agent 1 first.")
 
@@ -33,7 +33,7 @@ def build_prompt(input_dir: str, repo_root: str, output_dir: str) -> str:
     ) if repo_root else []
 
     context = {
-        "da_agent1_output":  agent1_output,
+        "DA_Data_Extractor":  agent1_output,
         "database":          layer1.get("database", {}),
         "source_files":      src_files,
     }

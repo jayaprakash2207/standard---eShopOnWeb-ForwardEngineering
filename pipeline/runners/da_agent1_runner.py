@@ -13,7 +13,7 @@ from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "03_DA_Agent1_DataExtractor.md"
-OUTPUT_FILE = "da_agent1_output.md"
+OUTPUT_FILE = "DA_Data_Extractor.md"
 
 
 def build_prompt(input_dir: str, repo_root: str) -> str:

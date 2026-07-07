@@ -6,18 +6,18 @@ Enterprise Knowledge Graph and 4 read-only foundation views,
 then generates the 20 forward-engineering documents.
 
 Reads:
-  <output>/ba-outputs/    - BA Agent 1 + 2 output
-  <output>/da-outputs/    - DA Agent 1 + 2 output
-  <output>/ta-outputs/    - TA Agent 1 + 2 output
-  <output>/aa-outputs/    - AA Agent 1 + 2 output
+  <output>/Business_Analysis/     - BA Agent 1 + 2 output
+  <output>/Data_Analysis/         - DA Agent 1 + 2 output
+  <output>/Technology_Analysis/   - TA Agent 1 + 2 output
+  <output>/Application_Analysis/  - AA Agent 1 + 2 output
 
 Writes:
-  <output>/foundation/ENTERPRISE_KNOWLEDGE_GRAPH.json
-  <output>/foundation/CANONICAL_ENTERPRISE_MODEL.md
-  <output>/foundation/ARCHITECTURE_INVENTORY.md
-  <output>/foundation/TRACEABILITY_MATRIX.md
-  <output>/foundation/FORWARD_ENGINEERING_INPUT_MAP.md
-  <output>/forward-engineering/01_BRD.md … 20_UI_UX_SPECIFICATION.md
+  <output>/Foundation_KnowledgeGraph/ENTERPRISE_KNOWLEDGE_GRAPH.json
+  <output>/Foundation_KnowledgeGraph/CANONICAL_ENTERPRISE_MODEL.md
+  <output>/Foundation_KnowledgeGraph/ARCHITECTURE_INVENTORY.md
+  <output>/Foundation_KnowledgeGraph/TRACEABILITY_MATRIX.md
+  <output>/Foundation_KnowledgeGraph/FORWARD_ENGINEERING_INPUT_MAP.md
+  <output>/ForwardEngineering_Docs/01_BRD.md … 20_UI_UX_SPECIFICATION.md
 """
 
 import argparse
@@ -144,10 +144,10 @@ def _load_layer_outputs(output_dir: str) -> dict:
     layers = {}
 
     for folder, keys in [
-        ("ba-outputs", ["ba_agent1_output.md", "ba_agent2_output.md"]),
-        ("da-outputs", ["da_agent1_output.md", "da_agent2_output.md"]),
-        ("ta-outputs", ["ta_agent1_output.md", "ta_agent2_output.md"]),
-        ("aa-outputs", ["aa_agent1_output.md", "aa_agent2_output.md"]),
+        ("Business_Analysis",    ["BA_Structural_Scout.md", "BA_Deep_Analyst.md"]),
+        ("Data_Analysis",        ["DA_Data_Extractor.md", "DA_Data_Reviewer.md"]),
+        ("Technology_Analysis",  ["TA_Stack_Scout.md", "TA_Deep_Analyst.md"]),
+        ("Application_Analysis", ["AA_App_Extractor.md", "AA_Quality_Review.md"]),
     ]:
         folder_path = base / folder
         for key in keys:
@@ -214,8 +214,8 @@ def run(output_dir: str) -> None:
     print("\n[Foundation] Splitting documents...")
     docs = _split_documents(combined_output)
 
-    foundation_dir    = Path(output_dir) / "foundation"
-    fwd_eng_dir       = Path(output_dir) / "forward-engineering"
+    foundation_dir    = Path(output_dir) / "Foundation_KnowledgeGraph"
+    fwd_eng_dir       = Path(output_dir) / "ForwardEngineering_Docs"
     foundation_dir.mkdir(parents=True, exist_ok=True)
     fwd_eng_dir.mkdir(parents=True, exist_ok=True)
 
@@ -254,6 +254,6 @@ if __name__ == "__main__":
         description="Foundation Runner — synthesise all layers into Enterprise Knowledge Graph"
     )
     parser.add_argument("--output", required=True,
-                        help="Root output directory containing ba/da/ta/aa-outputs/")
+                        help="Root output directory containing the *_Analysis/ folders")
     args = parser.parse_args()
     run(args.output)

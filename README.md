@@ -54,13 +54,13 @@ python run.py --source "C:/projects/legacy-app" --output ./results --skip-layer1
 
 ```
 results/
-├── pipeline-out/               ← Layer 1 JSON artifacts
-├── ba-outputs/                 ← BA Agent 1 + 2 outputs
-├── da-outputs/                 ← DA Agent 1 + 2 outputs
-├── ta-outputs/                 ← TA Agent 1 + 2 outputs
-├── aa-outputs/                 ← AA Agent 1 + 2 outputs
-├── foundation/                 ← Enterprise Knowledge Graph + 4 views
-└── forward-engineering/        ← 20 forward-engineering documents
+├── Source_Extraction/          ← Layer 1 JSON artifacts
+├── Business_Analysis/          ← BA Agent 1 + 2 outputs
+├── Data_Analysis/              ← DA Agent 1 + 2 outputs
+├── Technology_Analysis/        ← TA Agent 1 + 2 outputs
+├── Application_Analysis/       ← AA Agent 1 + 2 outputs
+├── Foundation_KnowledgeGraph/  ← Enterprise Knowledge Graph + 4 views
+└── ForwardEngineering_Docs/    ← 20 forward-engineering documents
 ```
 
 ---
@@ -88,37 +88,37 @@ $out = "./results"
 ```powershell
 # Run from inside the pipeline/ folder
 cd pipeline
-python -m layer1 --source (Resolve-Path "../source/eShopOnWeb") --output "../results/pipeline-out"
+python -m layer1 --source (Resolve-Path "../source/eShopOnWeb") --output "../results/Source_Extraction"
 cd ..
 ```
-> If `results/pipeline-out/` already exists from a previous run, you can **skip Batch 1** and reuse it.
+> If `results/Source_Extraction/` already exists from a previous run, you can **skip Batch 1** and reuse it.
 
 ### Batch 2 — BA Agent 1 (Structural Scout)
 ```powershell
-python pipeline/runners/ba_agent1_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/ba-outputs"
+python pipeline/runners/ba_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Business_Analysis"
 ```
 
 ### Batch 3 — BA Agent 2 (Deep Analyst)
 ```powershell
-python pipeline/runners/ba_agent2_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/ba-outputs"
+python pipeline/runners/ba_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Business_Analysis"
 ```
 
 ### Batch 4 & 5 — DA track (Data Extractor → Data Reviewer)
 ```powershell
-python pipeline/runners/da_agent1_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/da-outputs"
-python pipeline/runners/da_agent2_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/da-outputs"
+python pipeline/runners/da_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Data_Analysis"
+python pipeline/runners/da_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Data_Analysis"
 ```
 
 ### Batch 6 & 7 — TA track (Stack Scout → Deep Analyst)
 ```powershell
-python pipeline/runners/ta_agent1_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/ta-outputs"
-python pipeline/runners/ta_agent2_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/ta-outputs"
+python pipeline/runners/ta_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Technology_Analysis"
+python pipeline/runners/ta_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Technology_Analysis"
 ```
 
 ### Batch 8 & 9 — AA track (App Extractor → Quality Review)
 ```powershell
-python pipeline/runners/aa_agent1_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/aa-outputs"
-python pipeline/runners/aa_agent2_runner.py --input "$out/pipeline-out" --repo-root $src --output "$out/aa-outputs"
+python pipeline/runners/aa_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Application_Analysis"
+python pipeline/runners/aa_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Application_Analysis"
 ```
 
 ### Batch 10 — Foundation (Knowledge Graph + 20 documents)

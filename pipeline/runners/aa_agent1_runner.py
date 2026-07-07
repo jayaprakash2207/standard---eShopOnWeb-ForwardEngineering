@@ -17,7 +17,7 @@ from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "07_AA_Agent1_AppExtractor.md"
-OUTPUT_FILE = "aa_agent1_output.md"
+OUTPUT_FILE = "AA_App_Extractor.md"
 
 
 def build_prompt(input_dir: str, repo_root: str) -> str:

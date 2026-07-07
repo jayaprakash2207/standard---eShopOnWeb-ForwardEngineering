@@ -13,7 +13,7 @@ from base_runner import (call_claude, load_layer1, read_source_files,
                          save_output, load_prior_output)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "01_BA_Agent1_StructuralScout.md"
-OUTPUT_FILE = "ba_agent1_output.md"
+OUTPUT_FILE = "BA_Structural_Scout.md"
 
 
 def build_prompt(input_dir: str, repo_root: str) -> str:

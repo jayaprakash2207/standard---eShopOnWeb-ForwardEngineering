@@ -13,13 +13,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from base_runner import (call_claude, save_output, load_prior_output)
 
 PROMPT_FILE = Path(__file__).parent.parent.parent / "prompts-ready-to-use" / "08_AA_Agent2_QualityReview.md"
-OUTPUT_FILE = "aa_agent2_output.md"
+OUTPUT_FILE = "AA_Quality_Review.md"
 
 
 def build_prompt(output_dir: str) -> str:
     prompt_text = PROMPT_FILE.read_text(encoding="utf-8")
 
-    agent1_output = load_prior_output(output_dir, "aa_agent1_output.md")
+    agent1_output = load_prior_output(output_dir, "AA_App_Extractor.md")
     if not agent1_output:
         raise RuntimeError("AA Agent 1 output not found — run AA Agent 1 first.")
 

@@ -20,13 +20,13 @@ Usage:
   python run.py --source "C:/path/to/repo"             --output ./results --skip-layer1
 
 Output structure:
-  <output>/pipeline-out/              — Layer 1 JSON artifacts
-  <output>/ba-outputs/                — BA Agent 1 + 2 outputs
-  <output>/da-outputs/                — DA Agent 1 + 2 outputs
-  <output>/ta-outputs/                — TA Agent 1 + 2 outputs
-  <output>/aa-outputs/                — AA Agent 1 + 2 outputs
-  <output>/foundation/                — Enterprise Knowledge Graph + 4 views
-  <output>/forward-engineering/       — 20 forward-engineering documents
+  <output>/Source_Extraction/         — Layer 1 JSON artifacts
+  <output>/Business_Analysis/         — BA Agent 1 + 2 outputs
+  <output>/Data_Analysis/             — DA Agent 1 + 2 outputs
+  <output>/Technology_Analysis/       — TA Agent 1 + 2 outputs
+  <output>/Application_Analysis/      — AA Agent 1 + 2 outputs
+  <output>/Foundation_KnowledgeGraph/ — Enterprise Knowledge Graph + 4 views
+  <output>/ForwardEngineering_Docs/   — 20 forward-engineering documents
 """
 
 import argparse
@@ -222,9 +222,9 @@ def _aa_track(pipeline_out, repo_root, aa_out, results, lock):
 
 
 def run_parallel_tracks(pipeline_out, repo_root, output_dir) -> list:
-    da_out = output_dir / "da-outputs"
-    ta_out = output_dir / "ta-outputs"
-    aa_out = output_dir / "aa-outputs"
+    da_out = output_dir / "Data_Analysis"
+    ta_out = output_dir / "Technology_Analysis"
+    aa_out = output_dir / "Application_Analysis"
     for d in (da_out, ta_out, aa_out):
         d.mkdir(parents=True, exist_ok=True)
 
@@ -277,12 +277,12 @@ def print_summary(output_dir: Path, all_results: list, total_s: float):
 
     print(f"\n{bold('Output folders:')}")
     for label, folder in [
-        ("BA outputs",          output_dir / "ba-outputs"),
-        ("DA outputs",          output_dir / "da-outputs"),
-        ("TA outputs",          output_dir / "ta-outputs"),
-        ("AA outputs",          output_dir / "aa-outputs"),
-        ("Foundation / KG",     output_dir / "foundation"),
-        ("Forward Engineering", output_dir / "forward-engineering"),
+        ("Business Analysis",    output_dir / "Business_Analysis"),
+        ("Data Analysis",        output_dir / "Data_Analysis"),
+        ("Technology Analysis",  output_dir / "Technology_Analysis"),
+        ("Application Analysis", output_dir / "Application_Analysis"),
+        ("Foundation / KG",      output_dir / "Foundation_KnowledgeGraph"),
+        ("Forward Engineering",  output_dir / "ForwardEngineering_Docs"),
     ]:
         n = _count(folder)
         status = green(f"{n:>3} files") if n > 0 else dim("  —  not created")
@@ -298,8 +298,8 @@ def print_summary(output_dir: Path, all_results: list, total_s: float):
 
 def orchestrate(source: str, output_dir: Path, skip_layer1: bool) -> int:
     output_dir   = output_dir.resolve()
-    pipeline_out = output_dir / "pipeline-out"
-    ba_out       = output_dir / "ba-outputs"
+    pipeline_out = output_dir / "Source_Extraction"
+    ba_out       = output_dir / "Business_Analysis"
     output_dir.mkdir(parents=True, exist_ok=True)
     # Resolve source to absolute path so Layer 1 InputResolver accepts it
     if not _is_url(source):
@@ -384,12 +384,12 @@ Examples:
   python run.py --source "C:/projects/legacy-app"  --output ./results --skip-layer1
 
 Output:
-  <output>/ba-outputs/               BA Agent outputs
-  <output>/da-outputs/               DA Agent outputs
-  <output>/ta-outputs/               TA Agent outputs
-  <output>/aa-outputs/               AA Agent outputs
-  <output>/foundation/               Enterprise Knowledge Graph + 4 views
-  <output>/forward-engineering/      20 forward-engineering documents
+  <output>/Business_Analysis/         BA Agent outputs
+  <output>/Data_Analysis/             DA Agent outputs
+  <output>/Technology_Analysis/       TA Agent outputs
+  <output>/Application_Analysis/      AA Agent outputs
+  <output>/Foundation_KnowledgeGraph/ Enterprise Knowledge Graph + 4 views
+  <output>/ForwardEngineering_Docs/   20 forward-engineering documents
 """,
     )
     parser.add_argument("--source",       required=True,

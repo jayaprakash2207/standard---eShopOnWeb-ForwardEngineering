@@ -25,6 +25,9 @@ class FileFilter:
         # BA Pipeline's own output dirs (if a previous run wrote into the source tree)
         "da-outputs", "ba_documents", "aa-outputs", "architecture-output",
         "evidence-packs", "llm-stages",
+        "source_extraction", "business_analysis", "data_analysis",
+        "technology_analysis", "application_analysis",
+        "foundation_knowledgegraph", "forwardengineering_docs",
     }
 
     # Directory name fragments that indicate test projects (lowercased)
