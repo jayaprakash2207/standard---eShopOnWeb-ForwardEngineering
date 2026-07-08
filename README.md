@@ -68,54 +68,139 @@ python run.py --source "C:/projects/legacy-app"               --output ./results
 
 ```mermaid
 flowchart TD
-    INPUT([" 📁  Legacy Codebase\n GitHub URL · Local Path · ZIP "])
-    INPUT --> L1
+    INPUT(["📁 Legacy Codebase
+    GitHub URL · Local Path · ZIP"])
 
-    L1["🔧  STEP 1 — Layer 1  ·  Pure Python AST  ·  ~5 min  ·  Zero LLM calls\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSource_Code.json  ·  Database.json  ·  Config.json  ·  Logs.json"]
-    L1 --> BA1
+    INPUT --> S1
 
-    BA1["🧠  STEP 2 — BA Agent 1  ·  Structural Scout  ·  ~15 min\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEntity list  ·  State machines  ·  Roles  ·  Capabilities  ·  Module map"]
-    BA1 --> BA2
+    S1["⚙️ STEP 1 — Layer 1
+    Pure Python · No LLM · ~5 min
+    ───────────────────────────
+    Source_Code.json
+    Database.json
+    Config.json · Logs.json"]
 
-    BA2["🧠  STEP 3 — BA Agent 2  ·  Deep Analyst  ·  ~15 min\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nBusiness rules  ·  Processes  ·  Value streams  ·  Domain boundaries"]
-    BA2 --> SPLIT
+    S1 --> S2
 
-    SPLIT{{"⚡  3 PARALLEL THREADS  —  wall clock = slowest thread only"}}
-    SPLIT --> DA1
-    SPLIT --> TA1
-    SPLIT --> AA1
+    S2["🧠 STEP 2 — BA Agent 1
+    Structural Scout · ~15 min
+    ───────────────────────────
+    Entity list · State machines
+    Roles · Capabilities · Module map"]
 
-    subgraph DATATRACK ["🔵  DATA TRACK  ·  ~30 min"]
-        DA1["DA Agent 1 — Data Extractor\nSchema · ERD · Data Dict · PII · Data flows"]
-        DA1 --> DA2["DA Agent 2 — Data Reviewer\nValidate · Enrich · Open questions"]
+    S2 --> S3
+
+    S3["🧠 STEP 3 — BA Agent 2
+    Deep Analyst · ~15 min
+    ───────────────────────────
+    Business rules · Processes
+    Value streams · Domain map"]
+
+    S3 --> PAR
+
+    PAR(["⚡ 3 PARALLEL THREADS START
+    Wall clock = slowest thread only"])
+
+    PAR --> DA1
+    PAR --> TA1
+    PAR --> AA1
+
+    subgraph DATA ["🔵 DATA TRACK  ~30 min"]
+        DA1["STEP 4 — DA Agent 1
+        Data Extractor
+        ─────────────────
+        Schema · ERD
+        Data Dictionary
+        PII Register
+        Data Flows"]
+        DA1 --> DA2["STEP 5 — DA Agent 2
+        Data Reviewer
+        ─────────────────
+        Validate schema
+        Enrich findings
+        Open questions"]
     end
 
-    subgraph TECHTRACK ["🟢  TECH TRACK  ·  ~30 min"]
-        TA1["TA Agent 1 — Stack Scout\nRuntime · Frameworks · CI/CD · Infra"]
-        TA1 --> TA2["TA Agent 2 — Deep Analyst\nArch patterns · NFR · Security · Tech debt"]
+    subgraph TECH ["🟢 TECHNOLOGY TRACK  ~30 min"]
+        TA1["STEP 6 — TA Agent 1
+        Stack Scout
+        ─────────────────
+        Runtime · Frameworks
+        Security libs
+        CI/CD · Infra"]
+        TA1 --> TA2["STEP 7 — TA Agent 2
+        Deep Analyst
+        ─────────────────
+        Arch patterns
+        NFR spec
+        Security · Tech debt"]
     end
 
-    subgraph APPTRACK ["🟡  APP TRACK  ·  ~30 min"]
-        AA1["AA Agent 1 — App Extractor\nComponents · DI wiring · Call flows"]
-        AA1 --> AA2["AA Agent 2 — Quality Review\nPASS / PARTIAL / FAIL verdict"]
+    subgraph APP ["🟡 APPLICATION TRACK  ~30 min"]
+        AA1["STEP 8 — AA Agent 1
+        App Extractor
+        ─────────────────
+        Component registry
+        DI wiring
+        Call flow map"]
+        AA1 --> AA2["STEP 9 — AA Agent 2
+        Quality Review
+        ─────────────────
+        PASS / PARTIAL / FAIL
+        Evidence traceability"]
     end
 
-    DA2 --> FOUND
-    TA2 --> FOUND
-    AA2 --> FOUND
+    DA2 --> MERGE
+    TA2 --> MERGE
+    AA2 --> MERGE
 
-    FOUND["⭐  STEP 8 — Foundation Synthesis  ·  2 × Claude calls  ·  ~30 min\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nCall 1 → Enterprise Knowledge Graph  +  docs 01–10\nCall 2 → Architecture documents 11–20  (KG as context)"]
-    FOUND --> OUTPUT
+    MERGE(["✅ All 3 tracks complete
+    Results merged"])
 
-    OUTPUT([" ✅  25 Documents Ready\n 274-Node Knowledge Graph  +  20 Architecture Docs "])
+    MERGE --> F1
 
-    style INPUT   fill:#1a1a2e,color:#e0e0ff,stroke:#5555aa,stroke-width:2px
-    style OUTPUT  fill:#0d2d1a,color:#d4ffda,stroke:#27ae60,stroke-width:2px
-    style SPLIT   fill:#2d1f00,color:#ffe0a0,stroke:#e67e22,stroke-width:2px
-    style FOUND   fill:#1a0d2d,color:#e8d4ff,stroke:#8e44ad,stroke-width:2px
-    style DATATRACK fill:#0d1e30,color:#cce5ff,stroke:#2980b9
-    style TECHTRACK fill:#0d2d1a,color:#d4ffda,stroke:#27ae60
-    style APPTRACK  fill:#2d1a00,color:#ffe5cc,stroke:#e67e22
+    subgraph FOUND ["⭐ STEP 10 — Foundation Synthesis  ~30 min"]
+        F1["Claude Call 1
+        ─────────────────
+        Enterprise Knowledge Graph
+        4 Foundation views
+        Docs 01 – 10"]
+        F1 --> F2["Claude Call 2
+        ─────────────────
+        Docs 11 – 20
+        (KG passed as context)"]
+    end
+
+    F2 --> OUTPUT
+
+    OUTPUT(["🏆 DONE — 25 Documents Ready
+    274-Node Knowledge Graph
+    20 Architecture Documents
+    Total time ≈ 1.5 – 2 hours"])
+
+    %% Node styles
+    style INPUT  fill:#1e1b4b,color:#c7d2fe,stroke:#6366f1,stroke-width:2px
+    style OUTPUT fill:#052e16,color:#bbf7d0,stroke:#22c55e,stroke-width:2px
+    style PAR    fill:#431407,color:#fed7aa,stroke:#f97316,stroke-width:2px
+    style MERGE  fill:#1c1917,color:#e7e5e4,stroke:#78716c,stroke-width:2px
+
+    style S1  fill:#0c1a2e,color:#bfdbfe,stroke:#3b82f6,stroke-width:1px
+    style S2  fill:#0c1a2e,color:#bfdbfe,stroke:#3b82f6,stroke-width:1px
+    style S3  fill:#0c1a2e,color:#bfdbfe,stroke:#3b82f6,stroke-width:1px
+
+    style DA1 fill:#0d1f36,color:#93c5fd,stroke:#2563eb,stroke-width:1px
+    style DA2 fill:#0d1f36,color:#93c5fd,stroke:#2563eb,stroke-width:1px
+    style TA1 fill:#052e16,color:#86efac,stroke:#16a34a,stroke-width:1px
+    style TA2 fill:#052e16,color:#86efac,stroke:#16a34a,stroke-width:1px
+    style AA1 fill:#2d1b00,color:#fcd34d,stroke:#d97706,stroke-width:1px
+    style AA2 fill:#2d1b00,color:#fcd34d,stroke:#d97706,stroke-width:1px
+    style F1  fill:#2e1065,color:#e9d5ff,stroke:#9333ea,stroke-width:1px
+    style F2  fill:#2e1065,color:#e9d5ff,stroke:#9333ea,stroke-width:1px
+
+    style DATA  fill:#030f1e,color:#93c5fd,stroke:#2563eb
+    style TECH  fill:#021208,color:#86efac,stroke:#16a34a
+    style APP   fill:#1a0f00,color:#fcd34d,stroke:#d97706
+    style FOUND fill:#160733,color:#e9d5ff,stroke:#9333ea
 ```
 
 ---
