@@ -158,10 +158,7 @@ flowchart TD
 
 ## 📦 25 Output Documents
 
-<details>
-<summary><b>🏛️ Foundation — Enterprise Knowledge Graph (5 files)</b></summary>
-
-<br/>
+### 🏛️ Foundation — Enterprise Knowledge Graph (5 files)
 
 | File | What it contains |
 |---|---|
@@ -171,12 +168,7 @@ flowchart TD
 | [TRACEABILITY_MATRIX.md](Enterprise_Foundation_Package/TRACEABILITY_MATRIX.md) | Full chain: Capability → Process → Entity → Service → API → Database |
 | [FORWARD_ENGINEERING_INPUT_MAP.md](Enterprise_Foundation_Package/FORWARD_ENGINEERING_INPUT_MAP.md) | What is KNOWN · INFERRED · MISSING — input spec for AI code regeneration |
 
-</details>
-
-<details>
-<summary><b>📄 Forward-Engineering Documents (20 files) — click to expand</b></summary>
-
-<br/>
+### 📄 Forward-Engineering Documents (20 files)
 
 | # | Document | Contains |
 |---|---|---|
@@ -200,8 +192,6 @@ flowchart TD
 | 18 | [Deployment Architecture](Forward_Engineering_Package/18_DEPLOYMENT_ARCHITECTURE.md) | Containers, infra topology, deployment pipeline |
 | 19 | [Frontend Architecture](Forward_Engineering_Package/19_FRONTEND_ARCHITECTURE.md) | UI architecture, component hierarchy, state management |
 | 20 | [UI/UX Specification](Forward_Engineering_Package/20_UI_UX_SPECIFICATION.md) | Screen flows, interaction patterns, design system |
-
-</details>
 
 ---
 
@@ -298,34 +288,108 @@ Leave it running. Come back in ~2 hours. All 25 documents are waiting.
 
 ### Option B — Batch by Batch *(for token budget control)*
 
-<details>
-<summary><b>📋 Click to expand all batch commands (PowerShell)</b></summary>
+Run each agent as its own terminal session. Each session is independent — ideal when you need to stay within a per-session token limit. Wait for each command to fully finish before running the next.
 
-<br/>
+> [!WARNING]
+> **PowerShell users:** Run each command on a **single line**. Never use `\` for line continuation — it is bash syntax and will cause a parser error in PowerShell.
 
-**Set once at the top of your session:**
+---
+
+#### 🟦 STEP 0 — Set variables once (copy this first, then keep the window open)
+
 ```powershell
 $src = "source/eShopOnWeb"
 $out = "./results"
 ```
 
-| Batch | Command | Notes |
-|---|---|---|
-| **1 — Layer 1** | `cd pipeline; python -m layer1 --source (Resolve-Path "../source/eShopOnWeb") --output "../results/Source_Extraction"; cd ..` | No LLM, ~5 min. Skip if folder exists. |
-| **2 — BA Agent 1** | `python pipeline/runners/ba_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Business_Analysis"` | Structural Scout |
-| **3 — BA Agent 2** | `python pipeline/runners/ba_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Business_Analysis"` | Must run after Batch 2 |
-| **4 — DA Agent 1** | `python pipeline/runners/da_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Data_Analysis"` | Can run in any order after Batch 3 |
-| **5 — DA Agent 2** | `python pipeline/runners/da_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Data_Analysis"` | Must run after Batch 4 |
-| **6 — TA Agent 1** | `python pipeline/runners/ta_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Technology_Analysis"` | Can run in any order after Batch 3 |
-| **7 — TA Agent 2** | `python pipeline/runners/ta_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Technology_Analysis"` | Must run after Batch 6 |
-| **8 — AA Agent 1** | `python pipeline/runners/aa_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Application_Analysis"` | Can run in any order after Batch 3 |
-| **9 — AA Agent 2** | `python pipeline/runners/aa_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Application_Analysis"` | Must run after Batch 8 |
-| **10 — Foundation** | `python pipeline/foundation_runner.py --output $out` | **Always last** — needs all above |
+---
 
-> [!WARNING]
-> **PowerShell only:** Each command must be on a single line. Never use `\` for line continuation — it causes a parser error in PowerShell.
+#### 🟩 STEP 1 — Layer 1: Source Extraction
+> Pure Python — no LLM, no token cost. Takes ~5 minutes. Skip if `results/Source_Extraction/` already exists.
 
-</details>
+```powershell
+cd pipeline
+python -m layer1 --source (Resolve-Path "../source/eShopOnWeb") --output "../results/Source_Extraction"
+cd ..
+```
+
+---
+
+#### 🟩 STEP 2 — BA Agent 1: Structural Scout
+> Maps all entities, states, roles, capabilities. Must run before Step 3.
+
+```powershell
+python pipeline/runners/ba_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Business_Analysis"
+```
+
+---
+
+#### 🟩 STEP 3 — BA Agent 2: Deep Analyst
+> Reads method bodies and interprets business rules, processes, value streams. Must run after Step 2.
+
+```powershell
+python pipeline/runners/ba_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Business_Analysis"
+```
+
+---
+
+#### 🟦 STEPS 4–9 — DA / TA / AA Tracks
+> These three tracks are independent. You can run them in any order after Step 3 — but within each track, Agent 1 must run before Agent 2.
+
+**DATA TRACK — Steps 4 and 5**
+
+```powershell
+# Step 4 — DA Agent 1: Data Extractor (schema, ERD, data dictionary, PII register, data flows)
+python pipeline/runners/da_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Data_Analysis"
+```
+
+```powershell
+# Step 5 — DA Agent 2: Data Reviewer  (validate, enrich, open questions)  — run after Step 4
+python pipeline/runners/da_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Data_Analysis"
+```
+
+**TECHNOLOGY TRACK — Steps 6 and 7**
+
+```powershell
+# Step 6 — TA Agent 1: Stack Scout  (runtime, frameworks, CI/CD, infra inventory)
+python pipeline/runners/ta_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Technology_Analysis"
+```
+
+```powershell
+# Step 7 — TA Agent 2: Deep Analyst  (arch patterns, NFR, security, tech debt)  — run after Step 6
+python pipeline/runners/ta_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Technology_Analysis"
+```
+
+**APPLICATION TRACK — Steps 8 and 9**
+
+```powershell
+# Step 8 — AA Agent 1: App Extractor  (components, DI wiring, call flows, violations)
+python pipeline/runners/aa_agent1_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Application_Analysis"
+```
+
+```powershell
+# Step 9 — AA Agent 2: Quality Review  (PASS/PARTIAL/FAIL verdict + evidence)  — run after Step 8
+python pipeline/runners/aa_agent2_runner.py --input "$out/Source_Extraction" --repo-root $src --output "$out/Application_Analysis"
+```
+
+---
+
+#### 🟨 STEP 10 — Foundation: Knowledge Graph + 20 Documents
+> **Always run this last.** Requires all 9 previous steps to be complete.
+
+```powershell
+python pipeline/foundation_runner.py --output $out
+```
+
+> ✅ When this finishes, all 25 documents are ready in `results/Foundation_KnowledgeGraph/` and `results/ForwardEngineering_Docs/`
+
+---
+
+**Run order summary:**
+
+```
+Step 1 → Step 2 → Step 3 → Steps 4–9 (any order, Agent 1 before Agent 2 within each track) → Step 10
+```
 
 ---
 
