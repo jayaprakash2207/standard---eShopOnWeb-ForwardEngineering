@@ -486,7 +486,7 @@ The full eShopOnWeb analysis is already included. No pipeline run needed unless 
 
 <div align="center">
 
-Built with [Claude Code](https://claude.ai/code) &nbsp;·&nbsp; Powered by [Anthropic Claude](https://anthropic.com)
+Built with [AXITHOR AI](https://axithor.tech/) &nbsp;·&nbsp; Powered by [AXITHOR CORP](https://axithor.tech/)
 
 </div>
 
